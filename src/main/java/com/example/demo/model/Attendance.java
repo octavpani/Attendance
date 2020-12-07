@@ -1,0 +1,42 @@
+package com.example.demo.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Table(name = "attendance")
+@Data
+@Setter
+@Getter
+public class Attendance {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
+	private Long id;
+
+	@Size(min = 2, max = 20)
+	@Column(name="username")
+	private String username;
+
+	//@Column(name="month")
+	//private int month;
+	@Column(name="day1_st1")
+	private int day1_st1;
+	@Column(name="day1_st2")
+	private int day1_st2;
+	@Column(name="day1_end1")
+	private int day1_end1;
+	@Column(name="day1_end2")
+	private int day1_end2;
+
+
+}

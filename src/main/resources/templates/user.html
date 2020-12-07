@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table border="1">
+<tr>
+<th>ログインユーザー名</th>
+<th>ユーザー権限</th>
+</tr>
+
+<tr>
+<td th:text="${username}"></td>
+<td th:text="${role}"></td>
+<div>
+<a th:href="@{/attendance}">作成へ</a>
+</div>
+</tr>
+</table>
+</body>
+</html>

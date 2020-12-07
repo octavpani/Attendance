@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ <border="1"　width="50%" align="center">
+<form th:action="@{/attendance}" th:object="${attendance}" method="post">
+<tr><!-- ここから -->
+<td th:text=${month}></td><!-- ここに日付を入れます --><!-- データベースにユーザーのフィールドして、各番号を -->
+<!--timeは使わない。普通のintを2枠使う。int1*60*日数 + int2*日数 = 総労働時間　listに格納する。リストをすべて足して、*の操作を行う。-->
+<th><input type="number" name="day1_st1" th:value="*{day1_st1}"max = 24 min = 0 >:<input type=number name="day1_st2" th:value="*{day1_st2}" max = 60 min = 0 ></th><!-- ここに出金時間を入れます -->
+<th><input type="number" name="day1_end1" th:value="*{day1_end1}"max = 24 min = 0 >:<input type=number name="day1_end2" th:value="*{day1_end2}" max = 60 min = 0 ></th><!-- ここに退勤時間を入れます -->
+<th><input type="text" name="username" th:value="username"></th>
+<th>この行は不要。固定で一時間を勤務時間から差し引く</th><!-- ここに休憩時間を入れます -->
+<th>勤務時間</th><!-- ここに勤務時間を入れます -->
+</tr><!-- ここまで -->
+<button type="submit" th:formaction="@{/attendance}">登録</button>
+</form>
+
+
+
+
+</body>
+</html>
