@@ -5,9 +5,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<tr th:each="Attendance:${attendanceList}">
-<td th:text=${attendance.day1_st1}></td>
+<tr th:each="attendance:${attendanceList}">
+<td th:text=${attendance.username}></td>
 </tr>
+
+
 
 </body>
 </html>
