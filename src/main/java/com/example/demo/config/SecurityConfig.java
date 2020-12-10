@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.example.demo.util.Role;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -33,8 +31,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 		.antMatchers("/login", "/register", "/attendance", "/attendance/list").permitAll()
-		.antMatchers("/admin/**").hasRole(Role.ADMIN.name())
+
+
+
+
+
 		.anyRequest().authenticated()
+
+
 		.and()
 
 		.formLogin()

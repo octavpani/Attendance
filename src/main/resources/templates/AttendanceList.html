@@ -7,9 +7,10 @@
 <body>
 <tr th:each="attendance:${attendanceList}">
 <td th:text=${attendance.username}></td>
+開始<td th:text=${attendance.day1_st1}></td>:<td th:text=${attendance.day1_st2}></td>
+終了<td th:text=${attendance.day1_end1}></td>:<td th:text=${attendance.day1_end2}></td> <br>
 </tr>
 
-test
 
 </body>
 </html>
