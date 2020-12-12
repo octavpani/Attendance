@@ -6,6 +6,7 @@
 </head>
 <body>
 <td th:text="${name}"></td>さん　こんにちは<br>
+投稿のIDは、<td th:text="${id}"></td>です<br>
  <border="1"　width="50%" align="center">
 <form th:action="@{/attendance}" th:object="${attendance}" method="post">
 <tr><!-- ここから -->
@@ -20,6 +21,7 @@
 </tr><!-- ここまで -->
 
 <button type="submit" th:formaction="@{/attendance}">登録</button>
+<button type="submit" th:formaction="@{/attendance/update}">更新</button>
 </form>
 
 

@@ -2,7 +2,11 @@ package com.example.demo.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.model.Attendance;
@@ -29,6 +34,7 @@ public class SecurityController {
 	private final SiteUserRepository userRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final AttendanceRepository AttendanceRepository;
+	private final HttpSession session;
 
 
 	@GetMapping("/login")
@@ -95,17 +101,39 @@ public class SecurityController {
 		return showAttendanceList(mv);
 	}
 
-	@GetMapping("/edit/{id}")
-	public String editAttendance(@PathVariable Long id, Model model) {
-		model.addAttribute("attendance", AttendanceRepository.findById(id));
-		return "test1";
+
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public class NoSuchElementException
+	extends RuntimeException {
+
 	}
+
 	@GetMapping("/delete/{id}")
 	public String deleteAttendance(@PathVariable Long id) {
 		AttendanceRepository.deleteById(id);
 		return "redirect:/";
 	}
 
+	@GetMapping("/attendance/{id}")
+	public ModelAndView attendanceById(@PathVariable(name = "id")long id, ModelAndView mv) {
+		Optional<Attendance> att = AttendanceRepository.findById(id);
+		if ( !att.isPresent()) {
+		    throw new NoSuchElementException(); // ★
+		  }
+		mv.setViewName("test1");
+		Attendance attendance = att.get();
+		mv.addObject("attendance", attendance);
+		//session.setAttribute("mode", "update");
+		return mv;
+	}
+	@PostMapping("/attendance/update")
+	public String updateAttendance(@ModelAttribute Attendance attendance, Model model, Principal principal) {
+		attendance.setUsername(principal.getName());
+		AttendanceRepository.saveAndFlush(attendance);
+		return "redirect:/attendance/list";
+
+	}
 
 
 }

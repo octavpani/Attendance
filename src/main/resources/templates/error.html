@@ -7,6 +7,7 @@
 <body>
 <div>
 エラーです
+<div th:text="${status} + ' ' + ${error}"></div>
 <a th:href="@{/}">ホームへ戻る</a>
 </div>
 
