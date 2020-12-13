@@ -25,7 +25,7 @@ import com.example.demo.model.AttendanceQuery;
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.repository.SiteUserRepository;
-import com.example.demo.servie.AttendanceService;
+import com.example.demo.service.AttendanceService;
 import com.example.demo.util.Role;
 
 import lombok.RequiredArgsConstructor;
