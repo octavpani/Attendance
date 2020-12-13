@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.model.Attendance;
+import com.example.demo.model.AttendanceQuery;
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.repository.SiteUserRepository;
+import com.example.demo.servie.AttendanceService;
 import com.example.demo.util.Role;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,7 @@ public class SecurityController {
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final AttendanceRepository AttendanceRepository;
 	private final HttpSession session;
-
+	private final AttendanceService attendanceService;
 
 	@GetMapping("/login")
 	public String login() {
@@ -78,6 +80,7 @@ public class SecurityController {
 		mv.setViewName("attendanceList");
 		List<Attendance> attendanceList = AttendanceRepository.findAll();
 		mv.addObject("attendanceList", attendanceList);
+		mv.addObject("attendanceQuery", new AttendanceQuery());
 		return mv;
 	}
 
@@ -103,8 +106,8 @@ public class SecurityController {
 
 
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public class NoSuchElementException
+	@ResponseStatus(value = HttpStatus.GONE)
+	public class FilenotfoundException
 	extends RuntimeException {
 
 	}
@@ -119,7 +122,7 @@ public class SecurityController {
 	public ModelAndView attendanceById(@PathVariable(name = "id")long id, ModelAndView mv) {
 		Optional<Attendance> att = AttendanceRepository.findById(id);
 		if ( !att.isPresent()) {
-		    throw new NoSuchElementException(); // ★
+		    throw new FilenotfoundException(); // ★
 		  }
 		mv.setViewName("test1");
 		Attendance attendance = att.get();
@@ -128,11 +131,21 @@ public class SecurityController {
 		return mv;
 	}
 	@PostMapping("/attendance/update")
-	public String updateAttendance(@ModelAttribute Attendance attendance, Model model, Principal principal) {
+	public String updateAttendance(@ModelAttribute Attendance attendance, long id, Model model, Principal principal) {
 		attendance.setUsername(principal.getName());
+
 		AttendanceRepository.saveAndFlush(attendance);
 		return "redirect:/attendance/list";
 
+	}
+
+	@PostMapping("/attendance/query")
+	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery attendanceQuery, ModelAndView mv) {
+		mv.setViewName("attendanceList");
+		List<Attendance> attendanceList = null;
+		attendanceList = attendanceService.doQuery(attendanceQuery);
+		mv.addObject("attendanceList", attendanceList);
+		return mv;
 	}
 
 

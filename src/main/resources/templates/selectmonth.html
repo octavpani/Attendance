@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form th:action="@{}" method="post" th:object="${attendanceQuery}">
+<table border="1">
+<tr>
+<th>month</th>
+</tr>
+<tr>
+<input type="number" name="month" th:value="*{month}" max = 12 min = 1>
+</tr>
+<button type="submit" th:formaction="@{/attendance/query}">検索</button>
+
+</body>
+</html>

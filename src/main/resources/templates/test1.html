@@ -7,13 +7,16 @@
 <body>
 <td th:text="${name}"></td>さん　こんにちは<br>
 投稿のIDは、<td th:text="${id}"></td>です<br>
+
  <border="1"　width="50%" align="center">
 <form th:action="@{/attendance}" th:object="${attendance}" method="post">
+<input type="hidden" th:field="*{id}">
 <tr><!-- ここから -->
 <td th:text=${month}></td><!-- ここに日付を入れます --><!-- データベースにユーザーのフィールドして、各番号を -->
 <!--timeは使わない。普通のintを2枠使う。int1*60*日数 + int2*日数 = 総労働時間　listに格納する。リストをすべて足して、*の操作を行う。-->
-勤務開始<th><input type="number" name="day1_st1" th:value="*{day1_st1}"max = 24 min = 0 >:<input type=number name="day1_st2" th:value="*{day1_st2}" max = 60 min = 0 ></th><!-- ここに出金時間を入れます -->
-勤務終了<th><input type="number" name="day1_end1" th:value="*{day1_end1}"max = 24 min = 0 >:<input type=number name="day1_end2" th:value="*{day1_end2}" max = 60 min = 0 ></th><!-- ここに退勤時間を入れます -->
+勤務開始<th><input type="number" name="day1_st1" th:value="*{day1_st1}"max = 24 min = 0 >:<input type=number name="day1_st2" th:value="*{day1_st2}" max = 60 min = 0 ></th><!-- ここに出金時間を入れます --><br>
+勤務終了<th><input type="number" name="day1_end1" th:value="*{day1_end1}"max = 24 min = 0 >:<input type=number name="day1_end2" th:value="*{day1_end2}" max = 60 min = 0 ></th><!-- ここに退勤時間を入れます --><br>
+<th><input type="number" name="month" th:value="*{month}" max = 12 min = 1>月
 
 
 <th>この行は不要。固定で一時間を勤務時間から差し引く</th><!-- ここに休憩時間を入れます -->

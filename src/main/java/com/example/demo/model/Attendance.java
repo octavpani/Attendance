@@ -9,14 +9,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "attendance")
 @Data
 @Setter
-@Getter
 public class Attendance {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +25,8 @@ public class Attendance {
 	@Column(name="username")
 	private String username;
 
-	//@Column(name="month")
-	//private int month;
+	@Column(name="month")
+	private Integer month;
 	@Column(name="day1_st1")
 	private int day1_st1;
 	@Column(name="day1_st2")
