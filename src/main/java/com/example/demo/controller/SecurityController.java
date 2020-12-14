@@ -112,30 +112,59 @@ public class SecurityController {
 
 	}
 
-	@GetMapping("/delete/{id}")
-	public String deleteAttendance(@PathVariable Long id) {
-		AttendanceRepository.deleteById(id);
-		return "redirect:/";
+	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	public class IllegalArgumentException
+	extends RuntimeException {
+
 	}
 
+	@GetMapping("/delete/{id}")
+	public String deleteAttendance(@PathVariable(name = "id")long id, Principal principal) {
+		Optional<Attendance> att = AttendanceRepository.findById(id);
+		if ( !att.isPresent()) {
+		    throw new FilenotfoundException(); // ★
+		  }
+		Attendance attendance = att.get();
+
+		if(attendance.getUsername() != principal.getName()) {
+			throw new IllegalArgumentException();
+		}
+		AttendanceRepository.deleteById(id);
+		return "redirect:/";
+
+	}
 	@GetMapping("/attendance/{id}")
-	public ModelAndView attendanceById(@PathVariable(name = "id")long id, ModelAndView mv) {
+	public ModelAndView attendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
 		Optional<Attendance> att = AttendanceRepository.findById(id);
 		if ( !att.isPresent()) {
 		    throw new FilenotfoundException(); // ★
 		  }
 		mv.setViewName("test1");
 		Attendance attendance = att.get();
+
+		if(attendance.getUsername() != principal.getName()) {
+			throw new IllegalArgumentException();
+
+	} else {
 		mv.addObject("attendance", attendance);
 		//session.setAttribute("mode", "update");
 		return mv;
+
 	}
+
+
+	}
+
 	@PostMapping("/attendance/update")
 	public String updateAttendance(@ModelAttribute Attendance attendance, long id, Model model, Principal principal) {
 		attendance.setUsername(principal.getName());
 
-		AttendanceRepository.saveAndFlush(attendance);
-		return "redirect:/attendance/list";
+			AttendanceRepository.saveAndFlush(attendance);
+			return "redirect:/attendance/list";
+
+
+
+
 
 	}
 
