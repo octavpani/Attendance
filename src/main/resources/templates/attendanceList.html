@@ -30,7 +30,7 @@
 <th>開始</th><td th:text=${attendance.day1_st1}></td><th>:</th><td th:text=${attendance.day1_st2}></td>
 <th>終了</th><td th:text=${attendance.day1_end1}></td><th>:</th><td th:text=${attendance.day1_end2}></td>
 <td>
-<div th:if="${attendance.username == name}">
+<div th:if="${attendance.username == #authentication.principal.username}">
 <a th:href="@{/attendance/{id}(id=${attendance.id})}">編集へ</a>
 <a th:href="@{/delete/{id}(id=${attendance.id})}">削除</a>
 </div>
