@@ -94,6 +94,7 @@ public class SecurityController {
 	        mv.setViewName("test1");
 	        mv.addObject("attendance", attendance);
 	        mv.addObject("name", principal.getName());
+	        session.setAttribute("mode", "create");
 	        return mv;
 	}
 	@PostMapping("/attendance")
@@ -144,10 +145,20 @@ public class SecurityController {
 
 		if(attendance.getUsername() != principal.getName()) {
 			throw new IllegalArgumentException();
+			/*
+			 * 変更案
+			 @PreAuthorize （"hasAuthority（ 'ADMIN'）" ）
+    public  String  getMessage （） {
+        return  "Hello Method Security !!" ;
+    }
+
+			 */
+
+
 
 	} else {
 		mv.addObject("attendance", attendance);
-		//session.setAttribute("mode", "update");
+		session.setAttribute("mode", "update");
 		return mv;
 
 	}

@@ -6,8 +6,9 @@
 </head>
 <body>
 <td th:text="${name}"></td>さん　こんにちは<br>
+<div th:if="${session.mode == 'update'}">
 投稿のIDは、<td th:text="${id}"></td>です<br>
-
+</div>
  <border="1"　width="50%" align="center">
 <form th:action="@{/attendance}" th:object="${attendance}" method="post">
 <input type="hidden" th:field="*{id}">
@@ -23,8 +24,16 @@
 <th>勤務時間</th><!-- ここに勤務時間を入れます -->
 </tr><!-- ここまで -->
 
+<div th:if="${session.mode == 'create'}">
 <button type="submit" th:formaction="@{/attendance}">登録</button>
+</div>
+<div th:if="${session.mode == 'update'}">
 <button type="submit" th:formaction="@{/attendance/update}">更新</button>
+<a th:href="@{/delete/{id}(id=${attendance.id})}">
+<button type="button">削除</button>
+</a>
+
+</div>
 </form>
 
 

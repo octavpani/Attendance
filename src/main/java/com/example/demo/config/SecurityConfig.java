@@ -32,7 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 		.antMatchers("/login", "/register", "/attendance", "/attendance/list").permitAll()
 
+		/*@EnableGlobalMethodSecurity （prePostEnabled = true ）
+		//public  class  MySpringSecurityConfig  extends  WebSecurityConfigurerAdapter  {
+		//.xmlにおいて、<sec：global-method-security  pre-post-annotations = "enabled"  />
 
+        */
 
 
 
