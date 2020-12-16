@@ -4,8 +4,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,7 +34,6 @@ public class SecurityController {
 	private final SiteUserRepository userRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final AttendanceRepository AttendanceRepository;
-	private final HttpSession session;
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/login")
@@ -94,7 +91,7 @@ public class SecurityController {
 	        mv.setViewName("test1");
 	        mv.addObject("attendance", attendance);
 	        mv.addObject("name", principal.getName());
-	        session.setAttribute("mode", "create");
+	        //session.setAttribute("mode", "create");
 	        return mv;
 	}
 	@PostMapping("/attendance")
@@ -127,7 +124,7 @@ public class SecurityController {
 		  }
 		Attendance attendance = att.get();
 
-		if(attendance.getUsername() != principal.getName()) {
+		if(!attendance.getUsername().equals(principal.getName()) ) {
 			throw new IllegalArgumentException();
 		}
 		AttendanceRepository.deleteById(id);
@@ -140,10 +137,11 @@ public class SecurityController {
 		if ( !att.isPresent()) {
 		    throw new FilenotfoundException(); // ★
 		  }
+
 		mv.setViewName("test1");
 		Attendance attendance = att.get();
 
-		if(attendance.getUsername() != principal.getName()) {
+		if(!attendance.getUsername().equals(principal.getName()) ) {
 			throw new IllegalArgumentException();
 			/*
 			 * 変更案
@@ -158,7 +156,7 @@ public class SecurityController {
 
 	} else {
 		mv.addObject("attendance", attendance);
-		session.setAttribute("mode", "update");
+		mv.addObject("mode", "update");
 		return mv;
 
 	}

@@ -24,10 +24,14 @@
 <th>勤務時間</th><!-- ここに勤務時間を入れます -->
 </tr><!-- ここまで -->
 
+
+<!--
 <div th:if="${session.mode == 'create'}">
+-->
+<div th:unless="${mode == 'update'}">
 <button type="submit" th:formaction="@{/attendance}">登録</button>
 </div>
-<div th:if="${session.mode == 'update'}">
+<div th:if="${mode == 'update'}">
 <button type="submit" th:formaction="@{/attendance/update}">更新</button>
 <a th:href="@{/delete/{id}(id=${attendance.id})}">
 <button type="button">削除</button>
