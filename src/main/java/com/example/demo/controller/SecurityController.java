@@ -24,6 +24,7 @@ import com.example.demo.model.SiteUser;
 import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.repository.SiteUserRepository;
 import com.example.demo.service.AttendanceService;
+import com.example.demo.service.PracticeCalcService;
 import com.example.demo.util.Role;
 
 import lombok.RequiredArgsConstructor;
@@ -78,6 +79,21 @@ public class SecurityController {
 		List<Attendance> attendanceList = AttendanceRepository.findAll();
 		mv.addObject("attendanceList", attendanceList);
 		mv.addObject("attendanceQuery", new AttendanceQuery());
+		//--ここから--
+		mv.addObject("attendance", new Attendance());
+		mv.addObject("practiceCalcService", new PracticeCalcService());
+		List<PracticeCalcService> practiceCalcServiceList = null;
+		for(int i = 0; i < attendanceList.size(); i++)
+		{
+			PracticeCalcService st = new PracticeCalcService();
+			st.setAttendance(attendanceList.get(i));
+			st.get_sum_day_st(attendance);
+
+		practiceCalcServiceList.add(st);
+
+		}
+		//--ここまで--
+
 		return mv;
 	}
 
