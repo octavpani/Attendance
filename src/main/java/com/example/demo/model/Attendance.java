@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.example.demo.service.PracticeCalcService;
+
 import lombok.Data;
 import lombok.Setter;
 
@@ -35,6 +37,13 @@ public class Attendance {
 	private int day1_end1;
 	@Column(name="day1_end2")
 	private int day1_end2;
+
+	public int workingHour1() {
+		return PracticeCalcService.get_calcWH1(this);
+	}
+	public int workingHour2() {
+		return PracticeCalcService.get_calcWH2(this);
+	}
 
 
 }

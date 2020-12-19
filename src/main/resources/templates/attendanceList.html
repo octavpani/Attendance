@@ -1,47 +1,87 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<form th:action="@{/}" method="post" th:object="${attendanceQuery}">
-<table border="1">
-<tr>
-<th>ユーザー名</th>
-</tr>
-<td>
-<input type="text" name="username" size="40" th:value="*{username}">
-</td>
-<tr>
-<th>月</th>
-</tr>
-<td>
-<input type="number" name="month" th:value="*{month}">
-</td>
-<button type="submit" th:formaction="@{/attendance/query}">検索</button>
-</table>
-</form>
-<table border="1">
-<tr th:each="attendance:${attendanceList}">
-<th>id:</th><td th:text=${attendance.id}></td>
-<th>名前:</th><td th:text=${attendance.username}></td>
-<th>月</th><td th:text=${attendance.month}></td>　
-<th>開始</th><td th:text=${attendance.day1_st1}></td><th>:</th><td th:text=${attendance.day1_st2}></td>
-<th>終了</th><td th:text=${attendance.day1_end1}></td><th>:</th><td th:text=${attendance.day1_end2}></td>
-</tr>
-<!-- ここから-->
-<tr th:each="st:${practiceCalcServiceList}">勤務時間</th><td th:text="${practiceCalcService.calcWH1}"></td><th>:</th><td th:text=${practiceCalcService.calcWH2}></td>
-</tr>
-<!-- ここまで-->
-<td>
-<div th:if="${attendance.username == #authentication.principal.username}">
-<a th:href="@{/attendance/{id}(id=${attendance.id})}">編集へ</a>
-<a th:href="@{/delete/{id}(id=${attendance.id})}">削除</a>
-</div>
-</td>
-</table>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<style type="text/css">
+		table {
+		        border-collapse: collapse;
+		        border-spacing: 0px;
+	    }
+	    table.bordered th, table.bordered td {
+	             border: 1px solid-black;
+	    }
+	    th, td {
+	    padding: 4px;
+	    }
+	    </style>
+	</head>
+	<body>
+	<h2>検索条件</h2>
+	<form th:action="@{/}" method="post" th:object="${attendanceQuery}">
+	        <table>
+	                <tr>
+	                        <th>ユーザー名</th>
+	                        <td>
+                                    <input type="text" name="username" size="40" th:value="*{username}">
+                            </td>
+                    <tr>
+                    <tr>
+                            <th>月</th>
+                            <td>
+                                   <input type="number" name="month" th:value="*{month}">
+                            </td>
+                    </tr>
+                    <tr>
+                            <th></th>
+                    <td>
+                    <button type="submit" th:formaction="@{/attendance/query}">検索</button>
+                    </td>
+            </table>
+     </form>
+     <h2>勤務記録</h2>
+     <table class="bordered">
+            <thead>
+                    <tr>
+                             <th>id:</th>
+                             <th>名前:</th>
+                             <th>月</th>
+                             <th>開始</th>
+                             <th>終了</th>
+                             <th>勤務時間</th>
+                             <th>操作</th>
+                    </tr>
+            </thead>
+            <tbody>
+                    <tr th:each="attendance:${attendanceList}">
+                            <td th:text=${attendance.id}></td>
+                            <td th:text=${attendance.username}></td>
+                            <td th:text=${attendance.month}></td>　
+                            <td>
+                                    <span th:text=${attendance.day1_st1} />
+                                    :
+                                    <span th:text=${attendance.day1_st2} />
+                            </td>
+                            <td>
+                                    <span th:text=${attendance.day1_end1} />
+                                    :
+                                    <span th:text=${attendance.day1_end2} />
+                            </td>
+                            <td>
+                                    <span th:text=${attendance.workingHour1()} />
+                                    :
+                                    <span th:text=${attendance.workingHour2()} />
+                            </td>
+                            <td>
+                                    <div th:if="${attendance.username == #authentication.principal.username}">
+                                            <a th:href="@{/attendance/{id}(id=${attendance.id})}">編集へ</a>
+                                            <a th:href="@{/delete/{id}(id=${attendance.id})}">削除</a>
+                                    </div>
+                            </td>
+                    </tr>
+             </tbody>>
+     </table>
 
 
-</body>
+    </body>
 </html>

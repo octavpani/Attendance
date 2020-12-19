@@ -24,7 +24,6 @@ import com.example.demo.model.SiteUser;
 import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.repository.SiteUserRepository;
 import com.example.demo.service.AttendanceService;
-import com.example.demo.service.PracticeCalcService;
 import com.example.demo.util.Role;
 
 import lombok.RequiredArgsConstructor;
@@ -41,29 +40,33 @@ public class SecurityController {
 	public String login() {
 		return "login";
 	}
+
 	@GetMapping("/")
 	public String showList(Authentication loginUser, Model model) {
 		model.addAttribute("username", loginUser.getName());
 		model.addAttribute("role", loginUser.getAuthorities());
 		return "user";
-}
+	}
+
 	@GetMapping("/admin/list")
 
 	public String showAdminList(Model model) {
 		model.addAttribute("users", userRepository.findAll());
 		return "list";
 	}
+
 	@GetMapping("/register")
 	public String register(@ModelAttribute("user") SiteUser user) {
 		return "register";
 	}
+
 	@PostMapping("/register")
 	public String process(@Validated @ModelAttribute("user") SiteUser user, BindingResult result) {
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			return "register";
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		if(user.isAdmin()) {
+		if (user.isAdmin()) {
 			user.setRole(Role.ADMIN.name());
 		} else {
 			user.setRole(Role.USER.name());
@@ -79,21 +82,6 @@ public class SecurityController {
 		List<Attendance> attendanceList = AttendanceRepository.findAll();
 		mv.addObject("attendanceList", attendanceList);
 		mv.addObject("attendanceQuery", new AttendanceQuery());
-		//--ここから--
-		mv.addObject("attendance", new Attendance());
-		mv.addObject("practiceCalcService", new PracticeCalcService());
-		List<PracticeCalcService> practiceCalcServiceList = null;
-		for(int i = 0; i < attendanceList.size(); i++)
-		{
-			PracticeCalcService st = new PracticeCalcService();
-			st.setAttendance(attendanceList.get(i));
-			st.get_sum_day_st(attendance);
-
-		practiceCalcServiceList.add(st);
-
-		}
-		//--ここまで--
-
 		return mv;
 	}
 
@@ -102,17 +90,17 @@ public class SecurityController {
 
 
 	@GetMapping("/attendance")
-	public ModelAndView createAttendance1 (ModelAndView mv,
-	    @ModelAttribute("attendance") Attendance attendance, Principal principal, Model model) {
-	        mv.setViewName("test1");
-	        mv.addObject("attendance", attendance);
-	        mv.addObject("name", principal.getName());
+	public ModelAndView createAttendance1(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
+			Principal principal, Model model) {
+		mv.setViewName("test1");
+		mv.addObject("attendance", attendance);
+		mv.addObject("name", principal.getName());
 	        //session.setAttribute("mode", "create");
-	        return mv;
+		return mv;
 	}
 	@PostMapping("/attendance")
-	public ModelAndView createAttendance (ModelAndView mv,
-		    @ModelAttribute("attendance") Attendance attendance, Principal principal) {
+	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
+			Principal principal) {
 		attendance.setUsername(principal.getName());
 		AttendanceRepository.saveAndFlush(attendance);
 		return showAttendanceList(mv);
@@ -133,14 +121,14 @@ public class SecurityController {
 	}
 
 	@GetMapping("/delete/{id}")
-	public String deleteAttendance(@PathVariable(name = "id")long id, Principal principal) {
+	public String deleteAttendance(@PathVariable(name = "id") long id, Principal principal) {
 		Optional<Attendance> att = AttendanceRepository.findById(id);
-		if ( !att.isPresent()) {
-		    throw new FilenotfoundException(); // ★
+		if (!att.isPresent()) {
+			    throw new FilenotfoundException(); // ★
 		  }
 		Attendance attendance = att.get();
 
-		if(!attendance.getUsername().equals(principal.getName()) ) {
+		if (!attendance.getUsername().equals(principal.getName())) {
 			throw new IllegalArgumentException();
 		}
 		AttendanceRepository.deleteById(id);
@@ -148,50 +136,38 @@ public class SecurityController {
 
 	}
 	@GetMapping("/attendance/{id}")
-	public ModelAndView attendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
+	public ModelAndView attendanceById(@PathVariable(name = "id") long id, Principal principal, ModelAndView mv) {
 		Optional<Attendance> att = AttendanceRepository.findById(id);
-		if ( !att.isPresent()) {
-		    throw new FilenotfoundException(); // ★
+		if (!att.isPresent()) {
+			    throw new FilenotfoundException(); // ★
 		  }
 
 		mv.setViewName("test1");
 		Attendance attendance = att.get();
 
-		if(!attendance.getUsername().equals(principal.getName()) ) {
+		if (!attendance.getUsername().equals(principal.getName())) {
 			throw new IllegalArgumentException();
+
 			/*
 			 * 変更案
-			 @PreAuthorize （"hasAuthority（ 'ADMIN'）" ）
-    public  String  getMessage （） {
-        return  "Hello Method Security !!" ;
-    }
+			 @PreAuthorize （"hasAuthority（ 'ADMIN'）" ）public  String  getMessage （） {
+			 return  "Hello Method Security !!" ;
+			 }
 
 			 */
-
-
-
-	} else {
-		mv.addObject("attendance", attendance);
-		mv.addObject("mode", "update");
-		return mv;
-
-	}
-
-
-	}
+	  } else {
+		      mv.addObject("attendance", attendance);
+		      mv.addObject("mode", "update");
+		      return mv;
+		      }
+		}
 
 	@PostMapping("/attendance/update")
 	public String updateAttendance(@ModelAttribute Attendance attendance, long id, Model model, Principal principal) {
 		attendance.setUsername(principal.getName());
-
-			AttendanceRepository.saveAndFlush(attendance);
-			return "redirect:/attendance/list";
-
-
-
-
-
-	}
+		AttendanceRepository.saveAndFlush(attendance);
+		return "redirect:/attendance/list";
+		}
 
 	@PostMapping("/attendance/query")
 	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery attendanceQuery, ModelAndView mv) {
