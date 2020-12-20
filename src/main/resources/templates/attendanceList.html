@@ -39,7 +39,12 @@
                     </td>
             </table>
      </form>
-     <h2>勤務記録</h2>
+     <h2>勤務記録</h2>今月の勤務時間<div> <span th:text=
+     "${#aggregates.sum(attendanceList.![workingHours()])}"></span>:
+     <span th:text=
+     "${#aggregates.sum(attendanceList.![workingMinutes()])}"></span></div>
+
+                            </td>
      <table class="bordered">
             <thead>
                     <tr>
@@ -68,10 +73,11 @@
                                     <span th:text=${attendance.day1_end2} />
                             </td>
                             <td>
-                                    <span th:text=${attendance.workingHour1()} />
+                                    <span th:text=${attendance.workingHours()} />
                                     :
-                                    <span th:text=${attendance.workingHour2()} />
+                                    <span th:text=${attendance.workingMinutes()} />
                             </td>
+
                             <td>
                                     <div th:if="${attendance.username == #authentication.principal.username}">
                                             <a th:href="@{/attendance/{id}(id=${attendance.id})}">編集へ</a>

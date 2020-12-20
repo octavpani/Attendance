@@ -38,11 +38,11 @@ public class Attendance {
 	@Column(name="day1_end2")
 	private int day1_end2;
 
-	public int workingHour1() {
-		return PracticeCalcService.get_calcWH1(this);
+	public int workingHours() {
+		return PracticeCalcService.get_calcHours(this);
 	}
-	public int workingHour2() {
-		return PracticeCalcService.get_calcWH2(this);
+	public int workingMinutes() {
+		return PracticeCalcService.get_calcMinutes(this);
 	}
 
 
