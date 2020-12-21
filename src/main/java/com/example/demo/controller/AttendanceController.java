@@ -32,6 +32,14 @@ public class AttendanceController {
 	public ModelAndView showAttendanceList(ModelAndView mv) {
 		mv.setViewName("attendanceList");
 		List<Attendance> attendanceList = AttendanceRepository.findAll();
+		int sum_hours = 0;
+		int sum_minutes = 0;
+		for(int i = 0; i < attendanceList.size(); i++) {
+			sum_hours = sum_hours + attendanceList.get(i).workingHours();
+			sum_minutes = sum_minutes + attendanceList.get(i).workingMinutes();
+		}
+		mv.addObject("sum_hours", sum_hours);
+		mv.addObject("sum_minutes", sum_minutes);
 		mv.addObject("attendanceList", attendanceList);
 		mv.addObject("attendanceQuery", new AttendanceQuery());
 		return mv;
@@ -51,6 +59,12 @@ public class AttendanceController {
 	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
 			Principal principal) {
 		attendance.setUsername(principal.getName());
+		if (attendance.getDay1_end1() < attendance.getDay1_st1()) {
+			throw new IllegalArgumentException();
+		}
+		if (attendance.getDay1_st1() < 5 || 23 <= attendance.getDay1_st1()) {
+			throw new IllegalArgumentException();
+		}
 		AttendanceRepository.saveAndFlush(attendance);
 		return showAttendanceList(mv);
 	}

@@ -39,10 +39,10 @@ public class Attendance {
 	private int day1_end2;
 
 	public int workingHours() {
-		return PracticeCalcService.get_calcHours(this);
+		return PracticeCalcService.getHours(this);
 	}
 	public int workingMinutes() {
-		return PracticeCalcService.get_calcMinutes(this);
+		return PracticeCalcService.getMinutes(this);
 	}
 
 

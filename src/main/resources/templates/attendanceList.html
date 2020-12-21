@@ -39,10 +39,8 @@
                     </td>
             </table>
      </form>
-     <h2>勤務記録</h2>今月の勤務時間<div> <span th:text=
-     "${#aggregates.sum(attendanceList.![workingHours()])}"></span>:
-     <span th:text=
-     "${#aggregates.sum(attendanceList.![workingMinutes()])}"></span></div>
+     <h2>勤務記録</h2>今月の勤務時間<div> <span th:text=${sum_hours}></span>:
+     <span th:text=${sum_minutes}></span></div>
 
                             </td>
      <table class="bordered">
