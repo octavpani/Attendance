@@ -11,9 +11,10 @@ import lombok.Setter;
 @Setter
 
 public class PracticeCalcService {
-	private int sum_day_end;
-	private int sum_day_st;
+	private  int sum_day_end;
+	private  int sum_day_st;
 	static Attendance attendance;
+	private static int data[];
 	public static final int hour  = 60;
 
 	static public int getHours(Attendance attendance) {
@@ -35,6 +36,12 @@ public class PracticeCalcService {
 	}
 
 	static public int getMinutes(Attendance attendance) {
+		calc(attendance);
+		return data[1];
+	}
+
+	static public int[] calc(Attendance attendance) {
+
 		int sum_day_st = ((attendance.getDay1_st1() * hour) + attendance.getDay1_st2());
 		int sum_day_end = ((attendance.getDay1_end1() * hour) + attendance.getDay1_end2());
 		int calcHours = (sum_day_end - sum_day_st) / hour;
@@ -43,36 +50,37 @@ public class PracticeCalcService {
 			calcHours += 24;
 		}
 
-		if (calcHours > 23) {
-			calcHours = 0;
-			calcMinutes = 0;
-		}
-
 		if (calcMinutes < 0) {
 			calcMinutes += 60;
 			calcHours -= 1;
 		}
+		int[] data = new int [2];
+		data[0] = calcHours;
+		data[1] = calcMinutes;
 
-		return calcMinutes;
+		return data;
+
+
 	}
+
+
+
+
+	static public boolean isValidWorkingRange(
+		      int staHour, int staMin, int endHour, int endMin) {
+		  if (staHour > endHour) return false;
+		  if (staHour == endHour && staMin > endMin ) return false;
+		  if (staHour < 5 || staHour >= 23) return false;
+		  return true;
+		}
 
 //ここから
-	   static void calc(Attendance attendance) {
-		int sum_day_st = ((attendance.getDay1_st1() * hour) + attendance.getDay1_st2());
-		int sum_day_end = ((attendance.getDay1_end1() * hour) + attendance.getDay1_end2());
-		int calcHours = (sum_day_end - sum_day_st) / hour;
-		int calcMinutes = (sum_day_end - sum_day_st) % hour;
-	}
-	   @FunctionalInterface
-	   public interface  Output {
-		   void print(Integer integer);
 
-	   }
 //ここまで
-
-
-
 }
+
+
+
 
 
 

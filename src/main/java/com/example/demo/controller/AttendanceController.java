@@ -18,6 +18,7 @@ import com.example.demo.model.Attendance;
 import com.example.demo.model.AttendanceQuery;
 import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.service.AttendanceService;
+import com.example.demo.service.PracticeCalcService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +39,9 @@ public class AttendanceController {
 			sum_hours = sum_hours + attendanceList.get(i).workingHours();
 			sum_minutes = sum_minutes + attendanceList.get(i).workingMinutes();
 		}
+		sum_hours += sum_minutes / 60;
+		sum_minutes = sum_minutes % 60;
+
 		mv.addObject("sum_hours", sum_hours);
 		mv.addObject("sum_minutes", sum_minutes);
 		mv.addObject("attendanceList", attendanceList);
@@ -59,12 +63,11 @@ public class AttendanceController {
 	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
 			Principal principal) {
 		attendance.setUsername(principal.getName());
-		if (attendance.getDay1_end1() < attendance.getDay1_st1()) {
-			throw new IllegalArgumentException();
-		}
-		if (attendance.getDay1_st1() < 5 || 23 <= attendance.getDay1_st1()) {
-			throw new IllegalArgumentException();
-		}
+		if (PracticeCalcService.isValidWorkingRange(
+			      attendance.getDay1_st1(), attendance.getDay1_st2(),
+			      attendance.getDay1_end1(), attendance.getDay1_end2())) {
+			  throw new IllegalArgumentException();
+			}
 		AttendanceRepository.saveAndFlush(attendance);
 		return showAttendanceList(mv);
 	}
