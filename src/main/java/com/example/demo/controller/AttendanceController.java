@@ -63,7 +63,7 @@ public class AttendanceController {
 	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
 			Principal principal) {
 		attendance.setUsername(principal.getName());
-		if (PracticeCalcService.isValidWorkingRange(
+		if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getDay1_st1(), attendance.getDay1_st2(),
 			      attendance.getDay1_end1(), attendance.getDay1_end2())) {
 			  throw new IllegalArgumentException();
