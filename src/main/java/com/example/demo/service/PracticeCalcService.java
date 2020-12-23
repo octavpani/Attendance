@@ -11,30 +11,19 @@ import lombok.Setter;
 @Setter
 
 public class PracticeCalcService {
-	private  int sum_day_end;
-	private  int sum_day_st;
 	static Attendance attendance;
-	private  static int data[] = {0, 0};
 	public static final int hour  = 60;
 
 	static public int getHours(Attendance attendance) {
-		int sum_day_st = ((attendance.getDay1_st1() * hour) + attendance.getDay1_st2());
-		int sum_day_end = ((attendance.getDay1_end1() * hour) + attendance.getDay1_end2());
-		int calcHours = (sum_day_end - sum_day_st) / hour;
-		int calcMinutes = (sum_day_end - sum_day_st) % hour;
-
-
-		if (calcMinutes < 0) {
-			calcMinutes += 60;
-			calcHours -= 1;
-		}
-
-		return calcHours;
+		calc(attendance);
+		int[] data = calc(attendance);
+		return data[0];
 	}
 
 	static public int getMinutes(Attendance attendance) {
 		calc(attendance);
-		return PracticeCalcService.data[1];
+		int[] data = calc(attendance);
+		return data[1];
 	}
 
 	static public int[] calc(Attendance attendance) {
@@ -43,22 +32,13 @@ public class PracticeCalcService {
 		int sum_day_end = ((attendance.getDay1_end1() * hour) + attendance.getDay1_end2());
 		int calcHours = (sum_day_end - sum_day_st) / hour;
 		int calcMinutes = (sum_day_end - sum_day_st) % hour;
-
-
 		if (calcMinutes < 0) {
 			calcMinutes += 60;
 			calcHours -= 1;
 		}
-		PracticeCalcService.data[0] = calcHours;
-		PracticeCalcService.data[1] = calcMinutes;
-
-		return PracticeCalcService.data;
-
+		return new int[] {calcHours, calcMinutes};
 
 	}
-
-
-
 
 	static public boolean isValidWorkingRange(
 		      int staHour, int staMin, int endHour, int endMin) {

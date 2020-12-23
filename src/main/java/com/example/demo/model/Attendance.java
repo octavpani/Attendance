@@ -38,6 +38,8 @@ public class Attendance {
 	@Column(name="day1_end2")
 	private int day1_end2;
 
+
+
 	public int workingHours() {
 		return PracticeCalcService.getHours(this);
 	}
