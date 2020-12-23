@@ -39,7 +39,27 @@ public class PracticeCalcService {
 		return new int[] {calcHours, calcMinutes};
 
 	}
+	/* 作成途中
+	 *
+	 *  Map<int, int> calc = new LinkedHashMap<int, int>();
+	    for (i = 1; i <= 31; i++) {
 
+	    int sum_day_st = ((attendance.getDay + i + _st1() * hour) + attendance.getDay + i + _st2());
+		int sum_day_end = ((attendance.getDay + i + _end1() * hour) + attendance.getDay + i + _end2());
+		int calcHours = (sum_day_end - sum_day_st) / hour;
+		int calcMinutes = (sum_day_end - sum_day_st) % hour;
+		if (calcMinutes < 0) {
+			calcMinutes += 60;
+			calcHours -= 1;
+		}
+		calc.put(calcHours, calcMinutes);
+
+	}
+	    return calc;
+
+
+	}
+ */
 	static public boolean isValidWorkingRange(
 		      int staHour, int staMin, int endHour, int endMin) {
 		  if (staHour > endHour) return false;
