@@ -50,7 +50,7 @@ public class AttendanceController {
 	}
 
 	@GetMapping("/attendance")
-	public ModelAndView createAttendance1(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
+	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
 			Principal principal, Model model) {
 		mv.setViewName("test1");
 		mv.addObject("attendance", attendance);
@@ -64,8 +64,8 @@ public class AttendanceController {
 			Principal principal) {
 		attendance.setUsername(principal.getName());
 		if (!PracticeCalcService.isValidWorkingRange(
-			      attendance.getDay1_st1(), attendance.getDay1_st2(),
-			      attendance.getDay1_end1(), attendance.getDay1_end2())) {
+			      attendance.getSta_hour(), attendance.getSta_min(),
+			      attendance.getEnd_min(), attendance.getEnd_min())) {
 			  throw new IllegalArgumentException();
 			}
 		AttendanceRepository.saveAndFlush(attendance);

@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 
 public class PracticeCalcService {
-	static Attendance attendance;
 	public static final int hour  = 60;
 
 	static public int getHours(Attendance attendance) {
@@ -28,8 +27,8 @@ public class PracticeCalcService {
 
 	static public int[] calc(Attendance attendance) {
 
-		int sum_day_st = ((attendance.getDay1_st1() * hour) + attendance.getDay1_st2());
-		int sum_day_end = ((attendance.getDay1_end1() * hour) + attendance.getDay1_end2());
+		int sum_day_st = ((attendance.getSta_hour() * hour) + attendance.getSta_min());
+		int sum_day_end = ((attendance.getEnd_hour() * hour) + attendance.getEnd_min());
 		int calcHours = (sum_day_end - sum_day_st) / hour;
 		int calcMinutes = (sum_day_end - sum_day_st) % hour;
 		if (calcMinutes < 0) {

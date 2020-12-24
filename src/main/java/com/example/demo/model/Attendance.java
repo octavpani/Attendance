@@ -28,15 +28,23 @@ public class Attendance {
 	private String username;
 
 	@Column(name="month")
+	@Size(min = 1, max = 12)
 	private Integer month;
-	@Column(name="day1_st1")
-	private int day1_st1;
-	@Column(name="day1_st2")
-	private int day1_st2;
-	@Column(name="day1_end1")
-	private int day1_end1;
-	@Column(name="day1_end2")
-	private int day1_end2;
+
+	@Column(name="day")
+	@Size(min = 1, max = 31)
+	private Integer day;
+	@Column(name="year")
+	@Size(min = 2000, max = 2099)
+	private Integer year;
+	@Column(name="sta_hour")
+	private Integer sta_hour;
+	@Column(name="sta_min")
+	private Integer sta_min;
+	@Column(name="end_hour")
+	private Integer end_hour;
+	@Column(name="end_min")
+	private Integer end_min;
 
 
 

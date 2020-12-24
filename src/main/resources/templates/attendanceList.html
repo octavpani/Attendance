@@ -61,14 +61,14 @@
                             <td th:text=${attendance.username}></td>
                             <td th:text=${attendance.month}></td>　
                             <td>
-                                    <span th:text=${attendance.day1_st1} />
+                                    <span th:text=${attendance.STA_HOUR} />
                                     :
-                                    <span th:text=${attendance.day1_st2} />
+                                    <span th:text=${attendance.STA_MIN} />
                             </td>
                             <td>
-                                    <span th:text=${attendance.day1_end1} />
+                                    <span th:text=${attendance.END_HOUR} />
                                     :
-                                    <span th:text=${attendance.day1_end2} />
+                                    <span th:text=${attendance.END_MIN} />
                             </td>
                             <td>
                                     <span th:text=${attendance.workingHours()} />
