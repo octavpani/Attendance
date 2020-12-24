@@ -60,7 +60,7 @@ public class PracticeCalcService {
 	}
  */
 	static public boolean isValidWorkingRange(
-		      int staHour, int staMin, int endHour, int endMin) {
+		      Integer staHour, Integer staMin, Integer endHour,  Integer endMin) {
 		  if (staHour > endHour) return false;
 		  if (staHour == endHour && staMin > endMin ) return false;
 		  if (staHour < 5 || staHour >= 23) return false;

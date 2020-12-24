@@ -28,14 +28,10 @@ public class Attendance {
 	private String username;
 
 	@Column(name="month")
-	@Size(min = 1, max = 12)
 	private Integer month;
-
 	@Column(name="day")
-	@Size(min = 1, max = 31)
 	private Integer day;
 	@Column(name="year")
-	@Size(min = 2000, max = 2099)
 	private Integer year;
 	@Column(name="sta_hour")
 	private Integer sta_hour;

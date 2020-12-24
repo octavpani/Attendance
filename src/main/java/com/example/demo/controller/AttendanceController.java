@@ -65,7 +65,7 @@ public class AttendanceController {
 		attendance.setUsername(principal.getName());
 		if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getSta_hour(), attendance.getSta_min(),
-			      attendance.getEnd_min(), attendance.getEnd_min())) {
+			      attendance.getEnd_hour(), attendance.getEnd_min())) {
 			  throw new IllegalArgumentException();
 			}
 		AttendanceRepository.saveAndFlush(attendance);
