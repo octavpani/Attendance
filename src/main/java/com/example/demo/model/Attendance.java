@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import com.example.demo.service.PracticeCalcService;
@@ -26,11 +28,16 @@ public class Attendance {
 	@Size(min = 2, max = 20)
 	@Column(name="username")
 	private String username;
-
+	@Min(1)
+	@Max(12)
 	@Column(name="month")
 	private Integer month;
+	@Min(1)
+	@Max(31)
 	@Column(name="day")
 	private Integer day;
+	@Min(2000)
+	@Max(2099)
 	@Column(name="year")
 	private Integer year;
 	@Column(name="sta_hour")

@@ -66,7 +66,10 @@ public class AttendanceController {
 		if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getSta_hour(), attendance.getSta_min(),
 			      attendance.getEnd_hour(), attendance.getEnd_min())) {
-			  throw new IllegalArgumentException();
+			//テスト用です。
+			  mv.addObject("error_calc", "開始時刻には5以上23以下の数字を入力して下さい。");
+			  mv.setViewName("test1");
+			  return mv;
 			}
 		AttendanceRepository.saveAndFlush(attendance);
 		return showAttendanceList(mv);

@@ -48,7 +48,9 @@
                     <tr>
                              <th>id:</th>
                              <th>名前:</th>
+                             <th>年</th>
                              <th>月</th>
+                             <th>日</th>
                              <th>開始</th>
                              <th>終了</th>
                              <th>勤務時間</th>
@@ -59,7 +61,9 @@
                     <tr th:each="attendance:${attendanceList}">
                             <td th:text=${attendance.id}></td>
                             <td th:text=${attendance.username}></td>
-                            <td th:text=${attendance.month}></td>　
+                            <td th:text=${attendance.year}></td>
+                            <td th:text=${attendance.month}></td>
+                            <td th:text=${attendance.day}></td>
                             <td>
                                     <span th:text=${attendance.sta_hour} />
                                     :

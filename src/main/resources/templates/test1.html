@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+    p {
+      background-color:#FF6666;
+    }
+  </style>
 </head>
 <body>
 <td th:text="${name}"></td>さん　こんにちは<br>
@@ -24,6 +29,7 @@
 <tr>
 <input type="number" name="day" th:value="*{day}" max = 31 min = 1>日
 </tr>
+<p> [[${error_calc}]] </p>
 <tr>
 <th>勤務開始</th>
 <th>勤務終了</th>
