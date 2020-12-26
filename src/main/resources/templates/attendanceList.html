@@ -88,9 +88,29 @@
                                     </div>
                             </td>
                     </tr>
-             </tbody>
-     </table>
+                    </table>
+                     </tbody>
 
+                   <div>
+                        <span th:text="|${attendancePage.getNumber() + 1} / ${attendancePage.getTotalPages()}ページを表示中 |">
+                        </span>
+                        <ul id="nav">
+                        <li>
+                        <span th:if="${attendancePage.isFirst()}">←前</span>
+                        <a th:unless="${todoPage.isFirst()}" th:href="@{/attendance/list(page=${attendancePage.getNumber()- 1})}">
+                        ←前
+                        </a>
+                        </li>
+
+                        <li>
+                        <span th:if="${attendancePage.isLast()}">
+                        次→
+                        </span>
+                        <a th:href="@{/attendance/list(page=${attendancePage.getNumber}+1)}">次へ</a>
+                        </li>
+
+                        </ul>
+                    </div>
 
     </body>
 </html>

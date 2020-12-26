@@ -4,6 +4,9 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +33,8 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv) {
-		findList(mv);
+	public ModelAndView showAttendanceList(ModelAndView mv, Pageable pageable) {
+		findList(mv, pageable);
 		return mv;
 	}
 
@@ -44,7 +47,7 @@ public class AttendanceController {
 	}
 
 	@PostMapping("/attendance")
-	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
+	public ModelAndView createAttendance(ModelAndView mv, Pageable pageable, @ModelAttribute("attendance") Attendance attendance,
 			Principal principal) {
 		setLoginName(principal, attendance);
 		if (!PracticeCalcService.isValidWorkingRange(
@@ -56,7 +59,7 @@ public class AttendanceController {
 			  return mv;
 			}
 		AttendanceRepository.saveAndFlush(attendance);
-		return showAttendanceList(mv);
+		return showAttendanceList(mv, pageable);
 	}
 
 	@GetMapping("/delete/{id}")
@@ -103,7 +106,24 @@ public class AttendanceController {
 		attendance.setUsername(principal.getName());
 	}
 
-	public void findList(ModelAndView mv) {
+
+	public void findList(ModelAndView mv, @PageableDefault(page = 0 , size = 10, sort = "id")Pageable pageable) {
+		mv.setViewName("attendanceList");
+		Page<Attendance> attendancePage = AttendanceRepository.findAll(pageable);
+		mv.addObject("attendanceList", attendancePage.getContent());
+		mv.addObject("attendanceQuery", new AttendanceQuery());
+		mv.addObject("attendancePage", attendancePage);
+	}
+
+
+
+
+
+
+
+
+		/*　前回→全件取得時のコード
+		public void findList(ModelAndView mv) {
 		mv.setViewName("attendanceList");
 		List<Attendance> attendanceList = AttendanceRepository.findAll();
 		int sum_hours = 0;
@@ -117,9 +137,11 @@ public class AttendanceController {
 
 		mv.addObject("sum_hours", sum_hours);
 		mv.addObject("sum_minutes", sum_minutes);
+
 		mv.addObject("attendanceList", attendanceList);
 		mv.addObject("attendanceQuery", new AttendanceQuery());
 	}
+	*/
 
 	public Attendance secureAttendanceId(@PathVariable(name = "id")long id, Principal principal) {
 		Optional<Attendance> att = AttendanceRepository.findById(id);
