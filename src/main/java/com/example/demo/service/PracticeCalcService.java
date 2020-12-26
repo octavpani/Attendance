@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 
 public class PracticeCalcService {
-	public static final int hour  = 60;
+	public static final int HOUR  = 60;
 
 	static public int getHours(Attendance attendance) {
 		calc(attendance);
@@ -27,38 +27,18 @@ public class PracticeCalcService {
 
 	static public int[] calc(Attendance attendance) {
 
-		int sum_day_st = ((attendance.getSta_hour() * hour) + attendance.getSta_min());
-		int sum_day_end = ((attendance.getEnd_hour() * hour) + attendance.getEnd_min());
-		int calcHours = (sum_day_end - sum_day_st) / hour;
-		int calcMinutes = (sum_day_end - sum_day_st) % hour;
+		int sum_day_st = ((attendance.getSta_hour() * HOUR) + attendance.getSta_min());
+		int sum_day_end = ((attendance.getEnd_hour() * HOUR) + attendance.getEnd_min());
+		int calcHours = (sum_day_end - sum_day_st) / HOUR;
+		int calcMinutes = (sum_day_end - sum_day_st) % HOUR;
 		if (calcMinutes < 0) {
-			calcMinutes += 60;
+			calcMinutes += HOUR;
 			calcHours -= 1;
 		}
 		return new int[] {calcHours, calcMinutes};
 
 	}
-	/* 作成途中
-	 *
-	 *  Map<int, int> calc = new LinkedHashMap<int, int>();
-	    for (i = 1; i <= 31; i++) {
 
-	    int sum_day_st = ((attendance.getDay + i + _st1() * hour) + attendance.getDay + i + _st2());
-		int sum_day_end = ((attendance.getDay + i + _end1() * hour) + attendance.getDay + i + _end2());
-		int calcHours = (sum_day_end - sum_day_st) / hour;
-		int calcMinutes = (sum_day_end - sum_day_st) % hour;
-		if (calcMinutes < 0) {
-			calcMinutes += 60;
-			calcHours -= 1;
-		}
-		calc.put(calcHours, calcMinutes);
-
-	}
-	    return calc;
-
-
-	}
- */
 	static public boolean isValidWorkingRange(
 		      Integer staHour, Integer staMin, Integer endHour,  Integer endMin) {
 		  if (staHour > endHour) return false;

@@ -31,21 +31,7 @@ public class AttendanceController {
 
 	@GetMapping("/attendance/list")
 	public ModelAndView showAttendanceList(ModelAndView mv) {
-		mv.setViewName("attendanceList");
-		List<Attendance> attendanceList = AttendanceRepository.findAll();
-		int sum_hours = 0;
-		int sum_minutes = 0;
-		for(int i = 0; i < attendanceList.size(); i++) {
-			sum_hours = sum_hours + attendanceList.get(i).workingHours();
-			sum_minutes = sum_minutes + attendanceList.get(i).workingMinutes();
-		}
-		sum_hours += sum_minutes / 60;
-		sum_minutes = sum_minutes % 60;
-
-		mv.addObject("sum_hours", sum_hours);
-		mv.addObject("sum_minutes", sum_minutes);
-		mv.addObject("attendanceList", attendanceList);
-		mv.addObject("attendanceQuery", new AttendanceQuery());
+		findList(mv);
 		return mv;
 	}
 
@@ -53,16 +39,14 @@ public class AttendanceController {
 	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
 			Principal principal, Model model) {
 		mv.setViewName("test1");
-		mv.addObject("attendance", attendance);
 		mv.addObject("name", principal.getName());
-	        //session.setAttribute("mode", "create");
 		return mv;
 	}
 
 	@PostMapping("/attendance")
 	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute("attendance") Attendance attendance,
 			Principal principal) {
-		attendance.setUsername(principal.getName());
+		setLoginName(principal, attendance);
 		if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getSta_hour(), attendance.getSta_min(),
 			      attendance.getEnd_hour(), attendance.getEnd_min())) {
@@ -75,58 +59,31 @@ public class AttendanceController {
 		return showAttendanceList(mv);
 	}
 
-	@ResponseStatus(value = HttpStatus.GONE)
-	public class FilenotfoundException
-	extends RuntimeException {
-	}
-
-	@ResponseStatus(value = HttpStatus.FORBIDDEN)
-	public class IllegalArgumentException
-	extends RuntimeException {
-	}
-
 	@GetMapping("/delete/{id}")
 	public String deleteAttendance(@PathVariable(name = "id")long id, Principal principal) {
-		Optional<Attendance> att = AttendanceRepository.findById(id);
-		if (!att.isPresent()) {
-			    throw new FilenotfoundException(); // ★
-		  }
-		Attendance attendance = att.get();
-		if (!attendance.getUsername().equals(principal.getName())) {
-			throw new IllegalArgumentException();
-		}
-		AttendanceRepository.deleteById(id);
+		Attendance attendance = secureAttendanceId(id, principal);
+		AttendanceRepository.deleteById(attendance.getId());
 		return "redirect:/";
 	}
 
 	@GetMapping("/attendance/{id}")
-	public ModelAndView attendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
-		Optional<Attendance> att = AttendanceRepository.findById(id);
-		if (!att.isPresent()) {
-			    throw new FilenotfoundException(); // ★
-		  }
+	public ModelAndView getAttendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
+		Attendance attendance = secureAttendanceId(id, principal);
 		mv.setViewName("test1");
-		Attendance attendance = att.get();
-		if (!attendance.getUsername().equals(principal.getName())) {
-			throw new IllegalArgumentException();
-
+		mv.addObject("attendance", attendance);
+		mv.addObject("mode", "update");
+		return mv;
+		}
 			/*
 			 * 変更案
 			 @PreAuthorize （"hasAuthority（ 'ADMIN'）" ）public  String  getMessage （） {
 			 return  "Hello Method Security !!" ;
 			 }
-
 			 */
-	  } else {
-		      mv.addObject("attendance", attendance);
-		      mv.addObject("mode", "update");
-		      return mv;
-		      }
-		}
 
 	@PostMapping("/attendance/update")
-	public String updateAttendance(@ModelAttribute Attendance attendance, long id, Model model, Principal principal) {
-		attendance.setUsername(principal.getName());
+	public String updateAttendance(Attendance attendance, long id, Principal principal) {
+		setLoginName(principal, attendance);
 		AttendanceRepository.saveAndFlush(attendance);
 		return "redirect:/attendance/list";
 		}
@@ -138,5 +95,53 @@ public class AttendanceController {
 		attendanceList = attendanceService.doQuery(attendanceQuery);
 		mv.addObject("attendanceList", attendanceList);
 		return mv;
+	}
+
+	//ここから
+
+	public void setLoginName(Principal principal, Attendance attendance) {
+		attendance.setUsername(principal.getName());
+	}
+
+	public void findList(ModelAndView mv) {
+		mv.setViewName("attendanceList");
+		List<Attendance> attendanceList = AttendanceRepository.findAll();
+		int sum_hours = 0;
+		int sum_minutes = 0;
+		for(int i = 0; i < attendanceList.size(); i++) {
+			sum_hours = sum_hours + attendanceList.get(i).workingHours();
+			sum_minutes = sum_minutes + attendanceList.get(i).workingMinutes();
+		}
+		sum_hours += sum_minutes / PracticeCalcService.HOUR;
+		sum_minutes = sum_minutes % PracticeCalcService.HOUR;
+
+		mv.addObject("sum_hours", sum_hours);
+		mv.addObject("sum_minutes", sum_minutes);
+		mv.addObject("attendanceList", attendanceList);
+		mv.addObject("attendanceQuery", new AttendanceQuery());
+	}
+
+	public Attendance secureAttendanceId(@PathVariable(name = "id")long id, Principal principal) {
+		Optional<Attendance> att = AttendanceRepository.findById(id);
+		Attendance attendance = att.get();
+		if (!att.isPresent()) {
+			    throw new FilenotfoundException(); // ★
+		  }
+		if (!attendance.getUsername().equals(principal.getName())) {
+			throw new IllegalArgumentException();
+		}
+		return attendance;
+	}
+
+	//ここまで
+
+	@ResponseStatus(value = HttpStatus.GONE)
+	public class FilenotfoundException
+	extends RuntimeException {
+	}
+
+	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	public class IllegalArgumentException
+	extends RuntimeException {
 	}
 }
