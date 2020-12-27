@@ -33,8 +33,9 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, Pageable pageable) {
+	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(page = 0, size = 10,sort = "id")Pageable pageable) {
 		findList(mv, pageable);
+
 		return mv;
 	}
 
@@ -107,7 +108,7 @@ public class AttendanceController {
 	}
 
 
-	public void findList(ModelAndView mv, @PageableDefault(page = 0 , size = 10, sort = "id")Pageable pageable) {
+	public void findList(ModelAndView mv, Pageable pageable) {
 		mv.setViewName("attendanceList");
 		Page<Attendance> attendancePage = AttendanceRepository.findAll(pageable);
 		mv.addObject("attendanceList", attendancePage.getContent());

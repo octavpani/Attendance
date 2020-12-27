@@ -103,10 +103,8 @@
                                       </a>
                                    </li>
                                    <li>
-                                      <span th:if="${attendancePage.isLast()}">
-                        次→
-                                      </span>
-                                      <a th:href="@{/attendance/list(page=${attendancePage.getNumber}+1)}">次へ</a>
+                                      <span th:if="${attendancePage.isLast()}">次→</span>
+                                      <a th:unless="${attendancePage.isLast()}" th:href="@{/attendance/list(page=${attendancePage.getNumber()+ 1})}">次→</a>
                                    </li>
                                 </ul>
 
