@@ -53,16 +53,11 @@ public class SecurityController {
 			return "register";
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		if (user.isAdmin()) {
-			user.setRole(Role.ADMIN.name());
-		} else {
-			user.setRole(Role.USER.name());
-		}
+		user.setRole(Role.USER.name());
 		userRepository.save(user);
 
-		return "redirect:/login?register";
+		return "redirect:/login";
 	}
-
 
 
 }

@@ -13,12 +13,14 @@ import javax.validation.constraints.Size;
 import com.example.demo.service.PracticeCalcService;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "attendance")
 @Data
 @Setter
+@Getter
 public class Attendance {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,26 +30,33 @@ public class Attendance {
 	@Size(min = 2, max = 20)
 	@Column(name="username")
 	private String username;
+
 	@Min(1)
 	@Max(12)
 	@Column(name="month")
 	private Integer month;
+
 	@Min(1)
 	@Max(31)
 	@Column(name="day")
 	private Integer day;
+
 	@Min(2000)
 	@Max(2099)
 	@Column(name="year")
 	private Integer year;
+
 	@Column(name="sta_hour")
-	private Integer sta_hour;
+	private Integer staHour;
+
 	@Column(name="sta_min")
-	private Integer sta_min;
+	private Integer staMin;
+
 	@Column(name="end_hour")
-	private Integer end_hour;
+	private Integer endHour;
+
 	@Column(name="end_min")
-	private Integer end_min;
+	private Integer endMin;
 
 
 

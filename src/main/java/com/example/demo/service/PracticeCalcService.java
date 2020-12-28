@@ -14,23 +14,21 @@ public class PracticeCalcService {
 	public static final int HOUR  = 60;
 
 	static public int getHours(Attendance attendance) {
-		calc(attendance);
-		int[] data = calc(attendance);
+		int[] data = calcWorkingTime(attendance);
 		return data[0];
 	}
 
 	static public int getMinutes(Attendance attendance) {
-		calc(attendance);
-		int[] data = calc(attendance);
+		int[] data = calcWorkingTime(attendance);
 		return data[1];
 	}
 
-	static public int[] calc(Attendance attendance) {
+	static public int[] calcWorkingTime(Attendance attendance) {
 
-		int sum_day_st = ((attendance.getSta_hour() * HOUR) + attendance.getSta_min());
-		int sum_day_end = ((attendance.getEnd_hour() * HOUR) + attendance.getEnd_min());
-		int calcHours = (sum_day_end - sum_day_st) / HOUR;
-		int calcMinutes = (sum_day_end - sum_day_st) % HOUR;
+		int sumOfDaySta = ((attendance.getStaHour() * HOUR) + attendance.getStaMin());
+		int sumOfDayEnd = ((attendance.getEndHour() * HOUR) + attendance.getEndMin());
+		int calcHours = (sumOfDayEnd - sumOfDaySta) / HOUR;
+		int calcMinutes = (sumOfDayEnd - sumOfDaySta) % HOUR;
 		if (calcMinutes < 0) {
 			calcMinutes += HOUR;
 			calcHours -= 1;

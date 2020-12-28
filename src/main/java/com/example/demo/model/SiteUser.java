@@ -23,11 +23,5 @@ public class SiteUser {
 	@Size(min = 4, max = 255)
 	private String password;
 
-	
-
-	private boolean admin;
 	private String role;
-	private boolean active = true;
-
-
 }

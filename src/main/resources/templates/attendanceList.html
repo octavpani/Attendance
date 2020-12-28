@@ -39,6 +39,30 @@
                     </td>
             </table>
      </form>
+
+    <!--   項目ごとにoptionでソートさせる
+
+    <form th:action="@{/}" method="post" th:object="${attendanceQuery}">
+    <select name="sortdate">
+          <option value="day_asc">日付（昇順）</option>
+          <option value="day_desc">日付（降順）</option>
+    </select>
+    </form>
+
+    <form th:action="@{/}" method="post" th:object="${attendanceQuery}">
+    <select name="sortdate">
+          <option value="name_asc">ユーザー名（あいうえお）</option>
+          <option value="name_desc">ユーザー名（わをん）</option>
+    </select>
+    </form>
+
+
+
+
+    -->
+
+
+
      <h4><a th:href="@{/attendance}"><button type="button">作成へ</button></a></h4>
      <h2>勤務記録</h2>今月の勤務時間<div> <span th:text=${sum_hours}></span>:
      <span th:text=${sum_minutes}></span></div>
@@ -66,14 +90,14 @@
                             <td th:text=${attendance.month}></td>
                             <td th:text=${attendance.day}></td>
                             <td>
-                                    <span th:text=${attendance.sta_hour} />
+                                    <span th:text=${attendance.staHour} />
                                     :
-                                    <span th:text=${attendance.sta_min} />
+                                    <span th:text=${attendance.staMin} />
                             </td>
                             <td>
-                                    <span th:text=${attendance.end_hour} />
+                                    <span th:text=${attendance.endHour} />
                                     :
-                                    <span th:text=${attendance.end_min} />
+                                    <span th:text=${attendance.endMin} />
                             </td>
                             <td>
                                     <span th:text=${attendance.workingHours()} />
@@ -107,8 +131,6 @@
                                       <a th:unless="${attendancePage.isLast()}" th:href="@{/attendance/list(page=${attendancePage.getNumber()+ 1})}">次→</a>
                                    </li>
                                 </ul>
-
-
                            </div>
 
 
