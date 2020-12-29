@@ -8,15 +8,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.model.Attendance;
 import com.example.demo.repository.AttendanceRepository;
@@ -60,13 +59,7 @@ public class AttendanceController {
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
-	//変更中　Get→Post
-	@PostMapping("/delete/{id}")
-	public String deleteAttendance(@PathVariable(name = "id")long id, Principal principal) {
-		Attendance attendance = secureAttendanceId(id, principal);
-		attendanceService.goodbyeAttendance(attendance);
-		return "redirect:/";
-	}
+
 
 	@GetMapping("/attendance/{id}")
 	public ModelAndView getAttendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
@@ -85,21 +78,39 @@ public class AttendanceController {
 
 	@PostMapping("/attendance/update")
 	public ModelAndView updateAttendance(ModelAndView mv,  Attendance attendance, long id, Principal principal) {
-		     mv =  new ModelAndView("redirect:/attendance/list");
 		     setLoginName(principal, attendance);
 		     if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getStaHour(), attendance.getStaMin(),
 			      attendance.getEndHour(), attendance.getEndMin())) {
-			 mv =  new ModelAndView("redirect:/attendance/{id}");
 			 mv.addObject("error_calc", "開始時刻には5以上23以下の数字を入力して下さい。");
 			 mv.addObject("mode", "update");
 			 mv.setViewName("attendance_form");
 			 return mv;
 		}
-		attendanceService.saveAttendance(attendance);
-		return mv;
+		     mv =  new ModelAndView("redirect:/attendance/list");
+		     attendanceService.saveAttendance(attendance);
+		     return mv;
 		}
 
+	@PostMapping("/delete")
+	public ModelAndView deleteAttendance(ModelAndView mv,long id, Principal principal) {
+		Attendance attendance = secureAttendanceId(id, principal);
+		attendanceService.goodbyeAttendance(attendance);
+		mv =  new ModelAndView("redirect:/attendance/list");
+		return mv;
+	}
+
+	//変更中　Get→Post
+
+	/*
+		@PostMapping("/delete")
+		public ModelAndView deleteAttendance(ModelAndView mv, long id, Principal principal) {
+			Attendance attendance = secureAttendanceId(id, principal);
+			attendanceService.goodbyeAttendance(attendance);
+			mv =  new ModelAndView("redirect:/attendance/list");
+			return mv;
+		}
+		*/
 	@PostMapping("/attendance/query")
 	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery attendanceQuery, ModelAndView mv) {
 		mv.setViewName("attendanceList");
@@ -128,7 +139,6 @@ public class AttendanceController {
 		return mv;
 	}
 */
-	//ここから
 
 	private void setLoginName(Principal principal, Attendance attendance) {
 		attendance.setUsername(principal.getName());
@@ -169,23 +179,18 @@ public class AttendanceController {
 		Optional<Attendance> att = attendanceRepository.findById(id);
 		Attendance attendance = att.get();
 		if (!att.isPresent()) {
-			    throw new FilenotFoundException(); // ★
+			    throw new FileNotFoundException(); // ★
 		  }
 		if (!attendance.getUsername().equals(principal.getName())) {
 			throw new IllegalArgumentException();
 		}
 		return attendance;
 	}
-
-	//引っ越し中
-
-	@ResponseStatus(value = HttpStatus.GONE)
-	public class FilenotFoundException
-	extends RuntimeException {
-	}
-
-	@ResponseStatus(value = HttpStatus.FORBIDDEN)
-	public class IllegalArgumentException
-	extends RuntimeException {
-	}
 }
+
+
+
+
+
+
+

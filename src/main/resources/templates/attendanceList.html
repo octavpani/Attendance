@@ -108,7 +108,7 @@
                             <td>
                                     <div th:if="${attendance.username == #authentication.principal.username}">
                                             <a th:href="@{/attendance/{id}(id=${attendance.id})}">編集へ</a>
-                                            <a th:href="@{/delete/{id}(id=${attendance.id})}">削除</a>
+                                            <!--<a th:href="@{/delete/{id}(id=${attendance.id})}">削除</a>  -->
                                     </div>
                             </td>
                     </tr>

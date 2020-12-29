@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/login", "/register", "/attendance", "/attendance/list").permitAll()
+		.antMatchers("/login", "/register", "/attendance", "/attendance/list", "/delete/*").permitAll()
 
 		/*@EnableGlobalMethodSecurity （prePostEnabled = true ）
 		//public  class  MySpringSecurityConfig  extends  WebSecurityConfigurerAdapter  {

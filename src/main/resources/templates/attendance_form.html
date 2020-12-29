@@ -57,9 +57,15 @@
                              <div th:if="${mode == 'update'}">
                                    <button type="submit" th:formaction="@{/attendance/update}">更新
                                    </button>
+
+                                   <button type="submit" th:formaction="@{/delete}">削除
+                                   </button>
+
+                                   <!--
                                    <a th:href="@{/delete/{id}(id=${attendance.id})}">
                                    <button type="button">削除</button>
                                    </a>
+                                     -->
                              </div>
 
                              <div class="index">
