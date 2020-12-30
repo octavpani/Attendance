@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,20 +47,31 @@ public class AttendanceController {
 	}
 
 	@PostMapping("/attendance")
-	public ModelAndView createAttendance1(ModelAndView mv, @ModelAttribute Attendance attendance, Principal principal) {
+	public ModelAndView createAttendance1(ModelAndView mv, @Validated @ModelAttribute Attendance attendance, Principal principal, BindingResult result) {
 		setLoginName(principal, attendance);
-		//メソッドにする
+		if(result.hasErrors()) {
+			mv.setViewName("attendance_form");
+			return mv;
+		}
 		if (!PracticeCalcService.isValidWorkingRange(
+		      attendance.getStaHour(), attendance.getStaMin(),
+		      attendance.getEndHour(), attendance.getEndMin())) {
+			mv.setViewName("attendance_form");
+			mv =  new ModelAndView("redirect:/attendance/list");
+			//これは出力された
+			mv.addObject("error_message", "入力時刻のエラーです。");
+			return mv;
+		}
+	 	attendanceService.saveAttendance(attendance);
+	 		return mv;
+		}
+		//メソッドにする
+		/*if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getStaHour(), attendance.getStaMin(),
 			      attendance.getEndHour(), attendance.getEndMin())) {
 			  mv.addObject("error_calc", "開始時刻には5以上23以下の数字を入力して下さい。");
-			  mv.setViewName("attendance_form");
-			  return mv;
-			}
-		attendanceService.saveAttendance(attendance);
-		mv =  new ModelAndView("redirect:/attendance/list");
-		return mv;
-	}
+			  */
+
 
 
 	@GetMapping("/attendance/{id}")
@@ -77,12 +90,20 @@ public class AttendanceController {
 			 */
 
 	@PostMapping("/attendance/update")
-	public ModelAndView updateAttendance(ModelAndView mv,  Attendance attendance, long id, Principal principal) {
-		     setLoginName(principal, attendance);
+	public ModelAndView updateAttendance(ModelAndView mv,@Validated  Attendance attendance, long id, Principal principal, BindingResult result) {
+			 setLoginName(principal, attendance);
+			 if(result.hasErrors()) {
+				 mv.addObject("mode", "update");
+			     mv.setViewName("attendance_form");
+				return mv;
+			}
+
 		     if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getStaHour(), attendance.getStaMin(),
 			      attendance.getEndHour(), attendance.getEndMin())) {
-			 mv.addObject("error_calc", "開始時刻には5以上23以下の数字を入力して下さい。");
+		    	 //
+		    	 mv.addObject("error_message", "入力時刻のエラーです。");
+
 			 mv.addObject("mode", "update");
 			 mv.setViewName("attendance_form");
 			 return mv;

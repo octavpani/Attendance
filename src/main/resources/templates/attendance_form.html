@@ -28,11 +28,10 @@
                      <tr>
                          <input type="number" name="day" th:value="*{day}" max = 31 min = 1>日
                      </tr>
-                         <p>
-                         [[${error_calc}]]
-                         </p>
+                         <h2 th:text="${error_message}"></h2>
 
                      <tr>
+
                          <th>勤務開始</th>
                          <th>勤務終了</th>
                          <th>実働時間</th>
@@ -42,6 +41,9 @@
                      <tr>
                          <th>
                              <input type="number" name="staHour" th:value="*{staHour}"max = 24 min = 0 >
+                             <!-- ここでエラー -->
+                              <p th:errors="*{staHour}" class="error-message"></p>
+                     </div>
                              :<input type="number" name="staMin" th:value="*{staMin}" max = 59 min = 0 >
                              </th><!-- ここに出金時間を入れます -->
                          <th>

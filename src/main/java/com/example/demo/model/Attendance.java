@@ -46,6 +46,8 @@ public class Attendance {
 	@Column(name="year")
 	private Integer year;
 
+	@Min(value = 5, message = "開始時刻には、5以上23以下の数字を入力してください。")
+	@Max(value = 23, message = "開始時刻には、5以上23以下の数字を入力してください。")
 	@Column(name="sta_hour")
 	private Integer staHour;
 
