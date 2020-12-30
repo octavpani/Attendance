@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.form.AttendanceQuery;
@@ -32,6 +35,12 @@ public class AttendanceService {
 
 		attendanceRepository.deleteById(attendance.getId());
 
+	}
+	public Page<Attendance> searchAttendance(Pageable pageable) {
+		return attendanceRepository.findAll(pageable);
+	}
+	public Optional<Attendance> findAttendanceById(long id) {
+		return attendanceRepository.findById(id);
 	}
 
 

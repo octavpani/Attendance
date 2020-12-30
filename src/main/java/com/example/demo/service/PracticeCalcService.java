@@ -24,15 +24,16 @@ public class PracticeCalcService {
 	}
 
 	static public int[] calcWorkingTime(Attendance attendance) {
-	    int sumDaySta = convertTime(attendance.getStaHour(), attendance.getStaMin());
-		int sumDayEnd = convertTime(attendance.getEndHour(), attendance.getEndMin());
-		int calcHours = getHours(sumDaySta, sumDayEnd);
-		int calcMinutes = getMinutes(sumDaySta, sumDayEnd);
+	    int sta = sumTimeFromTime(attendance.getStaHour(), attendance.getStaMin());
+		int end = sumTimeFromTime(attendance.getEndHour(), attendance.getEndMin());
+		int elapse = end - sta;
+		/*
 		if (calcMinutes < 0) {
 			calcMinutes += HOUR;
 			calcHours -= 1;
 		}
-		return new int[] {calcHours, calcMinutes};
+		*/
+		return new int[] {hourFromSumTime(elapse), minFromSumTime(elapse)};
 
 		/*
 		int calcHours = (sumDayEnd - sumDaySta) / HOUR;
@@ -69,16 +70,16 @@ public class PracticeCalcService {
 		  return true;
 		}
 
-	static public Integer convertTime(Integer hour,  Integer min) {
+	static public Integer sumTimeFromTime(Integer hour,  Integer min) {
 		 return hour * HOUR + min;
 	}
 
-	static public Integer getHours(Integer sumSta,  Integer sumEnd) {
-	     return (sumEnd - sumSta) / HOUR;
+	static public Integer hourFromSumTime(Integer sumTime) {
+	     return (sumTime) / HOUR;
 }
 
-	static public Integer getMinutes(Integer sumSta,  Integer sumEnd) {
-	     return (sumEnd - sumSta) % HOUR;
+	static public Integer minFromSumTime(Integer sumTime) {
+	     return (sumTime) % HOUR;
 
 
 	}

@@ -92,12 +92,13 @@ public class AttendanceController {
 	@PostMapping("/attendance/update")
 	public ModelAndView updateAttendance(ModelAndView mv,@Validated  Attendance attendance, long id, Principal principal, BindingResult result) {
 			 setLoginName(principal, attendance);
+			 //↓が400エラーです。
 			 if(result.hasErrors()) {
 				 mv.addObject("mode", "update");
 			     mv.setViewName("attendance_form");
 				return mv;
 			}
-
+			 //↓は表示されます。
 		     if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getStaHour(), attendance.getStaMin(),
 			      attendance.getEndHour(), attendance.getEndMin())) {
@@ -168,7 +169,7 @@ public class AttendanceController {
 
 	public void getAttendanceList(ModelAndView mv, Pageable pageable) {
 		mv.setViewName("attendanceList");
-		Page<Attendance> attendancePage = attendanceRepository.findAll(pageable);
+		Page<Attendance> attendancePage = attendanceService.searchAttendance(pageable);
 		mv.addObject("attendanceList", attendancePage.getContent());
 		mv.addObject("attendanceQuery", new AttendanceQuery());
 		mv.addObject("attendancePage", attendancePage);
@@ -197,7 +198,7 @@ public class AttendanceController {
 */
 
 	public Attendance secureAttendanceId(long id, Principal principal) {
-		Optional<Attendance> att = attendanceRepository.findById(id);
+		Optional<Attendance> att = attendanceService.findAttendanceById(id);
 		Attendance attendance = att.get();
 		if (!att.isPresent()) {
 			    throw new FileNotFoundException(); // ★

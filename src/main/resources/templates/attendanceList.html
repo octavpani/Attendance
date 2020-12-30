@@ -107,8 +107,15 @@
 
                             <td>
                                     <div th:if="${attendance.username == #authentication.principal.username}">
-                                            <a th:href="@{/attendance/{id}(id=${attendance.id})}">編集へ</a>
-                                            <!--<a th:href="@{/delete/{id}(id=${attendance.id})}">削除</a>  -->
+                                            <a th:href="@{/attendance/{id}(id=${attendance.id})}">
+                                            <button type="button">編集
+                                            </a>
+                                            <form th:action="@{/delete}" th:object="${attendance}" method="post">
+                                            <button type="submit">削除
+                                   			</button>
+                                   			<input type="hidden" name="id" th:value="${attendance.id}" />
+                                   			</form>
+
                                     </div>
                             </td>
                     </tr>
