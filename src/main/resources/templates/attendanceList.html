@@ -33,10 +33,18 @@
                             </td>
                     </tr>
                     <tr>
-                            <th></th>
-                    <td>
-                    <button type="submit" th:formaction="@{/attendance/query}">検索</button>
-                    </td>
+                    <tr>
+                    		<th>ソート条件</th>
+                    		<td>
+                    			<select name="day">
+                    				<option value="0">日付（昇）</option>
+                    				<option value="1">日付（降）</option>
+                    			</select>
+                    		</td>
+                    </tr>
+                    		<td>
+                    			<button type="submit" th:formaction="@{/attendance/query}">検索</button>
+                    		</td>
             </table>
      </form>
 
@@ -125,7 +133,10 @@
                             <div>
                                 <span th:text="|${attendancePage.getNumber() + 1} / ${attendancePage.getTotalPages()}ページを表示中 |">
                                 </span>
+
+
                                 <ul id="nav">
+
 
                                    <li>
                                       <span th:if="${attendancePage.isFirst()}">←前</span>
@@ -138,6 +149,29 @@
                                       <a th:unless="${attendancePage.isLast()}" th:href="@{/attendance/list(page=${attendancePage.getNumber()+ 1})}">次→</a>
                                    </li>
                                 </ul>
+
+                                <!--
+
+                                <ul id="nav">
+
+
+                                   <li>
+                                      <span th:if="${attendancePage.isFirst()}">←前</span>
+                                      <a th:unless="${attendancePage.isFirst()}" th:href="@{{attendancePage.url}">
+                                      ←前
+                                      </a>
+                                   </li>
+                                   <li>
+                                      <span th:if="${attendancePage.isLast()}">次→</span>
+                                      <a th:unless="${attendancePage.isLast()}" th:href="@{{attendancePage.url}}">次→</a>
+                                   </li>
+                                </ul>
+
+                                 -->>
+
+
+
+
                            </div>
 
 

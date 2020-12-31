@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.model.Attendance;
-import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.PracticeCalcService;
 
@@ -30,11 +29,12 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class AttendanceController {
 
-	private final AttendanceRepository attendanceRepository;
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
 	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(page = 0, size = 10,sort = "id")Pageable pageable) {
+
+		//Pageable pageable = PageRequest.of(0, 10, Sort.by("username").descending());
 		getAttendanceList(mv, pageable);
 		return mv;
 	}
@@ -57,12 +57,12 @@ public class AttendanceController {
 		      attendance.getStaHour(), attendance.getStaMin(),
 		      attendance.getEndHour(), attendance.getEndMin())) {
 			mv.setViewName("attendance_form");
-			mv =  new ModelAndView("redirect:/attendance/list");
 			//これは出力された
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
 	 	attendanceService.saveAttendance(attendance);
+	 	mv =  new ModelAndView("redirect:/attendance/list");
 	 		return mv;
 		}
 		//メソッドにする
@@ -90,25 +90,26 @@ public class AttendanceController {
 			 */
 
 	@PostMapping("/attendance/update")
-	public ModelAndView updateAttendance(ModelAndView mv,@Validated  Attendance attendance, long id, Principal principal, BindingResult result) {
+	public ModelAndView updateAttendance(ModelAndView mv,@Validated @ModelAttribute Attendance attendance, BindingResult result, long id, Principal principal) {
 			 setLoginName(principal, attendance);
-			 //↓が400エラーです。
 			 if(result.hasErrors()) {
 				 mv.addObject("mode", "update");
 			     mv.setViewName("attendance_form");
+			     setLoginName(principal, attendance);
+			     mv.addObject("name", principal.getName());
 				return mv;
 			}
-			 //↓は表示されます。
 		     if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getStaHour(), attendance.getStaMin(),
 			      attendance.getEndHour(), attendance.getEndMin())) {
 		    	 //
 		    	 mv.addObject("error_message", "入力時刻のエラーです。");
-
-			 mv.addObject("mode", "update");
-			 mv.setViewName("attendance_form");
-			 return mv;
-		}
+		    	 setLoginName(principal, attendance);
+		    	 mv.addObject("name", principal.getName());
+		    	 mv.addObject("mode", "update");
+		    	 mv.setViewName("attendance_form");
+		    	 return mv;
+		     }
 		     mv =  new ModelAndView("redirect:/attendance/list");
 		     attendanceService.saveAttendance(attendance);
 		     return mv;
@@ -133,6 +134,31 @@ public class AttendanceController {
 			return mv;
 		}
 		*/
+
+
+	@PostMapping("/attendance/query")
+	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery aq, ModelAndView mv, Pageable pa) {
+		//@PageableDefault(page = 0, size = 10)Pageable pageable,
+		mv.setViewName("attendanceList");
+		Page<Attendance> attendancePage = null;
+
+		if(aq.getDay() == 0) {
+			pa = PageRequest.of(0, 10, Sort.by("day").ascending());
+
+		} else {
+			pa = PageRequest.of(0, 10, Sort.by("day").descending());
+		}
+
+		//並べ替えお試し
+		//Pageable pageable = PageRequest.of(0, 10, Sort.by("day").ascending());
+		attendancePage = attendanceService.doQuery(pa, aq);
+		mv.addObject("attendanceList", attendancePage.getContent());
+		mv.addObject("attendanceQuery", new AttendanceQuery());
+		mv.addObject("attendancePage", attendancePage);
+		return mv;
+	}
+
+	/* 現在ページングへの対応テスト中
 	@PostMapping("/attendance/query")
 	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery attendanceQuery, ModelAndView mv) {
 		mv.setViewName("attendanceList");
@@ -149,6 +175,7 @@ public class AttendanceController {
 		mv.addObject("attendanceList", attendanceList);
 		return mv;
 	}
+	*/
 
 
 /*　前回→全件取得時
@@ -208,6 +235,8 @@ public class AttendanceController {
 		}
 		return attendance;
 	}
+
+
 }
 
 

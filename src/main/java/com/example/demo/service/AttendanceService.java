@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,13 +17,26 @@ import lombok.AllArgsConstructor;
 public class AttendanceService {
 	private final AttendanceRepository attendanceRepository;
 
-	public List<Attendance> doQuery(AttendanceQuery attendanceQueryService) {
+	/*
+	public List<Attendance> doQuery(AttendanceQuery aq) {
 		 List<Attendance> attendanceList = null;
-		 if(attendanceQueryService.getUsername().length() > 0) {
+		 if(aq.getUsername().length() > 0 && aq.getMonth() >= 1) {
+		attendanceList = attendanceRepository.findByUsernameLikeAndMonthIs("%" + aq.getUsername() + "%", aq.getMonth());
+		 }
+		 if(aq.getUsername().length() > 0) {
+			 attendanceList = attendanceRepository.findByUsernameLike("%" + aq.getUsername() + "%");
+		 }
 
-		attendanceList = attendanceRepository.findByUsernameLikeAndMonthIs("%" + attendanceQueryService.getUsername() + "%", attendanceQueryService.getMonth());
-	}
+		 if(aq.getMonth() >= 1) {
+			 attendanceList = attendanceRepository.findByMonth(aq.getMonth());
+		 } else {
+			 attendanceList = attendanceRepository.findAll();
+		 }
 		 return  attendanceList;
+	}
+	*/
+	public Page<Attendance> doQuery(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByUsernameLikeAndMonthIs("%" + aq.getUsername() + "%", aq.getMonth(), pageable);
 	}
 
 	public void saveAttendance(Attendance attendance) {
@@ -42,11 +54,13 @@ public class AttendanceService {
 	public Optional<Attendance> findAttendanceById(long id) {
 		return attendanceRepository.findById(id);
 	}
-
-
-
-
-
+	/*
+	public Page<Attendance> searchAttendanceAsPage(Pageable pageable) {
+		return attendanceRepository.findAllByOrderByIdAsc(pageable);
+	}
+	*/
 
 }
+
+
 
