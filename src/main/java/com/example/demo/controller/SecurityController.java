@@ -31,16 +31,17 @@ public class SecurityController {
 	@GetMapping("/")
 	public String showList(Authentication loginUser, Model model) {
 		model.addAttribute("username", loginUser.getName());
+		//再度追加
 		model.addAttribute("role", loginUser.getAuthorities());
 		return "user";
 	}
 
 	@GetMapping("/admin/list")
-
 	public String showAdminList(Model model) {
 		model.addAttribute("users", userRepository.findAll());
 		return "list";
 	}
+
 
 	@GetMapping("/register")
 	public String register(@ModelAttribute("user") SiteUser user) {
@@ -53,12 +54,16 @@ public class SecurityController {
 			return "register";
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setRole(Role.USER.name());
-		userRepository.save(user);
 
+		//↓追加したものです。
+		if(user.getUsername().startsWith("Admin_")) {
+			user.setRole(Role.ADMIN.name());
+		} else {
+			user.setRole(Role.USER.name());
+		}
+		userRepository.save(user);
 		return "redirect:/login";
 	}
-
 
 }
 

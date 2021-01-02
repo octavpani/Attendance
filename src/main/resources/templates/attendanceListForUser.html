@@ -21,15 +21,15 @@
 	<form th:action="@{/}" method="post" th:object="${attendanceQuery}">
 	        <table>
 	                <tr>
-	                        <th>ユーザー名</th>
+	                        <th>月</th>
 	                        <td>
-                                    <input type="text" name="username" size="40" th:value="*{username}">
+                                    <input type="number" name="month" th:value="*{month}">
                             </td>
                     <tr>
                     <tr>
-                            <th>月</th>
+                            <th>日付</th>
                             <td>
-                                   <input type="number" name="month" th:value="*{month}">
+                                   <input type="number" name="day" th:value="*{day}">
                             </td>
                     </tr>
                     <tr>

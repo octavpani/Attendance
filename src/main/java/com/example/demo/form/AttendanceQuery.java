@@ -6,7 +6,6 @@ import lombok.Data;
 public class AttendanceQuery {
 	private String username;
 	private int month;
-	//↓ここを増やしてます
 	private int day;
 
 	public AttendanceQuery() {

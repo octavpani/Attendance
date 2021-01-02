@@ -32,9 +32,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	}
 	public User createUserDetails(SiteUser user) {
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+		//SpringSecurityで、hasRoleすると、自動で"ROLE_"が付加される為必要な処理
 		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
-
 		return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
 	}
-
+	/*どこで使っているメソッドなのか？→
+	 * SecurityConfig
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService)
+		.passwordEncoder(passwordEncoder());
+	}
+	*/
 }

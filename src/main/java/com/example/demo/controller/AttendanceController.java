@@ -32,16 +32,25 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(page = 0, size = 10,sort = "id")Pageable pageable) {
+	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(page = 0, size = 10,sort = "id")Pageable pageable, Principal principal) {
 
 		//Pageable pageable = PageRequest.of(0, 10, Sort.by("username").descending());
+		getYourAttendanceList(mv, pageable, principal);
+		return mv;
+	}
+
+
+	//追加したものです
+	@GetMapping("/admin/attendance/list")
+	public ModelAndView showAdminAttendanceList(ModelAndView mv, @PageableDefault(page = 0, size = 10,sort = "id")Pageable pageable) {
 		getAttendanceList(mv, pageable);
 		return mv;
 	}
 
+
 	@GetMapping("/attendance")
 	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute Attendance attendance, Principal principal) {
-		mv.setViewName("attendance_form");
+		mv.setViewName("attendanceForm");
 		mv.addObject("name", principal.getName());
 		return mv;
 	}
@@ -50,13 +59,13 @@ public class AttendanceController {
 	public ModelAndView createAttendance1(ModelAndView mv, @Validated @ModelAttribute Attendance attendance, Principal principal, BindingResult result) {
 		setLoginName(principal, attendance);
 		if(result.hasErrors()) {
-			mv.setViewName("attendance_form");
+			mv.setViewName("attendanceForm");
 			return mv;
 		}
 		if (!PracticeCalcService.isValidWorkingRange(
 		      attendance.getStaHour(), attendance.getStaMin(),
 		      attendance.getEndHour(), attendance.getEndMin())) {
-			mv.setViewName("attendance_form");
+			mv.setViewName("attendanceForm");
 			//これは出力された
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
@@ -77,7 +86,7 @@ public class AttendanceController {
 	@GetMapping("/attendance/{id}")
 	public ModelAndView getAttendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
 		Attendance attendance = secureAttendanceId(id, principal);
-		mv.setViewName("attendance_form");
+		mv.setViewName("attendanceForm");
 		mv.addObject("attendance", attendance);
 		mv.addObject("mode", "update");
 		return mv;
@@ -94,7 +103,7 @@ public class AttendanceController {
 			 setLoginName(principal, attendance);
 			 if(result.hasErrors()) {
 				 mv.addObject("mode", "update");
-			     mv.setViewName("attendance_form");
+			     mv.setViewName("attendanceForm");
 			     setLoginName(principal, attendance);
 			     mv.addObject("name", principal.getName());
 				return mv;
@@ -134,8 +143,28 @@ public class AttendanceController {
 			return mv;
 		}
 		*/
+	//ユーザー用に自分のもののみ検索
+	@PostMapping("/attendance/query")
+	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery aq, ModelAndView mv, Pageable pa,
+			Principal principal) {
+		//@PageableDefault(page = 0, size = 10)Pageable pageable,
+		mv.setViewName("attendanceList");
+		Page<Attendance> attendancePage = null;
 
+		if(aq.getDay() == 0) {
+			pa = PageRequest.of(0, 10, Sort.by("day").ascending());
 
+		} else {
+			pa = PageRequest.of(0, 10, Sort.by("day").descending());
+		}
+		attendancePage = attendanceService.doQueryAsUser(pa, aq, principal);
+		mv.addObject("attendanceList", attendancePage.getContent());
+		mv.addObject("attendanceQuery", new AttendanceQuery());
+		mv.addObject("attendancePage", attendancePage);
+		return mv;
+	}
+
+	/*既存のもの　Admin用で使う
 	@PostMapping("/attendance/query")
 	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery aq, ModelAndView mv, Pageable pa) {
 		//@PageableDefault(page = 0, size = 10)Pageable pageable,
@@ -149,14 +178,17 @@ public class AttendanceController {
 			pa = PageRequest.of(0, 10, Sort.by("day").descending());
 		}
 
-		//並べ替えお試し
-		//Pageable pageable = PageRequest.of(0, 10, Sort.by("day").ascending());
 		attendancePage = attendanceService.doQuery(pa, aq);
 		mv.addObject("attendanceList", attendancePage.getContent());
 		mv.addObject("attendanceQuery", new AttendanceQuery());
 		mv.addObject("attendancePage", attendancePage);
 		return mv;
-	}
+
+		*/
+
+		//並べ替えお試し
+		//Pageable pageable = PageRequest.of(0, 10, Sort.by("day").ascending());
+
 
 	/* 現在ページングへの対応テスト中
 	@PostMapping("/attendance/query")
@@ -192,15 +224,24 @@ public class AttendanceController {
 	private void setLoginName(Principal principal, Attendance attendance) {
 		attendance.setUsername(principal.getName());
 	}
-
-
-	public void getAttendanceList(ModelAndView mv, Pageable pageable) {
-		mv.setViewName("attendanceList");
-		Page<Attendance> attendancePage = attendanceService.searchAttendance(pageable);
+	//ユーザー用検索
+	public void getYourAttendanceList(ModelAndView mv, Pageable pageable, Principal principal) {
+		mv.setViewName("attendanceListForUser");
+		Page<Attendance> attendancePage = attendanceService.getYourAttendance(principal, pageable);
 		mv.addObject("attendanceList", attendancePage.getContent());
 		mv.addObject("attendanceQuery", new AttendanceQuery());
 		mv.addObject("attendancePage", attendancePage);
 	}
+
+	// 以前のもの　Admin用に
+	public void getAttendanceList(ModelAndView mv, Pageable pageable) {
+		mv.setViewName("attendanceList");
+		Page<Attendance> attendancePage = attendanceService.getAllAttendance(pageable);
+		mv.addObject("attendanceList", attendancePage.getContent());
+		mv.addObject("attendanceQuery", new AttendanceQuery());
+		mv.addObject("attendancePage", attendancePage);
+	}
+
 
 
 		/*　前回→全件取得時のコード

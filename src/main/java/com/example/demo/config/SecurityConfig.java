@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.example.demo.util.Role;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -31,29 +33,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 		.antMatchers("/login", "/register", "/attendance", "/attendance/list", "/delete/*").permitAll()
-
-		/*@EnableGlobalMethodSecurity （prePostEnabled = true ）
-		//public  class  MySpringSecurityConfig  extends  WebSecurityConfigurerAdapter  {
-		//.xmlにおいて、<sec：global-method-security  pre-post-annotations = "enabled"  />
-
-        */
-
-
-
+		.antMatchers("/admin/**").hasRole(Role.ADMIN.name())
 		.anyRequest().authenticated()
-
-
 		.and()
+
+
 
 		.formLogin()
 		.loginPage("/login")
 		.defaultSuccessUrl("/")
 		.and()
-
 		.logout()
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 		.and()
-
 		.rememberMe();
 
 	}
