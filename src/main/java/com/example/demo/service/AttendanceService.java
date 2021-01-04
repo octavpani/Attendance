@@ -36,12 +36,14 @@ public class AttendanceService {
 		 return  attendanceList;
 	}
 	*/
-	//　追加
-	public Page<Attendance> doQueryAsUser(Pageable pageable, AttendanceQuery aq, Principal principal) {
-		return attendanceRepository.findByMonthIsAndDayIsAndUsernameLike(aq.getMonth(), aq.getDay(), pageable,
+	public Page<Attendance> getYourAttendance(Pageable pageable, AttendanceQuery aq, Principal principal) {
+		return attendanceRepository.findByDayIsAndUsernameLike(aq.getDay(), pageable,
 				principal.getName());
-
 	}
+
+		public Page<Attendance> getYourAllAttendance(Principal principal, Pageable pageable) {
+			return attendanceRepository.findByUsernameLike(principal.getName(), pageable);
+		}
 
 	public Page<Attendance> doQuery(Pageable pageable, AttendanceQuery aq) {
 		return attendanceRepository.findByUsernameLikeAndMonthIs("%" + aq.getUsername() + "%", aq.getMonth(), pageable);
@@ -59,10 +61,7 @@ public class AttendanceService {
 	public Page<Attendance> getAllAttendance(Pageable pageable) {
 		return attendanceRepository.findAll(pageable);
 	}
-	//　追加
-	public Page<Attendance> getYourAttendance(Principal principal, Pageable pageable) {
-		return attendanceRepository.findByUsernameLike(principal.getName(), pageable);
-	}
+
 
 	public Optional<Attendance> findAttendanceById(long id) {
 		return attendanceRepository.findById(id);

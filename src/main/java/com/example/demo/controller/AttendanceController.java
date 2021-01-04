@@ -4,9 +4,7 @@ import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.Utils;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.model.Attendance;
@@ -32,13 +32,44 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(page = 0, size = 10,sort = "id")Pageable pageable, Principal principal) {
+	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(size = 5)Pageable pageable, @RequestParam(name = "day", required = false) Integer day, Principal principal, AttendanceQuery attendanceQuery) {
 
-		//Pageable pageable = PageRequest.of(0, 10, Sort.by("username").descending());
-		getYourAttendanceList(mv, pageable, principal);
+		Page<Attendance> attendances = null;
+		if(day == null) {
+			attendances = attendanceService.getYourAllAttendance(principal, pageable);
+		} else {
+			attendances = attendanceService.getYourAttendance(pageable, attendanceQuery, principal);
+		}
+
+		mv.addObject("attendanceList", attendances.getContent());
+		mv.addObject("attendances", attendances);
+		mv.addObject("day", day);
+		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "day", day));
+		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "day", day));
+		mv.setViewName("attendanceListForUser");
 		return mv;
 	}
+/*
+	@PostMapping("/attendance/query")
+	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery aq, ModelAndView mv, Pageable pa,
+			Principal principal) {
+		//@PageableDefault(page = 0, size = 10)Pageable pageable,
+		mv.setViewName("attendanceListForUser");
+		Page<Attendance> attendancePage = null;
 
+		if(aq.getDay() == 0) {
+			pa = PageRequest.of(0, 10, Sort.by("day").ascending());
+
+		} else {
+			pa = PageRequest.of(0, 10, Sort.by("day").descending());
+		}
+
+		mv.addObject("attendanceList", attendancePage.getContent());
+		mv.addObject("attendanceQuery", new AttendanceQuery());
+		mv.addObject("attendancePage", attendancePage);
+		return mv;
+	}
+*/
 
 	//追加したものです
 	@GetMapping("/admin/attendance/list")
@@ -132,37 +163,7 @@ public class AttendanceController {
 		return mv;
 	}
 
-	//変更中　Get→Post
 
-	/*
-		@PostMapping("/delete")
-		public ModelAndView deleteAttendance(ModelAndView mv, long id, Principal principal) {
-			Attendance attendance = secureAttendanceId(id, principal);
-			attendanceService.goodbyeAttendance(attendance);
-			mv =  new ModelAndView("redirect:/attendance/list");
-			return mv;
-		}
-		*/
-	//ユーザー用に自分のもののみ検索
-	@PostMapping("/attendance/query")
-	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery aq, ModelAndView mv, Pageable pa,
-			Principal principal) {
-		//@PageableDefault(page = 0, size = 10)Pageable pageable,
-		mv.setViewName("attendanceList");
-		Page<Attendance> attendancePage = null;
-
-		if(aq.getDay() == 0) {
-			pa = PageRequest.of(0, 10, Sort.by("day").ascending());
-
-		} else {
-			pa = PageRequest.of(0, 10, Sort.by("day").descending());
-		}
-		attendancePage = attendanceService.doQueryAsUser(pa, aq, principal);
-		mv.addObject("attendanceList", attendancePage.getContent());
-		mv.addObject("attendanceQuery", new AttendanceQuery());
-		mv.addObject("attendancePage", attendancePage);
-		return mv;
-	}
 
 	/*既存のもの　Admin用で使う
 	@PostMapping("/attendance/query")
@@ -170,20 +171,16 @@ public class AttendanceController {
 		//@PageableDefault(page = 0, size = 10)Pageable pageable,
 		mv.setViewName("attendanceList");
 		Page<Attendance> attendancePage = null;
-
 		if(aq.getDay() == 0) {
 			pa = PageRequest.of(0, 10, Sort.by("day").ascending());
-
 		} else {
 			pa = PageRequest.of(0, 10, Sort.by("day").descending());
 		}
-
 		attendancePage = attendanceService.doQuery(pa, aq);
 		mv.addObject("attendanceList", attendancePage.getContent());
 		mv.addObject("attendanceQuery", new AttendanceQuery());
 		mv.addObject("attendancePage", attendancePage);
 		return mv;
-
 		*/
 
 		//並べ替えお試し
@@ -199,7 +196,6 @@ public class AttendanceController {
 		mv.addObject("attendanceList", attendanceList);
 		return mv;
 	}
-
 	@PostMapping("/attendance/sortbymonth")
 	public ModelAndView sortByName(@ModelAttribute AttendanceQuery attendanceQuery, ModelAndView mv) {
 		mv.setViewName("attendanceList");
@@ -223,14 +219,6 @@ public class AttendanceController {
 
 	private void setLoginName(Principal principal, Attendance attendance) {
 		attendance.setUsername(principal.getName());
-	}
-	//ユーザー用検索
-	public void getYourAttendanceList(ModelAndView mv, Pageable pageable, Principal principal) {
-		mv.setViewName("attendanceListForUser");
-		Page<Attendance> attendancePage = attendanceService.getYourAttendance(principal, pageable);
-		mv.addObject("attendanceList", attendancePage.getContent());
-		mv.addObject("attendanceQuery", new AttendanceQuery());
-		mv.addObject("attendancePage", attendancePage);
 	}
 
 	// 以前のもの　Admin用に
@@ -256,10 +244,8 @@ public class AttendanceController {
 		}
 		sum_hours += sum_minutes / PracticeCalcService.HOUR;
 		sum_minutes = sum_minutes % PracticeCalcService.HOUR;
-
 		mv.addObject("sum_hours", sum_hours);
 		mv.addObject("sum_minutes", sum_minutes);
-
 		mv.addObject("attendanceList", attendanceList);
 		mv.addObject("attendanceQuery", new AttendanceQuery());
 	}
@@ -279,10 +265,3 @@ public class AttendanceController {
 
 
 }
-
-
-
-
-
-
-

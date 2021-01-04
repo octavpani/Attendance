@@ -18,56 +18,13 @@
 	</head>
 	<body>
 	<h2>検索条件</h2>
-	<form th:action="@{/}" method="post" th:object="${attendanceQuery}">
-	        <table>
-	                <tr>
-	                        <th>月</th>
-	                        <td>
-                                    <input type="number" name="month" th:value="*{month}">
-                            </td>
-                    <tr>
-                    <tr>
-                            <th>日付</th>
-                            <td>
-                                   <input type="number" name="day" th:value="*{day}">
-                            </td>
-                    </tr>
-                    <tr>
-                    <tr>
-                    		<th>ソート条件</th>
-                    		<td>
-                    			<select name="day">
-                    				<option value="0">日付（昇）</option>
-                    				<option value="1">日付（降）</option>
-                    			</select>
-                    		</td>
-                    </tr>
-                    		<td>
-                    			<button type="submit" th:formaction="@{/attendance/query}">検索</button>
-                    		</td>
-            </table>
-     </form>
-
-    <!--   項目ごとにoptionでソートさせる
-
-    <form th:action="@{/}" method="post" th:object="${attendanceQuery}">
-    <select name="sortdate">
-          <option value="day_asc">日付（昇順）</option>
-          <option value="day_desc">日付（降順）</option>
-    </select>
-    </form>
-
-    <form th:action="@{/}" method="post" th:object="${attendanceQuery}">
-    <select name="sortdate">
-          <option value="name_asc">ユーザー名（あいうえお）</option>
-          <option value="name_desc">ユーザー名（わをん）</option>
-    </select>
-    </form>
+	<section>
+		<form th:action="@{''}" method="get">
+			<input class="mr-4" type="number" name="day" th:value="${day}"/><input class="ope" type="submit" value="Search" />
+		</form>
+	</section>
 
 
-
-
-    -->
 
 
 
@@ -130,49 +87,24 @@
 
                     </table>
                      </tbody>
-                            <div>
-                                <span th:text="|${attendancePage.getNumber() + 1} / ${attendancePage.getTotalPages()}ページを表示中 |">
-                                </span>
-
-
-                                <ul id="nav">
-
-
-                                   <li>
-                                      <span th:if="${attendancePage.isFirst()}">←前</span>
-                                      <a th:unless="${attendancePage.isFirst()}" th:href="@{/attendance/list(page=${attendancePage.getNumber()- 1})}">
-                                      ←前
-                                      </a>
-                                   </li>
-                                   <li>
-                                      <span th:if="${attendancePage.isLast()}">次→</span>
-                                      <a th:unless="${attendancePage.isLast()}" th:href="@{/attendance/list(page=${attendancePage.getNumber()+ 1})}">次→</a>
-                                   </li>
-                                </ul>
-
-                                <!--
-
-                                <ul id="nav">
-
-
-                                   <li>
-                                      <span th:if="${attendancePage.isFirst()}">←前</span>
-                                      <a th:unless="${attendancePage.isFirst()}" th:href="@{{attendancePage.url}">
-                                      ←前
-                                      </a>
-                                   </li>
-                                   <li>
-                                      <span th:if="${attendancePage.isLast()}">次→</span>
-                                      <a th:unless="${attendancePage.isLast()}" th:href="@{{attendancePage.url}}">次→</a>
-                                   </li>
-                                </ul>
-
-                                 -->>
-
-
-
-
-                           </div>
+                     <section th:object="${attendance}">
+				<h3>ページングリンク</h3>
+				<div class="pager">
+					<a th:href="@{${pathWithSort}(page=0)}">最初</a>
+					<th:block th:each="i : ${#numbers.sequence(0, attendances.totalPages - 1)}">
+						<a th:href="@{${pathWithSort}(page=${i})}" th:text="${i+1}">0</a>
+					</th:block>
+					<a th:href="@{${pathWithSort}(page=*{totalPages-1})}">最後</a>
+				</div>
+			</section>
+                            <section th:object="${attendance}">
+				<h3>ソートリンク</h3>
+				<ul class="sorter">
+					<li><a th:href="@{${pathWithPage}(sort=month)}">月昇順</a></li>
+					<li><a th:href="@{${pathWithPage}(sort='month,desc')}">月降順</a></li>
+					<li><a th:href="@{${pathWithPage}(sort=id,sort='name,desc')}">Id昇順&amp;Name降順</a></li>
+				</ul>
+			</section>
 
 
 

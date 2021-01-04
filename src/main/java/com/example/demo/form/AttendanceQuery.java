@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class AttendanceQuery {
 	private String username;
-	private int month;
-	private int day;
+	private Integer month;
+	private Integer day;
 
 	public AttendanceQuery() {
 		username = "";
