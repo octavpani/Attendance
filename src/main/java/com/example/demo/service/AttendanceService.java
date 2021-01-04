@@ -36,18 +36,31 @@ public class AttendanceService {
 		 return  attendanceList;
 	}
 	*/
-	public Page<Attendance> getYourAttendance(Pageable pageable, AttendanceQuery aq, Principal principal) {
+	public Page<Attendance> getYourAllAttendance(Principal principal, Pageable pageable) {
+		return attendanceRepository.findByUsernameLike(principal.getName(), pageable);
+	}
+
+
+	public Page<Attendance> getYourAttendanceByDay(Pageable pageable, AttendanceQuery aq, Principal principal) {
 		return attendanceRepository.findByDayIsAndUsernameLike(aq.getDay(), pageable,
 				principal.getName());
 	}
-
-		public Page<Attendance> getYourAllAttendance(Principal principal, Pageable pageable) {
-			return attendanceRepository.findByUsernameLike(principal.getName(), pageable);
-		}
-
-	public Page<Attendance> doQuery(Pageable pageable, AttendanceQuery aq) {
-		return attendanceRepository.findByUsernameLikeAndMonthIs("%" + aq.getUsername() + "%", aq.getMonth(), pageable);
+	public Page<Attendance> getYourAttendanceByMonth(Pageable pageable, AttendanceQuery aq, Principal principal) {
+		return attendanceRepository.findByMonthIsAndUsernameLike(aq.getMonth(), pageable,
+				principal.getName());
 	}
+
+
+	public Page<Attendance> getYourAttendanceByMonthAndDay(Pageable pageable, AttendanceQuery aq, Principal principal) {
+		return attendanceRepository.findByMonthIsAndDayIsAndUsernameLike(aq.getMonth(), aq.getDay(), pageable,
+				principal.getName());
+	}
+
+
+
+	/*public Page<Attendance> doQuery(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByUsernameLikeAndMonthIs("%" + aq.getUsername() + "%", aq.getMonth(), pageable);
+	}*/
 
 	public void saveAttendance(Attendance attendance) {
 		attendanceRepository.saveAndFlush(attendance);

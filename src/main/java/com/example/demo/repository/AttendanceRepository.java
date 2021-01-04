@@ -14,6 +14,10 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 	//↓2つは、管理者とユーザーの機能を分ける為に追加したものになります。
 	Page<Attendance> findByDayIsAndUsernameLike(Integer day, Pageable pageable, String name);
 
+	Page<Attendance> findByMonthIsAndUsernameLike(Integer month, Pageable pageable, String name);
+
+	Page<Attendance> findByMonthIsAndDayIsAndUsernameLike(Integer month, Integer day, Pageable pageable, String name);
+
 	Page<Attendance> findByUsernameLike(String name, Pageable pageable);
 
 	/* 作成中　月のみ名前のみ

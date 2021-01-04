@@ -32,44 +32,28 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(size = 5)Pageable pageable, @RequestParam(name = "day", required = false) Integer day, Principal principal, AttendanceQuery attendanceQuery) {
+	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(size = 5)Pageable pageable, @RequestParam(name = "day", required = false)
+	Integer day, @RequestParam(name = "month", required = false) Integer month, Principal principal, AttendanceQuery attendanceQuery) {
 
 		Page<Attendance> attendances = null;
-		if(day == null) {
+		if(day == null && month == null) {
 			attendances = attendanceService.getYourAllAttendance(principal, pageable);
+		} else if (month == null){
+			attendances = attendanceService.getYourAttendanceByDay(pageable, attendanceQuery, principal);
+		} else if(day == null){
+			attendances = attendanceService.getYourAttendanceByMonth(pageable, attendanceQuery, principal);
 		} else {
-			attendances = attendanceService.getYourAttendance(pageable, attendanceQuery, principal);
+			attendances = attendanceService.getYourAttendanceByMonthAndDay(pageable, attendanceQuery, principal);
 		}
 
 		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("attendances", attendances);
 		mv.addObject("day", day);
-		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "day", day));
-		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "day", day));
+		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "day", day, "month", month));
+		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "day", day, "month", month));
 		mv.setViewName("attendanceListForUser");
 		return mv;
 	}
-/*
-	@PostMapping("/attendance/query")
-	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery aq, ModelAndView mv, Pageable pa,
-			Principal principal) {
-		//@PageableDefault(page = 0, size = 10)Pageable pageable,
-		mv.setViewName("attendanceListForUser");
-		Page<Attendance> attendancePage = null;
-
-		if(aq.getDay() == 0) {
-			pa = PageRequest.of(0, 10, Sort.by("day").ascending());
-
-		} else {
-			pa = PageRequest.of(0, 10, Sort.by("day").descending());
-		}
-
-		mv.addObject("attendanceList", attendancePage.getContent());
-		mv.addObject("attendanceQuery", new AttendanceQuery());
-		mv.addObject("attendancePage", attendancePage);
-		return mv;
-	}
-*/
 
 	//追加したものです
 	@GetMapping("/admin/attendance/list")
