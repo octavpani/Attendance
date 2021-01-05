@@ -29,11 +29,15 @@
                       <a th:href="@{/attendance}">作成へ</a>
                  </td>
                  <td>
-                      <a th:href="@{/attendance/list}">勤怠一覧へ</a>
+                 	<div sec:authorize="hasRole('ROLE_ADMIN')">
+    					<a th:href="@{/admin/attendance/list}">勤怠管理へ</a>
+    				</div>
+
+    				<div sec:authorize="hasRole('ROLE_USER')">
+    					<a th:href="@{/attendance/list}">勤怠一覧へ</a>
+    				</div>
                  </td>
-                 <td>
-                 	  <a th:href="@{/admin/attendance/list}">管理画面へ</a>
-                 </td>
+
              </tr>
      </table>
      </body>

@@ -45,6 +45,7 @@ public class AttendanceController {
 		} else {
 			attendances = attendanceService.getYourAttendanceByMonthAndDay(pageable, attendanceQuery, principal);
 		}
+		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAttendanceList();
 		int sumTime = 0;
 		for(int i = 0; i < attendanceList.size(); i++) {

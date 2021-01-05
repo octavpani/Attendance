@@ -13,7 +13,7 @@
     </head>
     <body>
          <td th:text="${name}"></td>さん　こんにちは<br>
-         <div th:if="${session.mode == 'update'}">
+         <div th:if="${mode == 'update'}">
          投稿のIDは、<td th:text="${id}"></td>です<br>
          </div>
          <border="1"　width="50%" align="center">

@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.security.Principal;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,7 @@ import com.example.demo.util.Role;
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
-public class SecurityController {
+public class HomeController {
 
 	private final SiteUserRepository userRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
@@ -31,7 +33,6 @@ public class SecurityController {
 	@GetMapping("/")
 	public String showList(Authentication loginUser, Model model) {
 		model.addAttribute("username", loginUser.getName());
-		//再度追加
 		model.addAttribute("role", loginUser.getAuthorities());
 		return "user";
 	}
