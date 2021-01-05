@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -30,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 public class AttendanceController {
 
 	private final AttendanceService attendanceService;
-
 	@GetMapping("/attendance/list")
 	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(size = 5)Pageable pageable, @RequestParam(name = "day", required = false)
 	Integer day, @RequestParam(name = "month", required = false) Integer month, Principal principal, AttendanceQuery attendanceQuery) {
@@ -45,7 +45,16 @@ public class AttendanceController {
 		} else {
 			attendances = attendanceService.getYourAttendanceByMonthAndDay(pageable, attendanceQuery, principal);
 		}
+		List<Attendance> attendanceList = attendanceService.getYourAttendanceList();
+		int sumTime = 0;
+		for(int i = 0; i < attendanceList.size(); i++) {
 
+			sumTime = sumTime + attendanceList.get(i).workingHours() * PracticeCalcService.HOUR + attendanceList.get(i).workingMinutes();
+		}
+		int sumHours = sumTime / PracticeCalcService.HOUR;
+		int sumMinutes = sumTime % PracticeCalcService.HOUR;
+		mv.addObject("sumHours", sumHours);
+		mv.addObject("sumMinutes", sumMinutes);
 		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("attendances", attendances);
 		mv.addObject("day", day);
@@ -55,7 +64,7 @@ public class AttendanceController {
 		return mv;
 	}
 
-	//追加したものです
+
 	@GetMapping("/admin/attendance/list")
 	public ModelAndView showAdminAttendanceList(ModelAndView mv, @PageableDefault(page = 0, size = 10,sort = "id")Pageable pageable) {
 		getAttendanceList(mv, pageable);

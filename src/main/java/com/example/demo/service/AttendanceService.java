@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -61,6 +62,10 @@ public class AttendanceService {
 	/*public Page<Attendance> doQuery(Pageable pageable, AttendanceQuery aq) {
 		return attendanceRepository.findByUsernameLikeAndMonthIs("%" + aq.getUsername() + "%", aq.getMonth(), pageable);
 	}*/
+
+	public List<Attendance> getYourAttendanceList() {
+		return attendanceRepository.findAll();
+	}
 
 	public void saveAttendance(Attendance attendance) {
 		attendanceRepository.saveAndFlush(attendance);
