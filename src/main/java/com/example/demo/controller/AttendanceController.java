@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class AttendanceController {
 
 	private final AttendanceService attendanceService;
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(size = 5)Pageable pageable, @RequestParam(name = "day", required = false)
+	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(size = 10)Pageable pageable, @RequestParam(name = "day", required = false)
 	Integer day, @RequestParam(name = "month", required = false) Integer month, Principal principal, AttendanceQuery attendanceQuery) {
 
 		Page<Attendance> attendances = null;
@@ -46,7 +47,7 @@ public class AttendanceController {
 			attendances = attendanceService.getYourAttendanceByMonthAndDay(pageable, attendanceQuery, principal);
 		}
 		//勤務時間の計算
-		List<Attendance> attendanceList = attendanceService.getYourAttendanceList();
+		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
 		int sumTime = 0;
 		for(int i = 0; i < attendanceList.size(); i++) {
 
@@ -65,13 +66,40 @@ public class AttendanceController {
 		return mv;
 	}
 
-
+//計算一旦不要
+//後で、==を.equalsに変更？
 	@GetMapping("/admin/attendance/list")
-	public ModelAndView showAdminAttendanceList(ModelAndView mv, @PageableDefault(page = 0, size = 10,sort = "id")Pageable pageable) {
-		getAttendanceList(mv, pageable);
+	public ModelAndView showAttendanceListForAdmin(ModelAndView mv, @PageableDefault(size = 10)Pageable pageable, @RequestParam(name = "day", required = false)
+	Integer day, @RequestParam(name = "month", required = false)Integer month,  @RequestParam(name="username", required = false)String username, Principal principal, AttendanceQuery attendanceQuery) {
+		Page<Attendance> attendances = null;
+		if(day == null && month == null &&  !(StringUtils.hasLength(username))) {
+			attendances = attendanceService.getAllAttendance(pageable);
+		} else if(day == null && month == null) {
+			attendances = attendanceService.getAttendanceByUsernameLike(pageable, attendanceQuery);
+		} else if(!(StringUtils.hasLength(username)) && month == null) {
+			attendances = attendanceService.getAttendanceByDayIs(pageable, attendanceQuery);
+		} else if(!(StringUtils.hasLength(username)) && day == null) {
+			attendances = attendanceService.getAttendanceByMonthIs(pageable, attendanceQuery);
+		} else if (month == null) {
+			attendances = attendanceService.getAttendanceByDayIsAndUsernameLike(pageable, attendanceQuery);
+		} else if(day == null) {
+			attendances = attendanceService.getAttendanceByMonthIsAndUsernameLike(pageable, attendanceQuery);
+		} else if(!(StringUtils.hasLength(username))) {
+			attendances = attendanceService.getAttendanceByMonthIsAndDayIs(pageable, attendanceQuery);
+		} else {
+			attendances = attendanceService.getAttendanceByMonthIsAndDayIsAndUsernameLike(pageable, attendanceQuery);
+		}
+
+		mv.addObject("attendanceList", attendances.getContent());
+		mv.addObject("attendances", attendances);
+		mv.addObject("username", username);
+		mv.addObject("day", day);
+		mv.addObject("month", month);
+		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "day", day, "month", month, "username", username));
+		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "day", day, "month", month, "username", username));
+		mv.setViewName("attendanceListForAdmin");
 		return mv;
 	}
-
 
 	@GetMapping("/attendance")
 	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute Attendance attendance, Principal principal) {
@@ -181,23 +209,6 @@ public class AttendanceController {
 		//Pageable pageable = PageRequest.of(0, 10, Sort.by("day").ascending());
 
 
-	/* 現在ページングへの対応テスト中
-	@PostMapping("/attendance/query")
-	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery attendanceQuery, ModelAndView mv) {
-		mv.setViewName("attendanceList");
-		List<Attendance> attendanceList = null;
-		attendanceList = attendanceService.doQuery(attendanceQuery);
-		mv.addObject("attendanceList", attendanceList);
-		return mv;
-	}
-	@PostMapping("/attendance/sortbymonth")
-	public ModelAndView sortByName(@ModelAttribute AttendanceQuery attendanceQuery, ModelAndView mv) {
-		mv.setViewName("attendanceList");
-		List<Attendance> attendanceList = attendanceRepository.findAll(Sort.by(Sort.Direction.ASC, "month"));
-		mv.addObject("attendanceList", attendanceList);
-		return mv;
-	}
-	*/
 
 
 /*　前回→全件取得時
@@ -215,14 +226,7 @@ public class AttendanceController {
 		attendance.setUsername(principal.getName());
 	}
 
-	// 以前のもの　Admin用に
-	public void getAttendanceList(ModelAndView mv, Pageable pageable) {
-		mv.setViewName("attendanceList");
-		Page<Attendance> attendancePage = attendanceService.getAllAttendance(pageable);
-		mv.addObject("attendanceList", attendancePage.getContent());
-		mv.addObject("attendanceQuery", new AttendanceQuery());
-		mv.addObject("attendancePage", attendancePage);
-	}
+
 
 
 

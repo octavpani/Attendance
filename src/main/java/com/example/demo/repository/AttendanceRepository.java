@@ -1,5 +1,7 @@
 package com.example.demo.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,21 +13,25 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 	Page<Attendance> findByUsernameLikeAndMonthIs(String username, Integer month, Pageable pageable);
 
 
-	//↓2つは、管理者とユーザーの機能を分ける為に追加したものになります。
-	Page<Attendance> findByDayIsAndUsernameLike(Integer day, Pageable pageable, String name);
+	//user用の検索
+	Page<Attendance> findByDayIsAndUsernameLike(Integer day, String name, Pageable pageable);
 
-	Page<Attendance> findByMonthIsAndUsernameLike(Integer month, Pageable pageable, String name);
+	Page<Attendance> findByMonthIsAndUsernameLike(Integer month, String name, Pageable pageable);
 
-	Page<Attendance> findByMonthIsAndDayIsAndUsernameLike(Integer month, Integer day, Pageable pageable, String name);
+	Page<Attendance> findByMonthIsAndDayIsAndUsernameLike(Integer month, Integer day, String name, Pageable pageable);
 
 	Page<Attendance> findByUsernameLike(String name, Pageable pageable);
 
-	/* 作成中　月のみ名前のみ
-	List<Attendance> findByUsernameLike(String username);
+	List<Attendance> findByUsernameLike(String name);
 
-	List<Attendance> findByMonth(Integer month);
-	*/
 
+	//Admin用の検索
+
+	Page<Attendance> findByMonthIsAndDayIs(Integer month, Integer day, Pageable pageable);
+
+	Page<Attendance> findByDayIs(Integer day, Pageable pageable);
+
+	Page<Attendance> findByMonthIs(Integer month, Pageable pageable);
 
 
 }

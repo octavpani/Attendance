@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import java.security.Principal;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -55,8 +53,6 @@ public class HomeController {
 			return "register";
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-		//↓追加したものです。
 		if(user.getUsername().startsWith("Admin_")) {
 			user.setRole(Role.ADMIN.name());
 		} else {

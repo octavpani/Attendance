@@ -19,76 +19,77 @@ import lombok.AllArgsConstructor;
 public class AttendanceService {
 	private final AttendanceRepository attendanceRepository;
 
-	/*
-	public List<Attendance> doQuery(AttendanceQuery aq) {
-		 List<Attendance> attendanceList = null;
-		 if(aq.getUsername().length() > 0 && aq.getMonth() >= 1) {
-		attendanceList = attendanceRepository.findByUsernameLikeAndMonthIs("%" + aq.getUsername() + "%", aq.getMonth());
-		 }
-		 if(aq.getUsername().length() > 0) {
-			 attendanceList = attendanceRepository.findByUsernameLike("%" + aq.getUsername() + "%");
-		 }
-
-		 if(aq.getMonth() >= 1) {
-			 attendanceList = attendanceRepository.findByMonth(aq.getMonth());
-		 } else {
-			 attendanceList = attendanceRepository.findAll();
-		 }
-		 return  attendanceList;
-	}
-	*/
+	//以下userの検索用
 	public Page<Attendance> getYourAllAttendance(Principal principal, Pageable pageable) {
 		return attendanceRepository.findByUsernameLike(principal.getName(), pageable);
 	}
 
-
 	public Page<Attendance> getYourAttendanceByDay(Pageable pageable, AttendanceQuery aq, Principal principal) {
-		return attendanceRepository.findByDayIsAndUsernameLike(aq.getDay(), pageable,
-				principal.getName());
+		return attendanceRepository.findByDayIsAndUsernameLike(aq.getDay(), principal.getName(),
+				pageable);
 	}
 	public Page<Attendance> getYourAttendanceByMonth(Pageable pageable, AttendanceQuery aq, Principal principal) {
-		return attendanceRepository.findByMonthIsAndUsernameLike(aq.getMonth(), pageable,
-				principal.getName());
+		return attendanceRepository.findByMonthIsAndUsernameLike(aq.getMonth(), principal.getName(),
+				pageable);
 	}
-
 
 	public Page<Attendance> getYourAttendanceByMonthAndDay(Pageable pageable, AttendanceQuery aq, Principal principal) {
-		return attendanceRepository.findByMonthIsAndDayIsAndUsernameLike(aq.getMonth(), aq.getDay(), pageable,
-				principal.getName());
+		return attendanceRepository.findByMonthIsAndDayIsAndUsernameLike(aq.getMonth(), aq.getDay(), principal.getName(),
+				pageable);
+	}
+
+	public List<Attendance> getYourAllAttendance(Principal principal) {
+		return attendanceRepository.findByUsernameLike(principal.getName());
+	}
+
+	//以下Adminの検索用
+	public Page<Attendance> getAllAttendance(Pageable pageable) {
+		return attendanceRepository.findAll(pageable);
+	}
+
+	public Page<Attendance> getAttendanceByDayIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByDayIsAndUsernameLike(aq.getDay(), aq.getUsername(), pageable);
+	}
+
+	public Page<Attendance> getAttendanceByMonthIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByMonthIsAndUsernameLike(aq.getMonth(), aq.getUsername(), pageable);
+	}
+
+	public Page<Attendance> getAttendanceByMonthIsAndDayIs(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByMonthIsAndDayIs(aq.getMonth(), aq.getDay(), pageable);
+	}
+
+	public Page<Attendance> getAttendanceByUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return  attendanceRepository.findByUsernameLike(aq.getUsername(),  pageable);
+	}
+
+	public Page<Attendance> getAttendanceByDayIs(Pageable pageable, AttendanceQuery aq) {
+		return  attendanceRepository.findByDayIs(aq.getDay(),  pageable);
+	}
+
+	public Page<Attendance> getAttendanceByMonthIs(Pageable pageable, AttendanceQuery aq) {
+		return  attendanceRepository.findByMonthIs(aq.getMonth(),  pageable);
+	}
+
+	public Page<Attendance> getAttendanceByMonthIsAndDayIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByMonthIsAndDayIsAndUsernameLike(aq.getMonth(), aq.getDay(), aq.getUsername(),
+				pageable);
 	}
 
 
-
-	/*public Page<Attendance> doQuery(Pageable pageable, AttendanceQuery aq) {
-		return attendanceRepository.findByUsernameLikeAndMonthIs("%" + aq.getUsername() + "%", aq.getMonth(), pageable);
-	}*/
-
-	public List<Attendance> getYourAttendanceList() {
-		return attendanceRepository.findAll();
-	}
-
+	//以下投稿編集用
 	public void saveAttendance(Attendance attendance) {
 		attendanceRepository.saveAndFlush(attendance);
 	}
 
 	public void goodbyeAttendance(Attendance attendance) {
-
 		attendanceRepository.deleteById(attendance.getId());
-
 	}
-	public Page<Attendance> getAllAttendance(Pageable pageable) {
-		return attendanceRepository.findAll(pageable);
-	}
-
 
 	public Optional<Attendance> findAttendanceById(long id) {
 		return attendanceRepository.findById(id);
 	}
-	/*
-	public Page<Attendance> searchAttendanceAsPage(Pageable pageable) {
-		return attendanceRepository.findAllByOrderByIdAsc(pageable);
-	}
-	*/
+
 
 }
 
