@@ -4,11 +4,11 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,19 +72,19 @@ public class AttendanceController {
 	public ModelAndView showAttendanceListForAdmin(ModelAndView mv, @PageableDefault(size = 10)Pageable pageable, @RequestParam(name = "day", required = false)
 	Integer day, @RequestParam(name = "month", required = false)Integer month,  @RequestParam(name="username", required = false)String username, Principal principal, AttendanceQuery attendanceQuery) {
 		Page<Attendance> attendances = null;
-		if(day == null && month == null &&  !(StringUtils.hasLength(username))) {
+		if(day == null && month == null && StringUtils.isEmpty(username)) {
 			attendances = attendanceService.getAllAttendance(pageable);
 		} else if(day == null && month == null) {
 			attendances = attendanceService.getAttendanceByUsernameLike(pageable, attendanceQuery);
-		} else if(!(StringUtils.hasLength(username)) && month == null) {
+		} else if(StringUtils.isEmpty(username) && month == null) {
 			attendances = attendanceService.getAttendanceByDayIs(pageable, attendanceQuery);
-		} else if(!(StringUtils.hasLength(username)) && day == null) {
+		} else if(StringUtils.isEmpty(username) && day == null) {
 			attendances = attendanceService.getAttendanceByMonthIs(pageable, attendanceQuery);
 		} else if (month == null) {
 			attendances = attendanceService.getAttendanceByDayIsAndUsernameLike(pageable, attendanceQuery);
 		} else if(day == null) {
 			attendances = attendanceService.getAttendanceByMonthIsAndUsernameLike(pageable, attendanceQuery);
-		} else if(!(StringUtils.hasLength(username))) {
+		} else if(StringUtils.isEmpty(username)) {
 			attendances = attendanceService.getAttendanceByMonthIsAndDayIs(pageable, attendanceQuery);
 		} else {
 			attendances = attendanceService.getAttendanceByMonthIsAndDayIsAndUsernameLike(pageable, attendanceQuery);
