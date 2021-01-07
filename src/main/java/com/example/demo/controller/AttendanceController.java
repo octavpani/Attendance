@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,6 +21,7 @@ import com.example.demo.Utils;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.model.Attendance;
+import com.example.demo.service.AttendanceListService;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.PracticeCalcService;
 
@@ -32,20 +32,16 @@ import lombok.RequiredArgsConstructor;
 public class AttendanceController {
 
 	private final AttendanceService attendanceService;
+	private final AttendanceListService attendanceListService;
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, @PageableDefault(size = 10)Pageable pageable, @RequestParam(name = "day", required = false)
-	Integer day, @RequestParam(name = "month", required = false) Integer month, Principal principal, AttendanceQuery attendanceQuery) {
+	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery,
+			@PageableDefault(size = 10)Pageable pageable,
+			@RequestParam(name = "month", required = false) Integer month,
+			@RequestParam(name = "day", required = false)Integer day)
+	{
 
-		Page<Attendance> attendances = null;
-		if(day == null && month == null) {
-			attendances = attendanceService.getYourAllAttendance(principal, pageable);
-		} else if (month == null){
-			attendances = attendanceService.getYourAttendanceByDay(pageable, attendanceQuery, principal);
-		} else if(day == null){
-			attendances = attendanceService.getYourAttendanceByMonth(pageable, attendanceQuery, principal);
-		} else {
-			attendances = attendanceService.getYourAttendanceByMonthAndDay(pageable, attendanceQuery, principal);
-		}
+		Page<Attendance> attendances = attendanceListService.SelectAttendanceListForUser(pageable, principal, attendanceQuery, month, day);
+
 		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
 		int sumTime = 0;
@@ -55,6 +51,7 @@ public class AttendanceController {
 		}
 		int sumHours = sumTime / PracticeCalcService.HOUR;
 		int sumMinutes = sumTime % PracticeCalcService.HOUR;
+
 		mv.addObject("sumHours", sumHours);
 		mv.addObject("sumMinutes", sumMinutes);
 		mv.addObject("attendanceList", attendances.getContent());
@@ -66,29 +63,17 @@ public class AttendanceController {
 		return mv;
 	}
 
-//計算一旦不要
-//後で、==を.equalsに変更？
+
 	@GetMapping("/admin/attendance/list")
-	public ModelAndView showAttendanceListForAdmin(ModelAndView mv, @PageableDefault(size = 10)Pageable pageable, @RequestParam(name = "day", required = false)
-	Integer day, @RequestParam(name = "month", required = false)Integer month,  @RequestParam(name="username", required = false)String username, Principal principal, AttendanceQuery attendanceQuery) {
-		Page<Attendance> attendances = null;
-		if(day == null && month == null && StringUtils.isEmpty(username)) {
-			attendances = attendanceService.getAllAttendance(pageable);
-		} else if(day == null && month == null) {
-			attendances = attendanceService.getAttendanceByUsernameLike(pageable, attendanceQuery);
-		} else if(StringUtils.isEmpty(username) && month == null) {
-			attendances = attendanceService.getAttendanceByDayIs(pageable, attendanceQuery);
-		} else if(StringUtils.isEmpty(username) && day == null) {
-			attendances = attendanceService.getAttendanceByMonthIs(pageable, attendanceQuery);
-		} else if (month == null) {
-			attendances = attendanceService.getAttendanceByDayIsAndUsernameLike(pageable, attendanceQuery);
-		} else if(day == null) {
-			attendances = attendanceService.getAttendanceByMonthIsAndUsernameLike(pageable, attendanceQuery);
-		} else if(StringUtils.isEmpty(username)) {
-			attendances = attendanceService.getAttendanceByMonthIsAndDayIs(pageable, attendanceQuery);
-		} else {
-			attendances = attendanceService.getAttendanceByMonthIsAndDayIsAndUsernameLike(pageable, attendanceQuery);
-		}
+	public ModelAndView showAttendanceListForAdmin(ModelAndView mv, @PageableDefault(size = 10)Pageable pageable,
+			AttendanceQuery attendanceQuery,
+			@RequestParam(name="username", required = false)String username,
+			@RequestParam(name = "month", required = false)Integer month,
+			@RequestParam(name = "day", required = false)Integer day)
+	 {
+
+		Page<Attendance> attendances = attendanceListService.SelectAttendanceListForAdmin(pageable, attendanceQuery,
+				username, month, day);
 
 		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("attendances", attendances);
@@ -119,7 +104,6 @@ public class AttendanceController {
 		      attendance.getStaHour(), attendance.getStaMin(),
 		      attendance.getEndHour(), attendance.getEndMin())) {
 			mv.setViewName("attendanceForm");
-			//これは出力された
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
