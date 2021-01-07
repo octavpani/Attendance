@@ -28,6 +28,7 @@
                  <td>
                       <a th:href="@{/attendance}">作成へ</a>
                  </td>
+
                  <td>
                  	<div sec:authorize="hasRole('ROLE_ADMIN')">
     					<a th:href="@{/admin/attendance/list}">勤怠管理画面へ</a>

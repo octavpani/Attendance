@@ -1,8 +1,14 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import com.example.demo.Utils;
 import com.example.demo.exception.FileNotFoundException;
@@ -169,42 +178,39 @@ public class AttendanceController {
 		return mv;
 	}
 
+	@GetMapping("/export")
+    public void exportToCSV(HttpServletResponse response, Principal principal) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename= " + principal.getName() + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        List<Attendance> attendances = attendanceService.getYourAllAttendance(principal);
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = {"Attendance ID", "UserName", "Month", "Day", "staHour", "staMin", "endHour", "endMin"};
+        String[] nameMapping = {"id", "username", "month", "day", "staHour", "staMin", "endHour", "endMin"};
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (Attendance attendance : attendances) {
+            csvWriter.write(attendance, nameMapping);
+        }
+
+        csvWriter.close();
+
+    }
 
 
-	/*既存のもの　Admin用で使う
-	@PostMapping("/attendance/query")
-	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery aq, ModelAndView mv, Pageable pa) {
-		//@PageableDefault(page = 0, size = 10)Pageable pageable,
-		mv.setViewName("attendanceList");
-		Page<Attendance> attendancePage = null;
-		if(aq.getDay() == 0) {
-			pa = PageRequest.of(0, 10, Sort.by("day").ascending());
-		} else {
-			pa = PageRequest.of(0, 10, Sort.by("day").descending());
-		}
-		attendancePage = attendanceService.doQuery(pa, aq);
-		mv.addObject("attendanceList", attendancePage.getContent());
-		mv.addObject("attendanceQuery", new AttendanceQuery());
-		mv.addObject("attendancePage", attendancePage);
-		return mv;
-		*/
-
-		//並べ替えお試し
-		//Pageable pageable = PageRequest.of(0, 10, Sort.by("day").ascending());
 
 
 
 
-/*　前回→全件取得時
-	@PostMapping("/attendance/query")
-	public ModelAndView queryAttendance(@ModelAttribute AttendanceQuery attendanceQuery, ModelAndView mv) {
-		mv.setViewName("attendanceList");
-		List<Attendance> attendanceList = null;
-		attendanceList = attendanceService.doQuery(attendanceQuery);
-		mv.addObject("attendanceList", attendanceList);
-		return mv;
-	}
-*/
+
+
 
 	private void setLoginName(Principal principal, Attendance attendance) {
 		attendance.setUsername(principal.getName());
