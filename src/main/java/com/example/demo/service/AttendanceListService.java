@@ -2,10 +2,10 @@ package com.example.demo.service;
 
 import java.security.Principal;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.model.Attendance;
@@ -19,19 +19,19 @@ public class AttendanceListService {
 	public Page<Attendance> SelectAttendanceListForAdmin(Pageable pageable, AttendanceQuery attendanceQuery,
 			String username, Integer month, Integer day) {
 		Page<Attendance> attendances = null;
-		if(day == null && month == null && StringUtils.isEmpty(username)) {
+		if(day == null && month == null && StringUtils.hasLength(username)) {
 			attendances = attendanceService.getAllAttendance(pageable);
 		} else if(day == null && month == null) {
 			attendances = attendanceService.getAttendanceByUsernameLike(pageable, attendanceQuery);
-		} else if(StringUtils.isEmpty(username) && month == null) {
+		} else if(StringUtils.hasLength(username) && month == null) {
 			attendances = attendanceService.getAttendanceByDayIs(pageable, attendanceQuery);
-		} else if(StringUtils.isEmpty(username) && day == null) {
+		} else if(StringUtils.hasLength(username) && day == null) {
 			attendances = attendanceService.getAttendanceByMonthIs(pageable, attendanceQuery);
 		} else if (month == null) {
 			attendances = attendanceService.getAttendanceByDayIsAndUsernameLike(pageable, attendanceQuery);
 		} else if(day == null) {
 			attendances = attendanceService.getAttendanceByMonthIsAndUsernameLike(pageable, attendanceQuery);
-		} else if(StringUtils.isEmpty(username)) {
+		} else if(StringUtils.hasLength(username)) {
 			attendances = attendanceService.getAttendanceByMonthIsAndDayIs(pageable, attendanceQuery);
 		} else {
 			attendances = attendanceService.getAttendanceByMonthIsAndDayIsAndUsernameLike(pageable, attendanceQuery);
