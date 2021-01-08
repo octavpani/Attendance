@@ -40,17 +40,25 @@ public class AttendanceListService {
 	}
 
 	public Page<Attendance> SelectAttendanceListForUser(Pageable pageable, Principal principal, AttendanceQuery attendanceQuery,
-			Integer month, Integer day) {
+			Integer year, Integer month, Integer day) {
 
 		Page<Attendance> attendances = null;
-		if(day == null && month == null) {
+		if(year == null && month == null  && day == null) {
 			attendances = attendanceService.getYourAllAttendance(principal, pageable);
-		} else if (month == null){
+		} else if(year == null && month == null) {
 			attendances = attendanceService.getYourAttendanceByDay(pageable, attendanceQuery, principal);
-		} else if(day == null){
+		} else if(year == null && day == null) {
 			attendances = attendanceService.getYourAttendanceByMonth(pageable, attendanceQuery, principal);
+		} else if(month == null && day == null) {
+			attendances = attendanceService.getYourAttendanceByYear(pageable, attendanceQuery, principal);
+		} else if(year == null) {
+			attendances = attendanceService.getYourAttendanceByMonthIsAndDayIs(pageable, attendanceQuery, principal);
+		} else if(month == null) {
+			attendances = attendanceService.getYourAttendanceByYearIsAndDayIs(pageable, attendanceQuery, principal);
+		} else if(day == null){
+			attendances = attendanceService.getYourAttendanceByYearIsAndMonthIs(pageable, attendanceQuery, principal);
 		} else {
-			attendances = attendanceService.getYourAttendanceByMonthAndDay(pageable, attendanceQuery, principal);
+			attendances = attendanceService.getYourAttendanceByYearIsAndMonthIsAndDayIs(pageable, attendanceQuery, principal);
 		}
 		return attendances;
 

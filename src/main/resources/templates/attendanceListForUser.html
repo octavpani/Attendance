@@ -20,6 +20,7 @@
 	<h2>検索条件</h2>
 	<section>
 		<form th:action="@{''}" method="get">
+			年<input class="mr-5" type="number" name="year" th:value="${year}"/><br>
 			月<input class="mr-5" type="number" name="month" th:value="${month}"/><br>
 			日<input class="mr-4" type="number" name="day" th:value="${day}"/><br>
 			<input class="ope" type="submit" value="Search" />

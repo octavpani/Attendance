@@ -45,11 +45,12 @@ public class AttendanceController {
 	@GetMapping("/attendance/list")
 	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery,
 			@PageableDefault(size = 10)Pageable pageable,
+			@RequestParam(name = "year", required = false) Integer year,
 			@RequestParam(name = "month", required = false) Integer month,
 			@RequestParam(name = "day", required = false)Integer day)
 	{
 
-		Page<Attendance> attendances = attendanceListService.SelectAttendanceListForUser(pageable, principal, attendanceQuery, month, day);
+		Page<Attendance> attendances = attendanceListService.SelectAttendanceListForUser(pageable, principal, attendanceQuery, year, month, day);
 
 		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
@@ -65,9 +66,11 @@ public class AttendanceController {
 		mv.addObject("sumMinutes", sumMinutes);
 		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("attendances", attendances);
+		mv.addObject("year", year);
+		mv.addObject("month", month);
 		mv.addObject("day", day);
-		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "day", day, "month", month));
-		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "day", day, "month", month));
+		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "day", day, "month", month, "year", year));
+		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "day", day, "month", month, "year", year));
 		mv.setViewName("attendanceListForUser");
 		return mv;
 	}
