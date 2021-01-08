@@ -11,9 +11,10 @@ public class AttendanceQuery {
 
 	public AttendanceQuery() {
 		username = "";
-		year = 1;
-		month = 1;
-		day = 1;
+		year = null;
+		month = null;
+		day = null;
+
 	}
 
 }

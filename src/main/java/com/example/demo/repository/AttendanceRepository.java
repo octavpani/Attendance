@@ -36,7 +36,13 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
 	//Admin用の検索
 
+	Page<Attendance> findByYearIsAndMonthIsAndDayIs(Integer year, Integer month, Integer day, Pageable pageable);
+
 	Page<Attendance> findByMonthIsAndDayIs(Integer month, Integer day, Pageable pageable);
+
+	Page<Attendance> findByYearIsAndMonthIs(Integer year, Integer month, Pageable pageable);
+
+	Page<Attendance> findByYearIsAndDayIs(Integer year, Integer day, Pageable pageable);
 
 	Page<Attendance> findByYearIs(Integer year, Pageable pageable);
 

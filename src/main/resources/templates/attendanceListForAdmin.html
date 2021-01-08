@@ -14,6 +14,7 @@
 	    th, td {
 	    padding: 4px;
 	    }
+
 	    input.mr-4 {
 	    	width:30px;
 	    }
@@ -30,12 +31,16 @@
 		<table class="bordered">
 			<tr>
 			<th>名前</th>
+			<th>年</th>
 			<th>月</th>
 			<th>日付</th>
 			</tr>
+			<tr>
 			<td><input class="mr-3" type="text" name="username" th:value="${username}"/></td>
+			<td><input class="mr-3" type="number" name="year" th:value="${year}"/></td>
 			<td><input class="mr-4" type="number" name="month" th:value="${month}"/></td>
 			<td><input class="mr-4" type="number" name="day" th:value="${day}"/></td>
+			</tr>
 			<tr>
 			<td><input class="ope" type="submit" value="検索" /></td>
 			</tr>

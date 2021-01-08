@@ -67,12 +67,24 @@ public class AttendanceService {
 		return attendanceRepository.findAll(pageable);
 	}
 
-	public Page<Attendance> getAttendanceByDayIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
-		return attendanceRepository.findByDayIsAndUsernameLike(aq.getDay(), aq.getUsername(), pageable);
+	public Page<Attendance> getAttendanceByYearIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByYearIsAndUsernameLike(aq.getYear(), aq.getUsername(), pageable);
 	}
 
 	public Page<Attendance> getAttendanceByMonthIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
 		return attendanceRepository.findByMonthIsAndUsernameLike(aq.getMonth(), aq.getUsername(), pageable);
+	}
+
+	public Page<Attendance> getAttendanceByDayIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByDayIsAndUsernameLike(aq.getDay(), aq.getUsername(), pageable);
+	}
+
+	public Page<Attendance> getAttendanceByYearIsAndMonthIs(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByYearIsAndMonthIs(aq.getYear(), aq.getMonth(), pageable);
+	}
+
+	public Page<Attendance> getAttendanceByYearIsAndDayIs(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByYearIsAndDayIs(aq.getYear(), aq.getDay(), pageable);
 	}
 
 	public Page<Attendance> getAttendanceByMonthIsAndDayIs(Pageable pageable, AttendanceQuery aq) {
@@ -83,6 +95,10 @@ public class AttendanceService {
 		return  attendanceRepository.findByUsernameLike(aq.getUsername(),  pageable);
 	}
 
+	public Page<Attendance> getAttendanceByYearIs(Pageable pageable, AttendanceQuery aq) {
+		return  attendanceRepository.findByYearIs(aq.getYear(),  pageable);
+	}
+
 	public Page<Attendance> getAttendanceByDayIs(Pageable pageable, AttendanceQuery aq) {
 		return  attendanceRepository.findByDayIs(aq.getDay(),  pageable);
 	}
@@ -90,10 +106,30 @@ public class AttendanceService {
 	public Page<Attendance> getAttendanceByMonthIs(Pageable pageable, AttendanceQuery aq) {
 		return  attendanceRepository.findByMonthIs(aq.getMonth(),  pageable);
 	}
+	//正常に動作せず
+	public Page<Attendance> getAttendanceByYearIsAndMonthIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByYearIsAndMonthIsAndUsernameLike(aq.getYear(), aq.getMonth(), aq.getUsername(),
+				pageable);
+	}
+	//正常に動作せず
+	public Page<Attendance> getAttendanceByYearIsAndDayIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByYearIsAndDayIsAndUsernameLike(aq.getYear(), aq.getDay(), aq.getUsername(),
+				pageable);
+	}
 
 	public Page<Attendance> getAttendanceByMonthIsAndDayIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
 		return attendanceRepository.findByMonthIsAndDayIsAndUsernameLike(aq.getMonth(), aq.getDay(), aq.getUsername(),
 				pageable);
+	}
+	//正常に動作せず
+	public Page<Attendance> getAttendanceByYearIsAndMonthIsAndDayIs(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByYearIsAndMonthIsAndDayIs(aq.getYear(), aq.getMonth(), aq.getDay(),
+				pageable);
+	}
+	//正常に動作せず
+	public Page<Attendance> getAttendanceByYearIsAndMonthIsAndDayIsAndUsernameLike(Pageable pageable, AttendanceQuery aq) {
+		return attendanceRepository.findByYearIsAndMonthIsAndDayIsAndUsernameLike(aq.getYear(), aq.getMonth(), aq.getDay(),
+				aq.getUsername(), pageable);
 	}
 
 

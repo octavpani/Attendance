@@ -80,20 +80,22 @@ public class AttendanceController {
 	public ModelAndView showAttendanceListForAdmin(ModelAndView mv, @PageableDefault(size = 10)Pageable pageable,
 			AttendanceQuery attendanceQuery,
 			@RequestParam(name="username", required = false)String username,
+			@RequestParam(name = "year", required = false)Integer year,
 			@RequestParam(name = "month", required = false)Integer month,
 			@RequestParam(name = "day", required = false)Integer day)
 	 {
 
 		Page<Attendance> attendances = attendanceListService.SelectAttendanceListForAdmin(pageable, attendanceQuery,
-				username, month, day);
+				username, year, month, day);
 
 		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("attendances", attendances);
 		mv.addObject("username", username);
-		mv.addObject("day", day);
+		mv.addObject("year", year);
 		mv.addObject("month", month);
-		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "day", day, "month", month, "username", username));
-		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "day", day, "month", month, "username", username));
+		mv.addObject("day", day);
+		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "year", year, "month", month, "day", day, "username", username));
+		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "year", year, "month", month, "day", day, "username", username));
 		mv.setViewName("attendanceListForAdmin");
 		return mv;
 	}
