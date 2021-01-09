@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AttendanceListService {
 	private final AttendanceService attendanceService;
-
+	/* 最初のメソッド 動作確認済み
 	public Page<Attendance> SelectAttendanceListForAdmin(Pageable pageable, AttendanceQuery attendanceQuery,
 			String username, Integer year, Integer month, Integer day) {
 		Page<Attendance> attendances = null;
@@ -39,7 +39,7 @@ public class AttendanceListService {
 			attendances = attendanceService.getAttendanceByYearIsAndMonthIs(pageable, attendanceQuery);
 		} else if(!(StringUtils.hasLength(username)) && month == null) {
 			attendances = attendanceService.getAttendanceByYearIsAndDayIs(pageable, attendanceQuery);
-		} else if(!(StringUtils.hasLength(username) && year == null)) {
+		} else if(!(StringUtils.hasLength(username)) && year == null) {
 			attendances = attendanceService.getAttendanceByMonthIsAndDayIs(pageable, attendanceQuery);
 		} else if(!(StringUtils.hasLength(username))) {
 			//正常に動作せず
@@ -58,7 +58,50 @@ public class AttendanceListService {
 		}
 
 		return attendances;
-}
+} */ //ローカル変数バージョン
+	public Page<Attendance> SelectAttendanceListForAdmin(Pageable pageable, AttendanceQuery attendanceQuery,
+			String username, Integer year, Integer month, Integer day) {
+		Page<Attendance> attendances = null;
+		  boolean noYear = year == null;
+		  boolean noMonth = month == null;
+		  boolean noDay = day == null;
+		  boolean noName = !StringUtils.hasLength(username);
+
+		  if (noYear && noMonth && noDay && noName) {
+			  attendances = attendanceService.getAllAttendance(pageable);
+		  } else if (noYear && noMonth && noDay) {
+			  attendances = attendanceService.getAttendanceByUsernameLike(pageable, attendanceQuery);
+		  } else if (noYear && noMonth && noName) {
+			  attendances = attendanceService.getAttendanceByDayIs(pageable, attendanceQuery);
+		  } else if (noYear && noDay && noName) {
+			  attendances = attendanceService.getAttendanceByMonthIs(pageable, attendanceQuery);
+		  } else if (noMonth && noDay && noName) {
+			  attendances = attendanceService.getAttendanceByYearIs(pageable, attendanceQuery);
+		  } else if (noMonth && noDay) {
+			  attendances = attendanceService.getAttendanceByYearIsAndUsernameLike(pageable, attendanceQuery);
+		  } else if (noYear && noDay) {
+			  attendances = attendanceService.getAttendanceByMonthIsAndUsernameLike(pageable, attendanceQuery);
+		  } else if (noYear && noMonth) {
+			  attendances = attendanceService.getAttendanceByDayIsAndUsernameLike(pageable, attendanceQuery);
+		  } else if (noDay && noName) {
+			  attendances = attendanceService.getAttendanceByYearIsAndMonthIs(pageable, attendanceQuery);
+		  } else if (noMonth && noName) {
+			  attendances = attendanceService.getAttendanceByYearIsAndDayIs(pageable, attendanceQuery);
+		  } else if (noYear && noName) {
+			  attendances = attendanceService.getAttendanceByMonthIsAndDayIs(pageable, attendanceQuery);
+		  } else if (noName) {
+			  attendances = attendanceService.getAttendanceByYearIsAndMonthIsAndDayIs(pageable, attendanceQuery);
+		  } else if (noDay) {
+			  attendances = attendanceService.getAttendanceByYearIsAndMonthIsAndUsernameLike(pageable, attendanceQuery);
+		  } else if (noMonth) {
+			  attendances = attendanceService.getAttendanceByYearIsAndDayIsAndUsernameLike(pageable, attendanceQuery);
+		  } else if (noYear) {
+			  attendances = attendanceService.getAttendanceByMonthIsAndDayIsAndUsernameLike(pageable, attendanceQuery);
+		  } else {
+			  attendances = attendanceService.getAttendanceByYearIsAndMonthIsAndDayIsAndUsernameLike(pageable, attendanceQuery);
+		  }
+		  return attendances;
+	}
 
 
 	public Page<Attendance> SelectAttendanceListForUser(Pageable pageable, Principal principal, AttendanceQuery attendanceQuery,
