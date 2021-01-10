@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.Attendance;
@@ -34,6 +36,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 	List<Attendance> findByUsernameLike(String name);
 
 
+
+
 	//Admin用の検索
 
 	Page<Attendance> findByYearIsAndMonthIsAndDayIs(Integer year, Integer month, Integer day, Pageable pageable);
@@ -49,6 +53,15 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 	Page<Attendance> findByMonthIs(Integer month, Pageable pageable);
 
 	Page<Attendance> findByDayIs(Integer day, Pageable pageable);
+
+	@Query(value = "SELECT * FROM attendance WHERE (:anyName OR username LIKE :username) AND (:anyYear OR year IS :year) AND (:anyMonth OR month IS :month) AND (:anyDame OR Day IS :day)",
+			countQuery = "SELECT COUNT(*) FROM attendance WHERE  (:anyName OR username LIKE :username) AND (:anyYear OR year IS :year) AND (:anyMonth OR month IS :month) AND (:anyDame OR Day IS :day)",
+			nativeQuery = true)
+	Page<Attendance> find(@Param("anyName") boolean anyName, @Param("username") String username,
+			@Param("anyYear") boolean anyYear, @Param("year") Integer year,
+			@Param("anyMonth") boolean anyMonth, @Param("month") Integer month,
+			@Param("anyDay") boolean anyDay, @Param("day") Integer day,
+			Pageable pageable);
 
 
 

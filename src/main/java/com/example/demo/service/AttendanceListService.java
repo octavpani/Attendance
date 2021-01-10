@@ -66,11 +66,14 @@ public class AttendanceListService {
 		  boolean noMonth = month == null;
 		  boolean noDay = day == null;
 		  boolean noName = !StringUtils.hasLength(username);
+		  attendances = attendanceService.getAttendance(pageable, attendanceQuery, username, year, month, day);
+		  /*
 
 		  if (noYear && noMonth && noDay && noName) {
 			  attendances = attendanceService.getAllAttendance(pageable);
 		  } else if (noYear && noMonth && noDay) {
-			  attendances = attendanceService.getAttendanceByUsernameLike(pageable, attendanceQuery);
+			  //ここはSELECT文を書いて作成
+			  attendances = attendanceService.getAttendanceByUsernameLike(pageable, attendanceQuery, username);
 		  } else if (noYear && noMonth && noName) {
 			  attendances = attendanceService.getAttendanceByDayIs(pageable, attendanceQuery);
 		  } else if (noYear && noDay && noName) {
@@ -100,6 +103,7 @@ public class AttendanceListService {
 		  } else {
 			  attendances = attendanceService.getAttendanceByYearIsAndMonthIsAndDayIsAndUsernameLike(pageable, attendanceQuery);
 		  }
+		  */
 		  return attendances;
 	}
 
