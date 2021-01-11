@@ -26,8 +26,8 @@ public class AttendanceService {
 			boolean anyMonth = aq.getMonth() == null;
 			boolean anyDay = aq.getDay() == null;
 			year = anyYear ? null : (aq.getYear());
-			year = anyMonth ? null : (aq.getMonth());
-			year = anyDay ? null : (aq.getDay());
+			month = anyMonth ? null : (aq.getMonth());
+			day = anyDay ? null : (aq.getDay());
 
 			return attendanceRepository.findYourAttendance(principal.getName() , anyYear, aq.getYear(),  anyMonth, aq.getMonth(), anyDay, aq.getDay(), pageable);
 		}
@@ -45,8 +45,8 @@ public class AttendanceService {
 			boolean anyDay = aq.getDay() == null;
 			boolean anyName = aq.getUsername() == null || aq.getUsername().isEmpty();
 			year = anyYear ? null : (aq.getYear());
-			year = anyMonth ? null : (aq.getMonth());
-			year = anyDay ? null : (aq.getDay());
+			month = anyMonth ? null : (aq.getMonth());
+			day = anyDay ? null : (aq.getDay());
 			username = anyName ? "" : ("%" + aq.getUsername() + "%");
 
 			return attendanceRepository.findAttendance(anyName, aq.getUsername(), anyYear, aq.getYear(),  anyMonth, aq.getMonth(), anyDay, aq.getDay(), pageable);
