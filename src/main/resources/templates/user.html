@@ -33,6 +33,9 @@
                  	<div sec:authorize="hasRole('ROLE_ADMIN')">
     					<a th:href="@{/admin/attendance/list}">勤怠管理画面へ</a>
     				</div>
+    				<div sec:authorize="hasRole('ROLE_ADMIN')">
+    					<a th:href="@{/admin/siteuser/list}">ユーザー管理画面へ</a>
+    				</div>
 
     				<div sec:authorize="hasRole('ROLE_USER')">
     					<a th:href="@{/attendance/list}">勤怠一覧へ</a>

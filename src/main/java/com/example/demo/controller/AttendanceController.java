@@ -30,7 +30,6 @@ import com.example.demo.Utils;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.model.Attendance;
-import com.example.demo.service.AttendanceListService;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.PracticeCalcService;
 
@@ -41,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class AttendanceController {
 
 	private final AttendanceService attendanceService;
-	private final AttendanceListService attendanceListService;
+
 	@GetMapping("/attendance/list")
 	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery,
 			@PageableDefault(size = 10)Pageable pageable,
@@ -50,7 +49,8 @@ public class AttendanceController {
 			@RequestParam(name = "day", required = false)Integer day)
 	{
 
-		Page<Attendance> attendances = attendanceListService.SelectAttendanceListForUser(pageable, principal, attendanceQuery, year, month, day);
+		//Page<Attendance> attendances = attendanceListService.SelectAttendanceListForUser(pageable, principal, attendanceQuery, year, month, day);
+		Page<Attendance> attendances = attendanceService.getYourAttendance(pageable, attendanceQuery, principal, year, month, day);
 
 		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
@@ -85,8 +85,8 @@ public class AttendanceController {
 			@RequestParam(name = "day", required = false)Integer day)
 	 {
 
-		Page<Attendance> attendances = attendanceListService.SelectAttendanceListForAdmin(pageable, attendanceQuery,
-				username, year, month, day);
+		Page<Attendance> attendances = attendanceService.getAttendance(pageable, attendanceQuery,
+				day, year, month, username);
 
 		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("attendances", attendances);
@@ -125,14 +125,6 @@ public class AttendanceController {
 	 	mv =  new ModelAndView("redirect:/attendance/list");
 	 		return mv;
 		}
-		//メソッドにする
-		/*if (!PracticeCalcService.isValidWorkingRange(
-			      attendance.getStaHour(), attendance.getStaMin(),
-			      attendance.getEndHour(), attendance.getEndMin())) {
-			  mv.addObject("error_calc", "開始時刻には5以上23以下の数字を入力して下さい。");
-			  */
-
-
 
 	@GetMapping("/attendance/{id}")
 	public ModelAndView getAttendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
@@ -204,45 +196,12 @@ public class AttendanceController {
         for (Attendance attendance : attendances) {
             csvWriter.write(attendance, nameMapping);
         }
-
         csvWriter.close();
-
     }
-
-
-
-
-
-
-
-
 
 	private void setLoginName(Principal principal, Attendance attendance) {
 		attendance.setUsername(principal.getName());
 	}
-
-
-
-
-
-		/*　前回→全件取得時のコード
-		public void getAttendanceList(ModelAndView mv) {
-		mv.setViewName("attendanceList");
-		List<Attendance> attendanceList = AttendanceRepository.findAll();
-		int sum_hours = 0;
-		int sum_minutes = 0;
-		for(int i = 0; i < attendanceList.size(); i++) {
-			sum_hours = sum_hours + attendanceList.get(i).workingHours();
-			sum_minutes = sum_minutes + attendanceList.get(i).workingMinutes();
-		}
-		sum_hours += sum_minutes / PracticeCalcService.HOUR;
-		sum_minutes = sum_minutes % PracticeCalcService.HOUR;
-		mv.addObject("sum_hours", sum_hours);
-		mv.addObject("sum_minutes", sum_minutes);
-		mv.addObject("attendanceList", attendanceList);
-		mv.addObject("attendanceQuery", new AttendanceQuery());
-	}
-*/
 
 	public Attendance secureAttendanceId(long id, Principal principal) {
 		Optional<Attendance> att = attendanceService.findAttendanceById(id);
@@ -255,6 +214,4 @@ public class AttendanceController {
 		}
 		return attendance;
 	}
-
-
 }

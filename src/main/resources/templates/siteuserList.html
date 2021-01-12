@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<style type="text/css">
+		table {
+		        border-collapse: collapse;
+		        border-spacing: 0px;
+	    }
+	    table.bordered th, table.bordered td {
+	             border: 1px solid-black;
+	    }
+	    th, td {
+	    padding: 4px;
+	    }
+
+	    input.mr-4 {
+	    	width:60px;
+	    }
+	    input.mr-3 {
+	    	width:80px
+	    }
+	    </style>
+	</head>
+	<body>
+	<h2>検索条件</h2>
+	<section>
+		<form th:action="@{''}" method="get">
+			id<input class="mr-4" type="number" name="id" th:value="${id}"/><br>
+			権限<select class="mr-4" type="select" select name="role" th:value="${role}"/>
+			<option value="USER">USER</option>
+			<option value="ADMIN">ADMIN</option>
+			</select>
+
+			<br>
+
+
+			名前<input class="mr-3" type="text" name="username" th:value="${username}"/><br>
+			<input class="ope" type="submit" value="Search" />
+		</form>
+	</section>
+	<br>
+
+
+     <!--  <h4><a th:href="@{/attendance}"><button type="button">作成へ</button></a></h4> -->
+     <h2>ユーザー一覧</h2>
+
+
+     <table class="bordered">
+            <thead>
+                    <tr>
+                             <th>id:</th>
+                             <th>権限:</th>
+                             <th>名前:</th>
+                             <th>操作</th>
+                    </tr>
+            </thead>
+            <tbody>
+                    <tr th:each="siteuser:${SiteuserList}">
+                            <td th:text=${siteuser.id}></td>
+                            <td th:text=${siteuser.role}></td>
+                            <td th:text=${siteuser.username}></td>
+
+                            <!-- <td>
+                                    <div th:if="${attendance.username == #authentication.principal.username}">
+                                            <a th:href="@{/attendance/{id}(id=${attendance.id})}">
+                                            <button type="button">編集
+                                            </a>
+                                            <form th:action="@{/delete}" th:object="${attendance}" method="post">
+                                            <button type="submit">削除
+                                   			</button>
+                                   			<input type="hidden" name="id" th:value="${attendance.id}" />
+                                   			</form>
+
+                                    </div>
+                            </td>
+                             -->
+                    </tr>
+
+                    </table>
+                     </tbody>
+                     <section th:object="${users}">
+				<h3>ページングリンク</h3>
+				<div class="pager">
+					<a th:href="@{${pathWithSort}(page=0)}">最初</a>
+					<th:block th:each="i : ${#numbers.sequence(0, users.totalPages - 1)}">
+						<a th:href="@{${pathWithSort}(page=${i})}" th:text="${i+1}">0</a>
+					</th:block>
+					<a th:href="@{${pathWithSort}(page=*{totalPages-1})}">最後</a>
+				</div>
+					</section>
+                <section th:object="${users}">
+					<h3>ソートリンク</h3>
+					<ul class="sorter">
+						<li><a th:href="@{${pathWithPage}(sort=id)}">id昇順</a></li>
+						<li><a th:href="@{${pathWithPage}(sort='id,desc')}">id降順</a></li>
+						<li><a th:href="@{${pathWithPage}(sort=username,sort='id,desc')}">名前昇順&amp;id降順</a></li>
+					</ul>
+				</section>
+
+
+
+    </body>
+</html>
