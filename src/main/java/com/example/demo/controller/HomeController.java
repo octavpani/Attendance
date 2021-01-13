@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.demo.form.UsersCreationDto;
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.SiteUserRepository;
-import com.example.demo.util.Role;
+import com.example.demo.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class HomeController {
 
 	private final SiteUserRepository userRepository;
+	private final UserService userService;
 	private final BCryptPasswordEncoder passwordEncoder;
 
 
@@ -41,7 +43,7 @@ public class HomeController {
 		return "list";
 	}
 
-
+/*
 	@GetMapping("/register")
 	public String register(@ModelAttribute("user") SiteUser user) {
 		return "register";
@@ -61,6 +63,27 @@ public class HomeController {
 		userRepository.save(user);
 		return "redirect:/login";
 	}
+	*/
+
+	@GetMapping("/register")
+	public String register(Model model)  {
+
+		UsersCreationDto usersform = new UsersCreationDto();
+		    for (int i = 1; i <= 3; i++) {
+		        usersform.addSiteUser(new SiteUser());
+		    }
+		    model.addAttribute("form", usersform);
+		return "register";
+	}
+
+	@PostMapping("/register")
+	public String process(@Validated @ModelAttribute UsersCreationDto form, BindingResult result, Model model) {
+
+		userService.saveAll(form.getUsers());
+
+		return "redirect:/login";
+	}
+
 
 }
 

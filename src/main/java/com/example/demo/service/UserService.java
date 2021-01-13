@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,10 @@ public class UserService {
 
 
 		return siteUserRepository.findUser(anyId, sq.getId(), anyUsername, sq.getUsername(),  anyRole, sq.getRole(), pageable);
+	}
+
+	public void saveAll(List<SiteUser> users) {
+		siteUserRepository.saveAll(users);
 	}
 
 }

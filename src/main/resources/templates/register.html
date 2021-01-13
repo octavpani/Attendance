@@ -8,28 +8,25 @@
 <div class="text-center">
 ユーザー登録
 </div>
-<form th:action="@{/register}" th:object="${user}" method="post" novalidate>
+<form th:action="@{/register}" th:object="${form}" method="post" novalidate>
+
+<table>
+            <thead>
+                <tr>
+                    <th> UserName</th>
+                    <th> PassWord</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user, itemStat : ** {users}">
+                    <td><input th:field="** {users[____${itemStat.index}____].username}"/></td>
+                    <td><input th:field="** {users[____${itemStat.index}____].password}"/></td>
+                </tr>
+            </tbody>
+        </table>
 
 
 
-<label for="name">
-名前
-</label>
-<input type="text" th:field="*{username}">
-
-
-<label for="password">
-ぱすわーど
-</label>
-<input type="password" th:field="*{password}">
-
-
-<!--
-<label for="name">
-管理者
-</label>
-<input type="checkbox" th:field="*{admin}">
--->
 
 <button class="btn btn-primary">登録</button>
 
