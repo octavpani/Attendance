@@ -3,15 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+p {
+background-color:#FF6666;
+text-align: center;
+}
+</style>
 </head>
 <body>
 <div class="text-center">
 ユーザー登録
 </div>
-<form th:action="@{/register}" th:object="${form}" method="post" novalidate>
+<form th:action="@{/register}" th:object="${usersCreationDto}" method="post" novalidate>
 
 <table>
             <thead>
+            <p th:text="${error_message}"></p>
                 <tr>
                     <th> UserName</th>
                     <th> PassWord</th>

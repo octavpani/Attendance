@@ -4,6 +4,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,24 +69,29 @@ public class HomeController {
 	@GetMapping("/register")
 	public String register(Model model)  {
 		 UsersCreationDto usersform = new UsersCreationDto();
-		 for (int i = 0; i <= 2; i++) {
-		        usersform.addSiteUser(new SiteUser());
-		        }
-		 model.addAttribute("form", usersform);
+		 for(int i = 0; i < 3; i++) {
+			 usersform.addSiteUser(new SiteUser());
+		 }
+		 model.addAttribute("usersCreationDto", usersform);
 		 return "register";
 	}
 
 	@PostMapping("/register")
-	public String process(@ModelAttribute UsersCreationDto form, Model model) {
-		//@Validated BindingResult result　一時的に削除
-		if(!UserService.isValidUsers(form.getUsers())) {
-			//↓でusersが見つからないというエラー
-			//return "register";
-			return "redirect:/register";
-			}
+	public String process(@ModelAttribute UsersCreationDto usersCreationDto, @Validated BindingResult result, Model model) {
+		/*　一時的に削除
+		if (result.hasErrors()) {
+			return "register";
+		}
+		*/
+		if(!UserService.isValidUsers(usersCreationDto.getUsers())) {
+			//model.addAttribute("form", form);
+			model.addAttribute("error_message", "入力内容に誤りがあります。");
+		return "register";
+	}
 
-		for (int i = 0; i <= 2; i++) {
-			SiteUser user = form.getUsers().get(i);
+
+		for (int i = 0; i < 3; i++) {
+			SiteUser user = usersCreationDto.getUsers().get(i);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			if(user.getUsername().startsWith("Admin_")) {
 				user.setRole(Role.ADMIN.name());
@@ -92,7 +99,7 @@ public class HomeController {
 				user.setRole(Role.USER.name());
 			}
 		}
-		userService.saveAll(form.getUsers());
+		userService.saveAll(usersCreationDto.getUsers());
 
 		return "redirect:/login";
 	}

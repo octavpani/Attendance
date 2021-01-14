@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import lombok.Data;
 import lombok.Getter;
@@ -24,11 +25,11 @@ public class SiteUser {
 	private Long id;
 
 	@Column(name="username")
-	//@Size(min = 2, max = 20)
+	@Size(min = 2, max = 20)
 	private String username;
 
 	@Column(name="password")
-	//@Size(min = 4, max = 255)
+	@Size(min = 4, max = 255)
 	private String password;
 
 	@Column(name="role")
