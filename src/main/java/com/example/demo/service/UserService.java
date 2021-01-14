@@ -30,6 +30,16 @@ public class UserService {
 		return siteUserRepository.findUser(anyId, sq.getId(), anyUsername, sq.getUsername(),  anyRole, sq.getRole(), pageable);
 	}
 
+	static public boolean isValidUsers(List<SiteUser> users) {
+		for(int i = 0; i < users.size();  i++) {
+			SiteUser user = users.get(i);
+			if(20 <= user.getUsername().length() || user.getUsername().length() <= 2) return false;
+			if(255 <= user.getPassword().length() || user.getUsername().length() <= 4) return false;
+		}
+		return true;
+
+		}
+
 	public void saveAll(List<SiteUser> users) {
 		siteUserRepository.saveAll(users);
 	}

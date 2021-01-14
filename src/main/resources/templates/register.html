@@ -18,9 +18,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="user, itemStat : ** {users}">
-                    <td><input th:field="** {users[____${itemStat.index}____].username}"/></td>
-                    <td><input th:field="** {users[____${itemStat.index}____].password}"/></td>
+                <tr th:each="user, itemStat : *{users}">
+
+                    <td><input th:field="*{users[__${itemStat.index}__].username}" /></td>
+                    <td><input th:field="*{users[__${itemStat.index}__].password}" /></td>
                 </tr>
             </tbody>
         </table>

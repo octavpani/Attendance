@@ -19,7 +19,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 	@Query(value = "SELECT * FROM attendance WHERE (username LIKE :username) AND (:anyYear OR year LIKE :year) AND (:anyMonth OR month LIKE :month) AND (:anyDay OR day LIKE :day)",
 			countQuery = "SELECT COUNT(*) FROM attendance WHERE (username LIKE :username) AND (:anyYear OR year LIKE :year) AND (:anyMonth OR month LIKE :month) AND (:anyDay OR day LIKE :day)",
 			nativeQuery = true)
-	Page<Attendance> findYourAttendance(String username,
+	Page<Attendance> findYourAttendance(@Param("username") String username,
 			@Param("anyYear") boolean anyYear, @Param("year") Integer year,
 			@Param("anyMonth") boolean anyMonth, @Param("month") Integer month,
 			@Param("anyDay") boolean anyDay, @Param("day") Integer day,
