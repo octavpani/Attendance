@@ -77,17 +77,18 @@ public class HomeController {
 	}
 
 	@PostMapping("/register")
-	public String process(@ModelAttribute UsersCreationDto usersCreationDto, @Validated BindingResult result, Model model) {
-		/*　一時的に削除
+	public String process(@Validated @ModelAttribute UsersCreationDto usersCreationDto, BindingResult result, Model model) {
+
 		if (result.hasErrors()) {
 			return "register";
 		}
-		*/
-		if(!UserService.isValidUsers(usersCreationDto.getUsers())) {
+
+		/*if(!UserService.isValidUsers(usersCreationDto.getUsers())) {
 			//model.addAttribute("form", form);
 			model.addAttribute("error_message", "入力内容に誤りがあります。");
 		return "register";
 	}
+	*/
 
 
 		for (int i = 0; i < 3; i++) {
