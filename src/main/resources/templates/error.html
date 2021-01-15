@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-    <meta charset="UTF-8">
-    <title>Insert title here</title>
-    </head>
-    <body>
-          <div>
-          エラーです
-          <div th:text="${status} + ' ' + ${error}">
-          </div>
-                <a th:href="@{/}">ホームへ戻る</a>
-          </div>
-    </body>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<div>エラーです
+		<div th:text="${status} + ' ' + ${error}">
+		</div>
+			<a th:href="@{/}">ホームへ戻る</a>
+		</div>
+	</body>
 </html>

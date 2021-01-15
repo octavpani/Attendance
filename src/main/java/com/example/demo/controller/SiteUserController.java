@@ -34,7 +34,7 @@ public class SiteUserController {
 		mv.addObject("id", id);
 		mv.addObject("username", username);
 		mv.addObject("role", role);
-		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "id", id, "musername", username, "role", role));
+		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "id", id, "username", username, "role", role));
 		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "id", id, "username", username, "role", role));
 		mv.setViewName("siteuserList");
 		return mv;

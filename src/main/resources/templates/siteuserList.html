@@ -24,64 +24,50 @@
 	    </style>
 	</head>
 	<body>
-	<h2>検索条件</h2>
-	<section>
-		<form th:action="@{''}" method="get">
-			id<input class="mr-4" type="number" name="id" th:value="${id}"/><br>
-			権限<select class="mr-4" type="select" select name="role" th:value="${role}"/>
-			<option value="USER">USER</option>
-			<option value="ADMIN">ADMIN</option>
-			</select>
+		<h2>検索条件</h2>
+			<section>
+				<form th:action="@{''}" method="get">
+				<table>
+					<tr>
+						<th>id</th>
+						<th>権限</th>
+						<th>名前</th>
+					</tr>
+					<tr>
+						<th><input class="mr-4" type="number" name="id" th:value="${id}"/></th>
+						<th><select class="mr-4" type="select" select name="role" th:value="${role}"/>
+							<option value="USER">USER</option>
+							<option value="ADMIN">ADMIN</option>
+							</select>
+						</th>
+						<th><input class="mr-3" type="text" name="username" th:value="${username}"/></th>
+						<th><input class="ope" type="submit" value="検索" /></th>
+					</tr>
+				</table>
+				</form>
+			</section>
 
-			<br>
-
-
-			名前<input class="mr-3" type="text" name="username" th:value="${username}"/><br>
-			<input class="ope" type="submit" value="Search" />
-		</form>
-	</section>
-	<br>
-
-
-     <!--  <h4><a th:href="@{/attendance}"><button type="button">作成へ</button></a></h4> -->
-     <h2>ユーザー一覧</h2>
-
-
-     <table class="bordered">
-            <thead>
-                    <tr>
-                             <th>id:</th>
-                             <th>権限:</th>
-                             <th>名前:</th>
-                             <th>操作</th>
-                    </tr>
-            </thead>
-            <tbody>
-                    <tr th:each="siteuser:${SiteuserList}">
-                            <td th:text=${siteuser.id}></td>
-                            <td th:text=${siteuser.role}></td>
-                            <td th:text=${siteuser.username}></td>
-
-                            <!-- <td>
-                                    <div th:if="${attendance.username == #authentication.principal.username}">
-                                            <a th:href="@{/attendance/{id}(id=${attendance.id})}">
-                                            <button type="button">編集
-                                            </a>
-                                            <form th:action="@{/delete}" th:object="${attendance}" method="post">
-                                            <button type="submit">削除
-                                   			</button>
-                                   			<input type="hidden" name="id" th:value="${attendance.id}" />
-                                   			</form>
-
-                                    </div>
-                            </td>
-                             -->
-                    </tr>
-
-                    </table>
-                     </tbody>
-                     <section th:object="${users}">
-				<h3>ページングリンク</h3>
+		<h2>ユーザー一覧</h2>
+			<table class="bordered">
+				<thead>
+					<tr>
+						<th>id:</th>
+						<th>権限:</th>
+						<th>名前:</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="siteuser:${SiteuserList}">
+						<td th:text=${siteuser.id}></td>
+						<td th:text=${siteuser.role}></td>
+						<td th:text=${siteuser.username}></td>
+						<!-- ここに更新、削除 -->
+					</tr>
+				</tbody>
+			</table>
+		<h3>ページングリンク</h3>
+			<section th:object="${users}">
 				<div class="pager">
 					<a th:href="@{${pathWithSort}(page=0)}">最初</a>
 					<th:block th:each="i : ${#numbers.sequence(0, users.totalPages - 1)}">
@@ -89,17 +75,14 @@
 					</th:block>
 					<a th:href="@{${pathWithSort}(page=*{totalPages-1})}">最後</a>
 				</div>
-					</section>
-                <section th:object="${users}">
-					<h3>ソートリンク</h3>
-					<ul class="sorter">
-						<li><a th:href="@{${pathWithPage}(sort=id)}">id昇順</a></li>
-						<li><a th:href="@{${pathWithPage}(sort='id,desc')}">id降順</a></li>
-						<li><a th:href="@{${pathWithPage}(sort=username,sort='id,desc')}">名前昇順&amp;id降順</a></li>
-					</ul>
-				</section>
-
-
-
+			</section>
+		<h3>ソートリンク</h3>
+			<section th:object="${users}">
+				<ul class="sorter">
+					<li><a th:href="@{${pathWithPage}(sort=id)}">id昇順</a></li>
+					<li><a th:href="@{${pathWithPage}(sort='id,desc')}">id降順</a></li>
+					<li><a th:href="@{${pathWithPage}(sort=username,sort='id,desc')}">名前昇順&amp;id降順</a></li>
+				</ul>
+			</section>
     </body>
 </html>
