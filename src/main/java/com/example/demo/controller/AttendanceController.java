@@ -29,6 +29,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.example.demo.Utils;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
+import com.example.demo.form.AttendancesCreationDto;
 import com.example.demo.model.Attendance;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.PracticeCalcService;
@@ -55,7 +56,7 @@ public class AttendanceController {
 		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
 		int sumTime = 0;
-		for(int i = 0; i < attendanceList.size(); i++) {
+		for (int i = 0; i < attendanceList.size(); i++) {
 
 			sumTime = sumTime + attendanceList.get(i).workingHours() * PracticeCalcService.HOUR + attendanceList.get(i).workingMinutes();
 		}
@@ -110,7 +111,7 @@ public class AttendanceController {
 	@PostMapping("/attendance")
 	public ModelAndView createAttendance1(ModelAndView mv, @Validated @ModelAttribute Attendance attendance, Principal principal, BindingResult result) {
 		setLoginName(principal, attendance);
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			mv.setViewName("attendanceForm");
 			return mv;
 		}
@@ -125,6 +126,57 @@ public class AttendanceController {
 	 	mv =  new ModelAndView("redirect:/attendance/list");
 	 		return mv;
 		}
+//ここから追加
+	@GetMapping("/form/preAttendances")
+	public ModelAndView setAttendancesForm(ModelAndView mv, Principal principal) {
+		//AttendancesForm attendancesForm = new AttendancesForm();
+		//attendancesForm.setUsername(principal.getName());
+		mv.setViewName("preAttendancesForm");
+		//mv.addObject(attendancesForm);
+		return mv;
+	}
+
+	@GetMapping("/form/attendances")
+	public ModelAndView createAttendances(ModelAndView mv) {
+			/* @RequestParam(name="username", required = false)String username,
+			@RequestParam(name="year", required = false)Integer year,
+			@RequestParam(name="month", required = false)Integer month,
+			@RequestParam(name="number", required = false)String number) */
+
+		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
+		for (int i = 0; i < 3; i++ ) {
+			attendancesCreationDto.addAttendance(new Attendance());
+		}
+
+		mv.setViewName("attendancesForm");
+		mv.addObject("attendancesCreationDto", attendancesCreationDto);
+		return mv;
+	}
+
+	@PostMapping("/form/attendances")
+	public ModelAndView createAttendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesCreationDto attendancesCreationDto, BindingResult result) {
+		if (result.hasErrors()) {
+			mv.setViewName("attendancesForm");
+			return mv;
+		}
+
+		for (int i = 0; i < 3; i++) {
+			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
+			attendance.setUsername(principal.getName());
+		}
+
+		/*if (!PracticeCalcService.isValidWorkingRange(
+			      attendance.getStaHour(), attendance.getStaMin(),
+			      attendance.getEndHour(), attendance.getEndMin())) {
+				mv.setViewName("attendanceForm");
+				mv.addObject("error_message", "入力時刻のエラーです。");
+				return mv;
+			}
+			*/
+		attendanceService.saveAllAttendances(attendancesCreationDto.getAttendances());
+		mv =  new ModelAndView("redirect:/attendance/list");
+		return mv;
+	}
 
 	@GetMapping("/attendance/{id}")
 	public ModelAndView getAttendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
@@ -144,7 +196,7 @@ public class AttendanceController {
 	@PostMapping("/attendance/update")
 	public ModelAndView updateAttendance(ModelAndView mv,@Validated @ModelAttribute Attendance attendance, BindingResult result, long id, Principal principal) {
 			 setLoginName(principal, attendance);
-			 if(result.hasErrors()) {
+			 if (result.hasErrors()) {
 				 mv.addObject("mode", "update");
 			     mv.setViewName("attendanceForm");
 			     setLoginName(principal, attendance);

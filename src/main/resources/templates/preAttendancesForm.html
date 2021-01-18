@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<form th:action="@{/form/attendances}"  method="get">
+		<!--  th:object="${attendancesForm}"-->
+			<table>
+				<tr>
+					<th>
+						作成件数
+					</th>
+					<th>
+						西暦
+					</th>
+					<th>
+						月
+					</th>
+				</tr>
+				<tr>
+					<td>
+						<input type="number" name="number" th:value="*{number}">
+					</td>
+					<td>
+						<input type="number" name="year" th:value="*{year}">
+					</td>
+					<td>
+						<input type="number" name="month" th:value="*{month}">
+					</td>
+					 <td>
+						<input type="hidden" name="username" th:value="*{username}">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button type="submit">送信</button>
+					</td>
+
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>

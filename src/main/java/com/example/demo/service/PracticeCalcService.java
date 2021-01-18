@@ -35,30 +35,7 @@ public class PracticeCalcService {
 		*/
 		return new int[] {hourFromSumTime(elapse), minFromSumTime(elapse)};
 
-		/*
-		int calcHours = (sumDayEnd - sumDaySta) / HOUR;
-		int calcMinutes = (sumDayEnd - sumDaySta) % HOUR;
-		if (calcMinutes < 0) {
-			calcMinutes += HOUR;
-			calcHours -= 1;
-			*/
 
-
-		/*
-		 int sumDaySta = ((attendance.getStaHour() * HOUR) + attendance.getStaMin());
-			int sumDayEnd = ((attendance.getEndHour() * HOUR) + attendance.getEndMin());
-			☑// [gpsoft]↑変数名もcamelCaseの方が良いです。
-			convertTime(attendance);
-			int calcHours = (sumDayEnd - sumDaySta) / HOUR;
-			int calcMinutes = (sumDayEnd - sumDaySta) % HOUR;
-		*/
-
-
-		// [gpsoft]
-		// 以下の3つは、よく使う演算なので、独立したメソッドにした方が良いのでは?
-		//☑   - hourとminから、「分単位」へ変換する(hour * 60 + min)
-		//☑  - 「分単位」から、hourを取り出す
-		//☑   - 「分単位」から、minを取り出す
 
 	}
 

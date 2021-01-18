@@ -69,7 +69,7 @@ public class HomeController {
 	@GetMapping("/register")
 	public String register(Model model)  {
 		 UsersCreationDto usersform = new UsersCreationDto();
-		 for(int i = 0; i < 3; i++) {
+		 for (int i = 0; i < 3; i++) {
 			 usersform.addSiteUser(new SiteUser());
 		 }
 		 model.addAttribute("usersCreationDto", usersform);
@@ -89,8 +89,6 @@ public class HomeController {
 		return "register";
 	}
 	*/
-
-
 		for (int i = 0; i < 3; i++) {
 			SiteUser user = usersCreationDto.getUsers().get(i);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));

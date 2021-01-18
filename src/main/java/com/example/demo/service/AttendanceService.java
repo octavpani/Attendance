@@ -58,6 +58,10 @@ public class AttendanceService {
 		attendanceRepository.saveAndFlush(attendance);
 	}
 
+	public void saveAllAttendances(List<Attendance> attendances) {
+		attendanceRepository.saveAll(attendances);
+	}
+
 	public void goodbyeAttendance(Attendance attendance) {
 		attendanceRepository.deleteById(attendance.getId());
 	}

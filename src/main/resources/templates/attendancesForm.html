@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<div class="text-center">
+			勤怠登録
+		</div>
+		<span>
+			<form th:action="@{/form/attendances}" th:object="${attendancesCreationDto}" method="post" novalidate>
+			<table>
+				<thead>
+				<!--
+					 <td th:each="attendance, itemStat : *{attendances}">
+						<input type="hidden" th:field="*{username}" th:value="${username}">
+						<input type="hidden" th:field="*{year}" th:value="${year}">
+						<input type="hidden" th:field="*{month}" th:value="${month}">
+					</td>
+					-->
+
+
+					<tr>
+						<th></th>
+						<th>年</th>
+						<th>月</th>
+						<th>日付</th>
+						<th>勤務開始</th>
+						<th>勤務終了</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="attendance, itemStat : *{attendances}">
+						<th>
+							<input type="hidden" th:field="*{attendances[__${itemStat.index}__].id}">
+						</th>
+						<th>
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].year}"max=2099 min=2020 >
+						</th>
+						<th>
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].month}"max=12 min=1 >
+						</th>
+						<th>
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].day}"max=31 min=1 >
+						</th>
+
+						<th>
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].staHour}"max=24 min=0 >
+							:<input type="number" th:field="*{attendances[__${itemStat.index}__].staMin}" max=59 min=0 >
+						</th><!-- ここに出金時間を入れます -->
+						<th>
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].endHour}"max=24 min=0 >
+							:<input type="number" th:field="*{attendances[__${itemStat.index}__].endMin}"max=59 min=0 >
+						</th><!-- ここに退勤時間を入れます -->
+					</tr>
+				</tbody>
+			</table>
+			<button class="btn btn-primary">登録</button>
+			</form>
+		</span>
+	</body>
+</html>
+
+
