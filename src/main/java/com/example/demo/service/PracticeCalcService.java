@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Attendance;
@@ -45,6 +47,16 @@ public class PracticeCalcService {
 		  if (staHour == endHour && staMin > endMin ) return false;
 		  if (staHour < 5 || staHour >= 23) return false;
 		  return true;
+		}
+
+	static public boolean isValidWorkingRange(List<Attendance> attendances) {
+		for(int i = 0; i < attendances.size();  i++) {
+			Attendance attendance = attendances.get(i);
+			if (attendance.getStaHour() > attendance.getEndHour()) return false;
+			if (attendance.getStaHour() == attendance.getEndHour() && attendance.getStaMin() > attendance.getEndMin() ) return false;
+			if (attendance.getStaHour() < 5 || attendance.getStaHour() >= 23) return false;
+			}
+		return true;
 		}
 
 	static public Integer sumTimeFromTime(Integer hour,  Integer min) {

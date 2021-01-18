@@ -127,7 +127,7 @@ public class AttendanceController {
 	 		return mv;
 		}
 //ここから追加
-	@GetMapping("/form/preAttendances")
+	@GetMapping("/form/pre/attendances")
 	public ModelAndView setAttendancesForm(ModelAndView mv, Principal principal) {
 		//AttendancesForm attendancesForm = new AttendancesForm();
 		//attendancesForm.setUsername(principal.getName());
@@ -160,12 +160,31 @@ public class AttendanceController {
 			return mv;
 		}
 
+		if (!PracticeCalcService.isValidWorkingRange(attendancesCreationDto.getAttendances())) {
+			mv.setViewName("attendancesForm");
+			mv.addObject("error_message", "入力時刻のエラーです。");
+			return mv;
+
+		}
+
+		/* for (int i = 0; i < 3; i++) {
+			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
+			 if (!PracticeCalcService.isValidWorkingRange(
+				      attendance.getStaHour(), attendance.getStaMin(),
+				      attendance.getEndHour(), attendance.getEndMin())) {
+					mv.setViewName("attendancesForm");
+					mv.addObject("error_message", "入力時刻のエラーです。");
+					return mv;
+				}
+
+		}*/
+
 		for (int i = 0; i < 3; i++) {
 			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
 			attendance.setUsername(principal.getName());
 		}
-
-		/*if (!PracticeCalcService.isValidWorkingRange(
+		/*
+		if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getStaHour(), attendance.getStaMin(),
 			      attendance.getEndHour(), attendance.getEndMin())) {
 				mv.setViewName("attendanceForm");

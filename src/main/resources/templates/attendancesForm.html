@@ -3,6 +3,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
+		<style>
+		p {
+		background-color:#FF6666;
+		}
+		</style>
 	</head>
 	<body>
 		<div class="text-center">
@@ -19,8 +24,33 @@
 						<input type="hidden" th:field="*{month}" th:value="${month}">
 					</td>
 					-->
+					<td th:each="attendance, itemStat : *{attendances}">
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].year')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].year}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].month')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].month}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].day')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].day}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].staHour')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].staHour}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].staMin')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].staMin}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].endHour')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].endHour}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].endMin')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].endMin}" class="error-message"></p>
+						</div>
 
-
+						<div>
+							<p th:text="${error_message}">
+						</div>
+					</td>
 					<tr>
 						<th></th>
 						<th>年</th>
