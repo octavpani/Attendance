@@ -135,16 +135,18 @@ public class AttendanceController {
 
 	@GetMapping("/form/attendances")
 	public ModelAndView createAttendances(ModelAndView mv, @RequestParam(name="year", required = false)Integer year,
-			@RequestParam(name="month", required = false)Integer month) {
+			@RequestParam(name="month", required = false)Integer month,
+			@RequestParam(name="number", required = false)Integer number) {
 
 		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
-		for (int i = 0; i < 3; i++ ) {
+		for (int i = 0; i < number; i++ ) {
 			attendancesCreationDto.addAttendance(new Attendance());
 		}
 
 		mv.setViewName("attendancesForm");
 		mv.addObject("year", year);
 		mv.addObject("month", month);
+		mv.addObject("number", number);
 		mv.addObject("attendancesCreationDto", attendancesCreationDto);
 		return mv;
 	}
@@ -162,7 +164,7 @@ public class AttendanceController {
 			return mv;
 		}
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < attendancesCreationDto.getAttendances().size(); i++) {
 			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
 			attendance.setUsername(principal.getName());
 		}
