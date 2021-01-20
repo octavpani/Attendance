@@ -71,6 +71,8 @@
 	 				</tr>
 	 			</thead>
 	 			<tbody>
+	 			<!-- ここから作業中です -->>
+	 			<form th:action="@{/form/attendacnes/edit}" th:Object="${idForEdit}" method="post">
 	 				<tr th:each="attendance:${attendanceList}">
 	 					<td th:text=${attendance.id}></td>
 	 					<td th:text=${attendance.username}></td>
@@ -88,19 +90,21 @@
 	 						<span th:text=${attendance.workingHours()} />
 	 						:<span th:text=${attendance.workingMinutes()} />
 	 					</td>
+
+	 					<td th:if="${attendance.username == #authentication.principal.username}">
+	 					<!-- ここから入れ子になってます -->>
+	 						<span th:each="id, itemStat : *{idList}">
+	 							<td>
+	 								<input type="checkbox" id="id"  th:name="|idList[${itemStat.index}].id|" th:value="${attendance.id}">
+	 							</td>
+	 						</span>
+	 					</td>
 	 					<td>
-	 						<div th:if="${attendance.username == #authentication.principal.username}">
-	 							<a th:href="@{/attendance/{id}(id=${attendance.id})}">
-	 								<button type="button">編集
-	 							</a>
-	 							<form th:action="@{/delete}" th:object="${attendance}" method="post">
-	 								<button type="submit">削除
-	 								</button>
-	 								<input type="hidden" name="id" th:value="${attendance.id}" />
-	 							</form>
-	 						</div>
+	 						<button type="submit">編集へ</button>
 	 					</td>
 	 				</tr>
+					>
+	 			</form>
 	 			</tbody>
 	 		</table>
 	 		<section th:object="${attendances}">

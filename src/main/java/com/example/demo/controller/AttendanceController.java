@@ -30,6 +30,7 @@ import com.example.demo.Utils;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.form.AttendancesCreationDto;
+import com.example.demo.form.IdForEdit;
 import com.example.demo.model.Attendance;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.PracticeCalcService;
@@ -43,26 +44,28 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery,
+	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery, IdForEdit idForEdit,
 			@PageableDefault(size = 10)Pageable pageable,
 			@RequestParam(name = "year", required = false) Integer year,
 			@RequestParam(name = "month", required = false) Integer month,
 			@RequestParam(name = "day", required = false)Integer day)
 	{
+		//編集のチェックボックス用の配列
 
-		//Page<Attendance> attendances = attendanceListService.SelectAttendanceListForUser(pageable, principal, attendanceQuery, year, month, day);
+
+
+		//初期のリスト表示
 		Page<Attendance> attendances = attendanceService.getYourAttendance(pageable, attendanceQuery, principal, year, month, day);
-
 		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
 		int sumTime = 0;
 		for (int i = 0; i < attendanceList.size(); i++) {
-
 			sumTime = sumTime + attendanceList.get(i).workingHours() * PracticeCalcService.HOUR + attendanceList.get(i).workingMinutes();
 		}
 		int sumHours = sumTime / PracticeCalcService.HOUR;
 		int sumMinutes = sumTime % PracticeCalcService.HOUR;
 
+		mv.addObject("idForEdit", idForEdit);
 		mv.addObject("sumHours", sumHours);
 		mv.addObject("sumMinutes", sumMinutes);
 		mv.addObject("attendanceList", attendances.getContent());
@@ -189,6 +192,15 @@ public class AttendanceController {
 			 }
 			 */
 
+	@PostMapping("/attendances")
+	public ModelAndView getAttendancesById(long id, Principal principal, ModelAndView mv) {
+		Attendance attendance = secureAttendanceId(id, principal);
+		mv.setViewName("attendanceForm");
+		mv.addObject("attendance", attendance);
+		mv.addObject("mode", "update");
+		return mv;
+		}
+
 	@PostMapping("/attendance/update")
 	public ModelAndView updateAttendance(ModelAndView mv,@Validated @ModelAttribute Attendance attendance, BindingResult result, long id, Principal principal) {
 			 setLoginName(principal, attendance);
@@ -221,6 +233,22 @@ public class AttendanceController {
 		attendanceService.goodbyeAttendance(attendance);
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
+	}
+
+	@PostMapping("/form/attendacnes/edit")
+	public ModelAndView editAttendances(ModelAndView mv, Principal principal, List<Long> attendancesForEdit) {
+
+		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
+		for(int i = 0;i < attendancesForEdit.size(); i++ ) {
+			attendancesCreationDto.addAttendance(secureAttendanceId(attendancesForEdit.get(i), principal));
+		}
+		mv.setViewName("attendancesForm");
+
+		return mv;
+
+
+
+
 	}
 
 	@GetMapping("/export")
