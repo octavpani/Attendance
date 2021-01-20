@@ -2,13 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8">
-		<title>Insert title here</title>
+		<title>Error Page</title>
+		<style type="text/css">
+			h1,div {
+			text-align:center
+			}
+
+		</style>
 	</head>
 	<body>
-		<div>エラーです
-		<div th:text="${status} + ' ' + ${error}">
-		</div>
+	<div>
+		<h1>エラーです</h1>
+		<div th:text="${status} + ' ' + ${error}"></div>
+		<br>
 			<a th:href="@{/}">ホームへ戻る</a>
-		</div>
+	</div>
+
 	</body>
 </html>
