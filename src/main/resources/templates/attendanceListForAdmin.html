@@ -5,23 +5,27 @@
 		<title>Insert title here</title>
 		<style type="text/css">
 		table {
-		        border-collapse: collapse;
-		        border-spacing: 0px;
-	    }
-	    table.bordered th, table.bordered td {
-	             border: 1px solid-black;
-	    }
-	    th, td {
-	    padding: 4px;
-	    }
-
-	    input.mr-4 {
-	    	width:30px;
-	    }
-	    input.mr-3 {
-	    	width:80px
-	    }
-	    </style>
+		border-collapse: collapse;
+		border-spacing: 0px;
+		}
+		table.bordered th, table.bordered td {
+		border: 1px solid-black;
+		}
+		th, td {
+		padding: 4px;
+		}
+		input.mr-4 {
+		width:30px;
+		}
+		input.mr-3 {
+		width:80px
+		}
+		body {
+		width:700px;
+		margin-right: auto;
+		margin-left : auto;
+		}
+		</style>
 	</head>
 	<body>
 		<section>
@@ -116,5 +120,5 @@
 					<li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li>
 				</ul>
 		</section>
-    </body>
+	</body>
 </html>

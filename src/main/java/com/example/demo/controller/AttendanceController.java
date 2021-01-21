@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -241,26 +240,21 @@ public class AttendanceController {
 	@PostMapping("/form/attendacnes/edit")
 	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdForEdit idForEdit) {
 
-		List<Long> atidList = new ArrayList<Long>();
+		//List<Long> atidList = new ArrayList<Long>();
+		List<Long> idList = idForEdit.getIdList();
 
 		for (int i = 0;i < 10; i++) {
-			List<Long> idList = idForEdit.getIdList();
-			if (idList.get(i) != -1) {
-				atidList.add(idList.get(i));
+			if (idList.get(i) == -1) {
+				idList.remove(i);
 			}
 		}
 
 		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
-		for(int i = 0;i < atidList.size(); i++ ) {
-			attendancesCreationDto.addAttendance(secureAttendanceId(atidList.get(i), principal));
+		for(int i = 0;i < idList.size(); i++ ) {
+			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i), principal));
 		}
 		mv.setViewName("attendancesForm");
-
 		return mv;
-
-
-
-
 	}
 
 	@GetMapping("/export")

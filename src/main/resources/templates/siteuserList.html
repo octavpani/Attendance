@@ -5,23 +5,22 @@
 		<title>Insert title here</title>
 		<style type="text/css">
 		table {
-		        border-collapse: collapse;
-		        border-spacing: 0px;
-	    }
-	    table.bordered th, table.bordered td {
-	             border: 1px solid-black;
-	    }
-	    th, td {
-	    padding: 4px;
-	    }
-
-	    input.mr-4 {
-	    	width:60px;
-	    }
-	    input.mr-3 {
-	    	width:80px
-	    }
-	    </style>
+		border-collapse: collapse;
+		border-spacing: 0px;
+		}
+		table.bordered th, table.bordered td {
+		border: 1px solid-black;
+		}
+		th, td {
+		padding: 4px;
+		}
+		input.mr-4 {
+		width:60px;
+		}
+		input.mr-3 {
+		width:80px
+		}
+		</style>
 	</head>
 	<body>
 		<h2>検索条件</h2>
@@ -46,7 +45,6 @@
 				</table>
 				</form>
 			</section>
-
 		<h2>ユーザー一覧</h2>
 			<table class="bordered">
 				<thead>
@@ -84,5 +82,5 @@
 					<li><a th:href="@{${pathWithPage}(sort=username,sort='id,desc')}">名前昇順&amp;id降順</a></li>
 				</ul>
 			</section>
-    </body>
+	</body>
 </html>
