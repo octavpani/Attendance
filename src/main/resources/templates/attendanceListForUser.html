@@ -77,7 +77,7 @@
 	 		<!-- ここから作業中です -->
 	 			<!--  attendanceList→attendancesより取得-->
 	 			<tr th:each="attendance, itemStat : *{attendanceList}">
-	 				<form th:action="@{/form/attendacnes/edit}" th:object="${idForEdit}" method="post">
+	 				<form th:action="@{/form/attendacnes/edit}" th:object="${idList}" method="post">
 	 					<td th:text=${attendance.id}></td>
 	 					<td th:text=${attendance.username}></td>
 	 					<td th:text=${attendance.year}></td>

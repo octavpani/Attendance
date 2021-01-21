@@ -31,6 +31,7 @@ import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.form.AttendancesCreationDto;
 import com.example.demo.form.IdForEdit;
+import com.example.demo.form.IdListForEdit;
 import com.example.demo.model.Attendance;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.PracticeCalcService;
@@ -52,9 +53,9 @@ public class AttendanceController {
 	{
 		//編集のチェックボックス用の配列
 		//Longをnewすると警告が出る為、valuesOf()で代用
-		IdForEdit idForEdit = new IdForEdit();
+		IdListForEdit idListForEdit = new IdListForEdit();
 		for (int i = 0; i < 10; i++) {
-			idForEdit.addId(Long.valueOf(-1));
+			idListForEdit.addId(new IdForEdit());
 		}
 		//初期のリスト表示
 		Page<Attendance> attendances = attendanceService.getYourAttendance(pageable, attendanceQuery, principal, year, month, day);
@@ -67,7 +68,7 @@ public class AttendanceController {
 		int sumHours = sumTime / PracticeCalcService.HOUR;
 		int sumMinutes = sumTime % PracticeCalcService.HOUR;
 
-		mv.addObject("idForEdit", idForEdit);
+		mv.addObject("idList", idListForEdit.getIdList());
 		mv.addObject("sumHours", sumHours);
 		mv.addObject("sumMinutes", sumMinutes);
 		mv.addObject("attendanceList", attendances.getContent());
@@ -238,20 +239,20 @@ public class AttendanceController {
 	}
 
 	@PostMapping("/form/attendacnes/edit")
-	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdForEdit idForEdit) {
+	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
 
 		//List<Long> atidList = new ArrayList<Long>();
-		List<Long> idList = idForEdit.getIdList();
+		List<IdForEdit> idList = idListForEdit.getIdList();
 
 		for (int i = 0;i < 10; i++) {
-			if (idList.get(i) == -1) {
+			if (idList.get(i).getId() == 0) {
 				idList.remove(i);
 			}
 		}
 
 		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
 		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i), principal));
+			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
 		}
 		mv.setViewName("attendancesForm");
 		return mv;
