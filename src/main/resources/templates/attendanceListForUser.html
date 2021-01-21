@@ -20,6 +20,9 @@
 		input.mr-3 {
 		width:80px
 		}
+		body {
+		padding:40px;
+		}
 		</style>
 	</head>
 	<body>
@@ -72,36 +75,35 @@
 	 		</thead>
 	 		<tbody>
 	 		<!-- ここから作業中です -->
-	 		<form th:action="@{/form/attendacnes/edit}" th:object="${idForEdit}" method="post">
-	 			<tr th:each="attendance:${attendanceList}">
-	 				<td th:text=${attendance.id}></td>
-	 				<td th:text=${attendance.username}></td>
-	 				<td th:text=${attendance.year}></td>
-	 				<td th:text=${attendance.month}></td>
-	 				<td th:text=${attendance.day}></td>
-	 				<td><span th:text=${attendance.staHour} />
-	 				:<span th:text=${attendance.staMin} />
-	 				</td>
-	 				<td>
+	 			<!--  attendanceList→attendancesより取得-->
+	 			<tr th:each="attendance, itemStat : *{attendanceList}">
+	 				<form th:action="@{/form/attendacnes/edit}" th:object="${idForEdit}" method="post">
+	 					<td th:text=${attendance.id}></td>
+	 					<td th:text=${attendance.username}></td>
+	 					<td th:text=${attendance.year}></td>
+	 					<td th:text=${attendance.month}></td>
+	 					<td th:text=${attendance.day}></td>
+	 					<td><span th:text=${attendance.staHour} />
+	 					:<span th:text=${attendance.staMin} />
+	 					</td>
+	 					<td>
 	 					<span th:text=${attendance.endHour} />
 	 					:<span th:text=${attendance.endMin} />
-	 				</td>
-	 				<td>
+	 					</td>
+	 					<td>
 	 					<span th:text=${attendance.workingHours()} />
 	 					:<span th:text=${attendance.workingMinutes()} />
-	 				</td>
-	 				<td th:if="${attendance.username == #authentication.principal.username}">
-	 					<span th:each="id, itemStat : *{idList}">
+	 					</td>
+	 					<td th:if="${attendance.username == #authentication.principal.username}">
 	 						<span>
 	 							<input type="checkbox" th:id="|idList[${itemStat.index}].id|"  th:name="|idList[${itemStat.index}].id|" th:value="${attendance.id}">
 	 						</span>
-	 					</span>
-	 				</td>
+	 						<span>
+	 							<button type="submit">編集へ</button>
+	 						</span>
+	 					</td>
+	 				</form>
 	 			</tr>
-	 			<tr>
-	 				<button type="submit">編集へ</button>
-	 			</tr>
-	 		</form>
 	 		</tbody>
 	 	</table>
 	 	<section th:object="${attendances}">

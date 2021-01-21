@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -44,16 +45,18 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery, IdForEdit idForEdit,
+	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery,
 			@PageableDefault(size = 10)Pageable pageable,
 			@RequestParam(name = "year", required = false) Integer year,
 			@RequestParam(name = "month", required = false) Integer month,
 			@RequestParam(name = "day", required = false)Integer day)
 	{
 		//編集のチェックボックス用の配列
-
-
-
+		//Longをnewすると警告が出る為、valuesOf()で代用
+		IdForEdit idForEdit = new IdForEdit();
+		for (int i = 0; i < 10; i++) {
+			idForEdit.addId(Long.valueOf(-1));
+		}
 		//初期のリスト表示
 		Page<Attendance> attendances = attendanceService.getYourAttendance(pageable, attendanceQuery, principal, year, month, day);
 		//勤務時間の計算
@@ -236,11 +239,20 @@ public class AttendanceController {
 	}
 
 	@PostMapping("/form/attendacnes/edit")
-	public ModelAndView editAttendances(ModelAndView mv, Principal principal, List<Long> attendancesForEdit) {
+	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdForEdit idForEdit) {
+
+		List<Long> atidList = new ArrayList<Long>();
+
+		for (int i = 0;i < 10; i++) {
+			List<Long> idList = idForEdit.getIdList();
+			if (idList.get(i) != -1) {
+				atidList.add(idList.get(i));
+			}
+		}
 
 		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
-		for(int i = 0;i < attendancesForEdit.size(); i++ ) {
-			attendancesCreationDto.addAttendance(secureAttendanceId(attendancesForEdit.get(i), principal));
+		for(int i = 0;i < atidList.size(); i++ ) {
+			attendancesCreationDto.addAttendance(secureAttendanceId(atidList.get(i), principal));
 		}
 		mv.setViewName("attendancesForm");
 
