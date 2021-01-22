@@ -73,11 +73,12 @@
 	 				<th>操作</th>
 	 			</tr>
 	 		</thead>
+
 	 		<tbody>
 	 		<!-- ここから作業中です -->
 	 			<!--  attendanceList→attendancesより取得-->
-	 			<tr th:each="attendance, itemStat : *{attendanceList}">
-	 				<form th:action="@{/form/attendacnes/edit}" th:object="${idList}" method="post">
+	 			<form th:action="@{/form/attendacnes/edit}" th:object="${idList}" method="post">
+	 				<tr th:each="attendance, itemStat : ${attendanceList}">
 	 					<td th:text=${attendance.id}></td>
 	 					<td th:text=${attendance.username}></td>
 	 					<td th:text=${attendance.year}></td>
@@ -98,12 +99,12 @@
 	 						<span>
 	 							<input type="checkbox" th:id="|idList[${itemStat.index}].id|"  th:name="|idList[${itemStat.index}].id|" th:value="${attendance.id}">
 	 						</span>
-	 						<span>
-	 							<button type="submit">編集へ</button>
-	 						</span>
 	 					</td>
-	 				</form>
-	 			</tr>
+	 	 			</tr>
+	 	 			<span>
+	 					<button type="submit">編集へ</button>
+	 				</span>
+	 	 		</form>
 	 		</tbody>
 	 	</table>
 	 	<section th:object="${attendances}">

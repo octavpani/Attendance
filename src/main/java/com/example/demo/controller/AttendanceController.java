@@ -68,10 +68,10 @@ public class AttendanceController {
 		int sumHours = sumTime / PracticeCalcService.HOUR;
 		int sumMinutes = sumTime % PracticeCalcService.HOUR;
 
+		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("idList", idListForEdit.getIdList());
 		mv.addObject("sumHours", sumHours);
 		mv.addObject("sumMinutes", sumMinutes);
-		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("attendances", attendances);
 		mv.addObject("year", year);
 		mv.addObject("month", month);
