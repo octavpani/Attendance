@@ -66,6 +66,14 @@ public class AttendanceService {
 		attendanceRepository.deleteById(attendance.getId());
 	}
 
+	public void goodbyeAttendances(Attendance attendance) {
+		attendanceRepository.deleteById(attendance.getId());
+	}
+
+	public void goodbyeAttendances(List<Attendance> attendances) {
+		attendanceRepository.deleteAll(attendances);
+	}
+
 	public Optional<Attendance> findAttendanceById(long id) {
 		return attendanceRepository.findById(id);
 	}

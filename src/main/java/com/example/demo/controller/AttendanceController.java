@@ -68,7 +68,7 @@ public class AttendanceController {
 		int sumMinutes = sumTime % PracticeCalcService.HOUR;
 
 		mv.addObject("attendanceList", attendances.getContent());
-		mv.addObject("idList", idListForEdit.getIdList());
+		mv.addObject("idListForEdit", idListForEdit);
 		mv.addObject("sumHours", sumHours);
 		mv.addObject("sumMinutes", sumMinutes);
 		mv.addObject("attendances", attendances);
@@ -138,26 +138,6 @@ public class AttendanceController {
 		return mv;
 	}
 
-	@PostMapping("/form/attendacnes/edit")
-	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
-
-		//List<Long> atidList = new ArrayList<Long>();
-		List<IdForEdit> idList = idListForEdit.getIdList();
-		for (int i = 0;i < idList.size(); i++) {
-			if (idList.get(i).getId() == 0) {
-				idList.remove(i);
-			}
-		}
-
-		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
-		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
-		}
-		mv.addObject("mode", "update");
-		mv.addObject("attendancesCreationDto", attendancesCreationDto);
-		mv.setViewName("attendancesForm");
-		return mv;
-	}
 
 	@GetMapping("/form/attendances")
 	public ModelAndView createAttendances(ModelAndView mv, @RequestParam(name="year", required = false)Integer year,
@@ -183,20 +163,38 @@ public class AttendanceController {
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-
 		if (!PracticeCalcService.isValidWorkingRange(attendancesCreationDto.getAttendances())) {
 			mv.setViewName("attendancesForm");
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
-
 		for (int i = 0; i < attendancesCreationDto.getAttendances().size(); i++) {
 			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
 			attendance.setUsername(principal.getName());
 		}
-
 		attendanceService.saveAllAttendances(attendancesCreationDto.getAttendances());
 		mv =  new ModelAndView("redirect:/attendance/list");
+		return mv;
+	}
+
+	@PostMapping("/form/attendacnes/edit")
+	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
+
+		List<IdForEdit> idList = idListForEdit.getIdList();
+		for (int i = 0;i < idList.size(); i++) {
+			if (idList.get(i).getId() == 0) {
+				idList.remove(i);
+			}
+		}
+
+		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
+		for(int i = 0;i < idList.size(); i++ ) {
+			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
+		}
+
+		mv.addObject("mode", "update");
+		mv.addObject("attendancesCreationDto", attendancesCreationDto);
+		mv.setViewName("attendancesForm");
 		return mv;
 	}
 
@@ -206,19 +204,33 @@ public class AttendanceController {
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-
 		if (!PracticeCalcService.isValidWorkingRange(attendancesCreationDto.getAttendances())) {
 			mv.setViewName("attendancesForm");
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
-
 		for (int i = 0; i < attendancesCreationDto.getAttendances().size(); i++) {
 			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
 			attendance.setUsername(principal.getName());
 		}
-
 		attendanceService.saveAllAttendances(attendancesCreationDto.getAttendances());
+		mv =  new ModelAndView("redirect:/attendance/list");
+		return mv;
+	}
+
+	@PostMapping("/attendances/delete")
+	public ModelAndView deleteAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
+		List<IdForEdit> idList = idListForEdit.getIdList();
+		for (int i = 0;i < idList.size(); i++) {
+			if (idList.get(i).getId() == 0) {
+				idList.remove(i);
+			}
+		}
+		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
+		for(int i = 0;i < idList.size(); i++ ) {
+			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
+		}
+		attendanceService.goodbyeAttendances(attendancesCreationDto.getAttendances());
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
@@ -280,8 +292,6 @@ public class AttendanceController {
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
-
-
 
 	@GetMapping("/export")
     public void exportToCSV(HttpServletResponse response, Principal principal) throws IOException {
