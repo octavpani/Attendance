@@ -52,7 +52,6 @@ public class AttendanceController {
 			@RequestParam(name = "day", required = false)Integer day)
 	{
 		//編集のチェックボックス用の配列
-		//Longをnewすると警告が出る為、valuesOf()で代用
 		IdListForEdit idListForEdit = new IdListForEdit();
 		for (int i = 0; i < 10; i++) {
 			idListForEdit.addId(new IdForEdit());
@@ -136,6 +135,27 @@ public class AttendanceController {
 	@GetMapping("/form/pre/attendances")
 	public ModelAndView setAttendancesForm(ModelAndView mv, Principal principal) {
 		mv.setViewName("preAttendancesForm");
+		return mv;
+	}
+
+	@PostMapping("/form/attendacnes/edit")
+	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
+
+		//List<Long> atidList = new ArrayList<Long>();
+		List<IdForEdit> idList = idListForEdit.getIdList();
+		for (int i = 0;i < idList.size(); i++) {
+			if (idList.get(i).getId() == 0) {
+				idList.remove(i);
+			}
+		}
+
+		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
+		for(int i = 0;i < idList.size(); i++ ) {
+			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
+		}
+
+		mv.addObject("attendancesCreationDto", attendancesCreationDto);
+		mv.setViewName("attendancesForm");
 		return mv;
 	}
 
@@ -238,25 +258,7 @@ public class AttendanceController {
 		return mv;
 	}
 
-	@PostMapping("/form/attendacnes/edit")
-	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
 
-		//List<Long> atidList = new ArrayList<Long>();
-		List<IdForEdit> idList = idListForEdit.getIdList();
-
-		for (int i = 0;i < 10; i++) {
-			if (idList.get(i).getId() == 0) {
-				idList.remove(i);
-			}
-		}
-
-		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
-		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
-		}
-		mv.setViewName("attendancesForm");
-		return mv;
-	}
 
 	@GetMapping("/export")
     public void exportToCSV(HttpServletResponse response, Principal principal) throws IOException {
