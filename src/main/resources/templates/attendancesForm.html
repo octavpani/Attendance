@@ -67,16 +67,21 @@
 						<th>
 							<input type="hidden" th:field="*{attendances[__${itemStat.index}__].id}">
 						</th>
-						<th>
-							  <input type="number" th:value="${year}" th:id="|attendances[${itemStat.index}].year|" th:name="|attendances[${itemStat.index}].year|" max=2099 min=2020 >
+						<th th:if="${mode == null}">
+							<input type="number" th:value="${year}" th:id="|attendances[${itemStat.index}].year|" th:name="|attendances[${itemStat.index}].year|" max=2099 min=2020 >
 						</th>
-						<th>
-							  <input type="number" th:value="${month}" th:id="|attendances[${itemStat.index}].month|" th:name="|attendances[${itemStat.index}].month|" max=12 min=1 >
+						<th th:if="${mode == 'update'}">
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].year}" max=2099 min=2020 >
+						</th>
+						<th th:if="${mode == null}">
+							<input type="number" th:value="${month}" th:id="|attendances[${itemStat.index}].month|" th:name="|attendances[${itemStat.index}].month|" max=12 min=1 >
+						</th>
+						<th th:if="${mode == 'update'}">
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].month}" max=12 min=1 >
 						</th>
 						<th>
 							<input type="number" th:field="*{attendances[__${itemStat.index}__].day}"max=31 min=1 >
 						</th>
-
 						<th>
 							<input type="number" th:field="*{attendances[__${itemStat.index}__].staHour}"max=24 min=0 >
 							:<input type="number" th:field="*{attendances[__${itemStat.index}__].staMin}" max=59 min=0 >
@@ -88,7 +93,12 @@
 					</tr>
 				</tbody>
 			</table>
-			<button class="btn btn-primary">登録</button>
+			<div th:if="${mode == null}">
+				<button class="btn btn-primary">登録</button>
+			</div>
+			<div th:if="${mode == 'update'}">
+				<button class="btn btn-primary" th:formaction="@{/attendances/update}">更新</button>
+			</div>
 			</form>
 		</span>
 	</body>

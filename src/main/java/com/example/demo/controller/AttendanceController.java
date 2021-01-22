@@ -153,7 +153,7 @@ public class AttendanceController {
 		for(int i = 0;i < idList.size(); i++ ) {
 			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
 		}
-
+		mv.addObject("mode", "update");
 		mv.addObject("attendancesCreationDto", attendancesCreationDto);
 		mv.setViewName("attendancesForm");
 		return mv;
@@ -179,6 +179,29 @@ public class AttendanceController {
 
 	@PostMapping("/form/attendances")
 	public ModelAndView createAttendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesCreationDto attendancesCreationDto, BindingResult result) {
+		if (result.hasErrors()) {
+			mv.setViewName("attendancesForm");
+			return mv;
+		}
+
+		if (!PracticeCalcService.isValidWorkingRange(attendancesCreationDto.getAttendances())) {
+			mv.setViewName("attendancesForm");
+			mv.addObject("error_message", "入力時刻のエラーです。");
+			return mv;
+		}
+
+		for (int i = 0; i < attendancesCreationDto.getAttendances().size(); i++) {
+			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
+			attendance.setUsername(principal.getName());
+		}
+
+		attendanceService.saveAllAttendances(attendancesCreationDto.getAttendances());
+		mv =  new ModelAndView("redirect:/attendance/list");
+		return mv;
+	}
+
+	@PostMapping("/attendances/update")
+	public ModelAndView updateattendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesCreationDto attendancesCreationDto, BindingResult result) {
 		if (result.hasErrors()) {
 			mv.setViewName("attendancesForm");
 			return mv;
@@ -228,10 +251,10 @@ public class AttendanceController {
 	public ModelAndView updateAttendance(ModelAndView mv,@Validated @ModelAttribute Attendance attendance, BindingResult result, long id, Principal principal) {
 			 setLoginName(principal, attendance);
 			 if (result.hasErrors()) {
+				 setLoginName(principal, attendance);
 				 mv.addObject("mode", "update");
-			     mv.setViewName("attendanceForm");
-			     setLoginName(principal, attendance);
 			     mv.addObject("name", principal.getName());
+			     mv.setViewName("attendanceForm");
 				return mv;
 			}
 		     if (!PracticeCalcService.isValidWorkingRange(
