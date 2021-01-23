@@ -14,45 +14,9 @@
 			勤怠登録
 		</div>
 		<span>
-			<form th:action="@{/form/attendances}" th:object="${attendancesCreationDto}" method="post" novalidate>
+			<form th:action="@{/form/attendances}" th:object="${attendancesDto}" method="post" novalidate>
 			<table>
 				<thead>
-
-					<!--   <td th:each="attendance, itemStat : *{attendances}">
-					  	<input type="hidden" th:field="*{username}" th:value="${username}">
-						<input type="hidden" th:field="*{year}" th:value="${year}">
-						<input type="hidden" th:field="*{month}" th:value="${month}">
-
-					</td>
-					-->
-
-					<td th:each="attendance, itemStat : *{attendances}">
-						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].year')}">
-							<p th:errors="*{attendances[__${itemStat.index}__].year}" class="error-message"></p>
-						</div>
-						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].month')}">
-							<p th:errors="*{attendances[__${itemStat.index}__].month}" class="error-message"></p>
-						</div>
-						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].day')}">
-							<p th:errors="*{attendances[__${itemStat.index}__].day}" class="error-message"></p>
-						</div>
-						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].staHour')}">
-							<p th:errors="*{attendances[__${itemStat.index}__].staHour}" class="error-message"></p>
-						</div>
-						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].staMin')}">
-							<p th:errors="*{attendances[__${itemStat.index}__].staMin}" class="error-message"></p>
-						</div>
-						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].endHour')}">
-							<p th:errors="*{attendances[__${itemStat.index}__].endHour}" class="error-message"></p>
-						</div>
-						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].endMin')}">
-							<p th:errors="*{attendances[__${itemStat.index}__].endMin}" class="error-message"></p>
-						</div>
-
-						<div>
-							<p th:text="${error_message}">
-						</div>
-					</td>
 					<tr>
 						<th></th>
 						<th>年</th>
@@ -83,12 +47,12 @@
 							<input type="number" th:field="*{attendances[__${itemStat.index}__].day}"max=31 min=1 >
 						</th>
 						<th>
-							<input type="number" th:field="*{attendances[__${itemStat.index}__].staHour}"max=24 min=0 >
-							:<input type="number" th:field="*{attendances[__${itemStat.index}__].staMin}" max=59 min=0 >
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].staHour}"max=24 min=0 >:
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].staMin}" max=59 min=0 >
 						</th><!-- ここに出金時間を入れます -->
 						<th>
-							<input type="number" th:field="*{attendances[__${itemStat.index}__].endHour}"max=24 min=0 >
-							:<input type="number" th:field="*{attendances[__${itemStat.index}__].endMin}"max=59 min=0 >
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].endHour}"max=24 min=0 >:
+							<input type="number" th:field="*{attendances[__${itemStat.index}__].endMin}"max=59 min=0 >
 						</th><!-- ここに退勤時間を入れます -->
 					</tr>
 				</tbody>
@@ -99,6 +63,33 @@
 			<div th:if="${mode == 'update'}">
 				<button class="btn btn-primary" th:formaction="@{/attendances/update}">更新</button>
 			</div>
+			<!-- 移動場所をきめかねている。 -->
+			<div th:each="attendance, itemStat : *{attendances}">
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].year')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].year}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].month')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].month}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].day')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].day}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].staHour')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].staHour}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].staMin')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].staMin}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].endHour')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].endHour}" class="error-message"></p>
+						</div>
+						<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].endMin')}">
+							<p th:errors="*{attendances[__${itemStat.index}__].endMin}" class="error-message"></p>
+						</div>
+						<div>
+							<p th:text="${error_message}">
+						</div>
+					</div>
 			</form>
 		</span>
 	</body>

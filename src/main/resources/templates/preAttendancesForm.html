@@ -6,7 +6,6 @@
 	</head>
 	<body>
 		<form th:action="@{/form/attendances}"  method="get">
-		<!--  th:object="${attendancesForm}"-->
 			<table>
 				<tr>
 					<th>
@@ -29,9 +28,6 @@
 					<td>
 						<input type="number" name="month" th:value="*{month}">
 					</td>
-					<!-- <td>
-						<input type="hidden" name="username" th:value="*{username}">
-					</td> -->
 				</tr>
 				<tr>
 					<td>

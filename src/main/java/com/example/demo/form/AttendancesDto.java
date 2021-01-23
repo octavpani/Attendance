@@ -9,7 +9,7 @@ import com.example.demo.model.Attendance;
 
 import lombok.Data;
 @Data
-public class AttendancesCreationDto {
+public class AttendancesDto {
 	@Valid
 	 private List<Attendance> attendances = new ArrayList<Attendance>();
 

@@ -29,7 +29,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.example.demo.Utils;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
-import com.example.demo.form.AttendancesCreationDto;
+import com.example.demo.form.AttendancesDto;
 import com.example.demo.form.IdForEdit;
 import com.example.demo.form.IdListForEdit;
 import com.example.demo.model.Attendance;
@@ -56,8 +56,10 @@ public class AttendanceController {
 		for (int i = 0; i < 10; i++) {
 			idListForEdit.addId(new IdForEdit());
 		}
+
 		//初期のリスト表示
 		Page<Attendance> attendances = attendanceService.getYourAttendance(pageable, attendanceQuery, principal, year, month, day);
+
 		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
 		int sumTime = 0;
@@ -89,8 +91,7 @@ public class AttendanceController {
 			@RequestParam(name = "year", required = false)Integer year,
 			@RequestParam(name = "month", required = false)Integer month,
 			@RequestParam(name = "day", required = false)Integer day)
-	 {
-
+	{
 		Page<Attendance> attendances = attendanceService.getAttendance(pageable, attendanceQuery,
 				day, year, month, username);
 
@@ -120,6 +121,7 @@ public class AttendanceController {
 			mv.setViewName("attendanceForm");
 			return mv;
 		}
+
 		if (!PracticeCalcService.isValidWorkingRange(
 		      attendance.getStaHour(), attendance.getStaMin(),
 		      attendance.getEndHour(), attendance.getEndMin())) {
@@ -127,52 +129,54 @@ public class AttendanceController {
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
+
 	 	attendanceService.saveAttendance(attendance);
 	 	mv =  new ModelAndView("redirect:/attendance/list");
 	 		return mv;
 		}
-//ここから追加
+
 	@GetMapping("/form/pre/attendances")
 	public ModelAndView setAttendancesForm(ModelAndView mv, Principal principal) {
 		mv.setViewName("preAttendancesForm");
 		return mv;
 	}
 
-
 	@GetMapping("/form/attendances")
 	public ModelAndView createAttendances(ModelAndView mv, @RequestParam(name="year", required = false)Integer year,
 			@RequestParam(name="month", required = false)Integer month,
 			@RequestParam(name="number", required = false)Integer number) {
 
-		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
+		AttendancesDto attendancesDto = new AttendancesDto();
 		for (int i = 0; i < number; i++ ) {
-			attendancesCreationDto.addAttendance(new Attendance());
+			attendancesDto.addAttendance(new Attendance());
 		}
 
 		mv.setViewName("attendancesForm");
 		mv.addObject("year", year);
 		mv.addObject("month", month);
 		mv.addObject("number", number);
-		mv.addObject("attendancesCreationDto", attendancesCreationDto);
+		mv.addObject("attendancesDto", attendancesDto);
 		return mv;
 	}
 
 	@PostMapping("/form/attendances")
-	public ModelAndView createAttendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesCreationDto attendancesCreationDto, BindingResult result) {
+	public ModelAndView createAttendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesDto attendancesDto, BindingResult result) {
 		if (result.hasErrors()) {
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-		if (!PracticeCalcService.isValidWorkingRange(attendancesCreationDto.getAttendances())) {
+
+		if (!PracticeCalcService.isValidWorkingRange(attendancesDto.getAttendances())) {
 			mv.setViewName("attendancesForm");
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
-		for (int i = 0; i < attendancesCreationDto.getAttendances().size(); i++) {
-			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
+
+		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
+			Attendance attendance = attendancesDto.getAttendances().get(i);
 			attendance.setUsername(principal.getName());
 		}
-		attendanceService.saveAllAttendances(attendancesCreationDto.getAttendances());
+		attendanceService.saveAllAttendances(attendancesDto.getAttendances());
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
@@ -187,33 +191,36 @@ public class AttendanceController {
 			}
 		}
 
-		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
+		AttendancesDto attendancesDto = new AttendancesDto();
 		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
+			attendancesDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
 		}
 
 		mv.addObject("mode", "update");
-		mv.addObject("attendancesCreationDto", attendancesCreationDto);
+		mv.addObject("attendancesDto", attendancesDto);
 		mv.setViewName("attendancesForm");
 		return mv;
 	}
 
 	@PostMapping("/attendances/update")
-	public ModelAndView updateattendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesCreationDto attendancesCreationDto, BindingResult result) {
+	public ModelAndView updateattendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesDto attendancesDto, BindingResult result) {
 		if (result.hasErrors()) {
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-		if (!PracticeCalcService.isValidWorkingRange(attendancesCreationDto.getAttendances())) {
+
+		if (!PracticeCalcService.isValidWorkingRange(attendancesDto.getAttendances())) {
 			mv.setViewName("attendancesForm");
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
-		for (int i = 0; i < attendancesCreationDto.getAttendances().size(); i++) {
-			Attendance attendance = attendancesCreationDto.getAttendances().get(i);
+
+		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
+			Attendance attendance = attendancesDto.getAttendances().get(i);
 			attendance.setUsername(principal.getName());
 		}
-		attendanceService.saveAllAttendances(attendancesCreationDto.getAttendances());
+
+		attendanceService.saveAllAttendances(attendancesDto.getAttendances());
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
@@ -226,11 +233,13 @@ public class AttendanceController {
 				idList.remove(i);
 			}
 		}
-		AttendancesCreationDto attendancesCreationDto = new AttendancesCreationDto();
+
+		AttendancesDto attendancesDto = new AttendancesDto();
 		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesCreationDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
+			attendancesDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
 		}
-		attendanceService.goodbyeAttendances(attendancesCreationDto.getAttendances());
+
+		attendanceService.goodbyeAttendances(attendancesDto.getAttendances());
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
@@ -243,12 +252,7 @@ public class AttendanceController {
 		mv.addObject("mode", "update");
 		return mv;
 		}
-			/*
-			 * 変更案
-			 @PreAuthorize （"hasAuthority（ 'ADMIN'）" ）public  String  getMessage （） {
-			 return  "Hello Method Security !!" ;
-			 }
-			 */
+
 
 	@PostMapping("/attendances")
 	public ModelAndView getAttendancesById(long id, Principal principal, ModelAndView mv) {
@@ -269,6 +273,7 @@ public class AttendanceController {
 			     mv.setViewName("attendanceForm");
 				return mv;
 			}
+
 		     if (!PracticeCalcService.isValidWorkingRange(
 			      attendance.getStaHour(), attendance.getStaMin(),
 			      attendance.getEndHour(), attendance.getEndMin())) {
@@ -280,6 +285,7 @@ public class AttendanceController {
 		    	 mv.setViewName("attendance_form");
 		    	 return mv;
 		     }
+
 		     mv =  new ModelAndView("redirect:/attendance/list");
 		     attendanceService.saveAttendance(attendance);
 		     return mv;
@@ -298,19 +304,15 @@ public class AttendanceController {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename= " + principal.getName() + currentDateTime + ".csv";
         response.setHeader(headerKey, headerValue);
 
         List<Attendance> attendances = attendanceService.getYourAllAttendance(principal);
-
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
         String[] csvHeader = {"Attendance ID", "UserName", "Month", "Day", "staHour", "staMin", "endHour", "endMin"};
         String[] nameMapping = {"id", "username", "month", "day", "staHour", "staMin", "endHour", "endMin"};
-
         csvWriter.writeHeader(csvHeader);
-
         for (Attendance attendance : attendances) {
             csvWriter.write(attendance, nameMapping);
         }
@@ -325,11 +327,14 @@ public class AttendanceController {
 		Optional<Attendance> att = attendanceService.findAttendanceById(id);
 		Attendance attendance = att.get();
 		if (!att.isPresent()) {
-			    throw new FileNotFoundException(); // ★
+			    throw new FileNotFoundException();
 		  }
+
 		if (!attendance.getUsername().equals(principal.getName())) {
 			throw new IllegalArgumentException();
 		}
+
 		return attendance;
 	}
+
 }
