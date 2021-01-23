@@ -73,7 +73,6 @@
 	 				<th>操作</th>
 	 			</tr>
 	 		</thead>
-
 	 		<tbody>
 	 		<!-- ここから作業中です -->
 	 			<!--  attendanceList→attendancesより取得-->
@@ -98,7 +97,7 @@
 	 					<td th:if="${attendance.username == #authentication.principal.username}">
 	 						<span>
 	 							<input type="checkbox" th:id="|idList[${itemStat.index}].id|"  th:name="|idList[${itemStat.index}].id|" th:value="${attendance.id}">
-	 						</span>
+	 						</span> <!--  th:name="|idList[${itemStat.index}].id|" -->
 	 					</td>
 	 	 			</tr>
 	 	 			<span>

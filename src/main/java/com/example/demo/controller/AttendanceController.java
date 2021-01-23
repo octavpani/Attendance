@@ -181,7 +181,7 @@ public class AttendanceController {
 	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
 
 		List<IdForEdit> idList = idListForEdit.getIdList();
-		for (int i = 0;i < idList.size(); i++) {
+		for (int i = idList.size() -1;i > -1; --i) {
 			if (idList.get(i).getId() == 0) {
 				idList.remove(i);
 			}
@@ -221,7 +221,7 @@ public class AttendanceController {
 	@PostMapping("/attendances/delete")
 	public ModelAndView deleteAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
 		List<IdForEdit> idList = idListForEdit.getIdList();
-		for (int i = 0;i < idList.size(); i++) {
+		for (int i = idList.size() -1;i > -1; --i) {
 			if (idList.get(i).getId() == 0) {
 				idList.remove(i);
 			}
