@@ -162,13 +162,15 @@ public class AttendanceController {
 	@PostMapping("/form/attendances")
 	public ModelAndView createAttendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesDto attendancesDto, BindingResult result) {
 		if (result.hasErrors()) {
+			mv.addObject("mode", "recreate");
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
 
 		if (!PracticeCalcService.isValidWorkingRange(attendancesDto.getAttendances())) {
-			mv.setViewName("attendancesForm");
+			mv.addObject("mode", "recreate");
 			mv.addObject("error_message", "入力時刻のエラーです。");
+			mv.setViewName("attendancesForm");
 			return mv;
 		}
 
@@ -205,13 +207,15 @@ public class AttendanceController {
 	@PostMapping("/attendances/update")
 	public ModelAndView updateattendances(ModelAndView mv, Principal principal, @Validated @ModelAttribute AttendancesDto attendancesDto, BindingResult result) {
 		if (result.hasErrors()) {
+			mv.addObject("mode", "update");
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
 
 		if (!PracticeCalcService.isValidWorkingRange(attendancesDto.getAttendances())) {
-			mv.setViewName("attendancesForm");
+			mv.addObject("mode", "update");
 			mv.addObject("error_message", "入力時刻のエラーです。");
+			mv.setViewName("attendancesForm");
 			return mv;
 		}
 

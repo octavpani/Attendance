@@ -29,16 +29,7 @@ public class PracticeCalcService {
 	    int sta = sumTimeFromTime(attendance.getStaHour(), attendance.getStaMin());
 		int end = sumTimeFromTime(attendance.getEndHour(), attendance.getEndMin());
 		int elapse = end - sta;
-		/*
-		if (calcMinutes < 0) {
-			calcMinutes += HOUR;
-			calcHours -= 1;
-		}
-		*/
 		return new int[] {hourFromSumTime(elapse), minFromSumTime(elapse)};
-
-
-
 	}
 
 	static public boolean isValidWorkingRange(
@@ -69,9 +60,8 @@ public class PracticeCalcService {
 
 	static public Integer minFromSumTime(Integer sumTime) {
 	     return (sumTime) % HOUR;
-
-
 	}
+
 }
 
 

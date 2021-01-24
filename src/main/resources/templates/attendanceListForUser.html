@@ -7,6 +7,7 @@
 		table {
 		border-collapse: collapse;
 		border-spacing: 0px;
+		margin: 0 auto;
 		}
 		table.bordered th, table.bordered td {
 		border: 1px solid-black;
@@ -23,11 +24,36 @@
 		body {
 		padding:40px;
 		}
+		input.ope, button.ope{
+		text-decoration: none;
+		background-color: #336699;
+		color: #ffffff;
+		padding: 2px 8px;
+		border-radius: 3px;
+		}
+		tr.row-4 {
+		border-bottom: 2px solid tomato;
+		}
+		div.ope {
+		padding-bottom:20px;
+		}
+		div.home-content {
+		text-align: center;
+		}
+		ul {
+		display:flex;
+		align-items: center;
+		flex-direction:column;
+		}
+		li {
+		float:left;
+		}
 		</style>
 	</head>
 	<body>
+	<div class="home-content">
 	<h2>検索条件</h2>
-		<section>
+		<div>
 			<form th:action="@{''}" method="get">
 			<table class="bordered">
 				<tr>
@@ -41,27 +67,29 @@
 					<th><input class="mr-4" type="number" name="day" th:value="${day}"/></th>
 				</tr>
 				<tr>
-					<td>
+					<td></td>
+					<td></td>
+					<td class="search">
 						<input class="ope" type="submit" value="検索" />
 					</td>
 				</tr>
 			</table>
 			</form>
-		</section>
+		</div>
 	<h2>勤怠出力</h2>
-		<td><a th:href="@{/export}"><button type="button">出力</button></a></td>
+		<a th:href="@{/export}"><button class="ope" type="button">出力</button></a>
 	<h2>勤怠作成</h2>
-	 	<a th:href="@{/attendance}"><button type="button">作成</button></a>
-	 	<a th:href="@{/form/pre/attendances}"><button type="button">一括作成</button></a>
+	 	<a th:href="@{/attendance}"><button class="ope" type="button">作成</button></a>
+	 	<a th:href="@{/form/pre/attendances}"><button class="ope" type="button">一括作成</button></a>
 	 <h2>勤務記録</h2>
-	 	累計勤務時間
-	 	<div>
+	 	<h4>累計勤務時間</h4>
+	 	<div class="ope">
 	 		<span th:text=${sumHours}></span>:
 	 		<span th:text=${sumMinutes}></span>
 	 	</div>
 	 	<table class="bordered">
 	 		<thead>
-	 			<tr>
+	 			<tr class="row-4">
 	 				<th>id:</th>
 	 				<th>名前:</th>
 	 				<th>年</th>
@@ -74,7 +102,6 @@
 	 			</tr>
 	 		</thead>
 	 		<tbody>
-	 		<!-- ここから作業中です -->
 	 			<!--  attendanceList→attendancesより取得-->
 	 			<form th:action="@{/form/attendacnes/edit}" th:object="${idList}" method="post">
 	 				<tr th:each="attendance, itemStat : ${attendanceList}">
@@ -100,12 +127,14 @@
 	 						</span> <!--  th:name="|idList[${itemStat.index}].id|" -->
 	 					</td>
 	 	 			</tr>
-	 	 			<span>
-	 					<button type="submit">編集へ</button>
-	 				</span>
-	 				<span>
-	 					<button type="submit" th:formaction="@{/attendances/delete}">削除へ</button>
-	 				</span>
+	 	 			<div class="ope">
+	 	 				<span>
+	 						<button class="ope" type="submit">編集へ</button>
+	 					</span>
+	 					<span>
+	 						<button class="ope" type="submit" th:formaction="@{/attendances/delete}">削除へ</button>
+	 					</span>
+	 				</div>
 	 	 		</form>
 	 		</tbody>
 	 	</table>
@@ -127,5 +156,6 @@
 					<li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li>
 				</ul>
 		</section>
+		</div>
 	</body>
 </html>
