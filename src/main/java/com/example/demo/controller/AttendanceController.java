@@ -30,7 +30,6 @@ import com.example.demo.Utils;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.form.AttendancesDto;
-import com.example.demo.form.IdForEdit;
 import com.example.demo.form.IdListForEdit;
 import com.example.demo.model.Attendance;
 import com.example.demo.service.AttendanceService;
@@ -54,7 +53,7 @@ public class AttendanceController {
 		//編集のチェックボックス用の配列
 		IdListForEdit idListForEdit = new IdListForEdit();
 		for (int i = 0; i < 10; i++) {
-			idListForEdit.addId(new IdForEdit());
+			idListForEdit.addId(new String());
 		}
 
 		//初期のリスト表示
@@ -82,7 +81,6 @@ public class AttendanceController {
 		mv.setViewName("attendanceListForUser");
 		return mv;
 	}
-
 
 	@GetMapping("/admin/attendance/list")
 	public ModelAndView showAttendanceListForAdmin(ModelAndView mv, @PageableDefault(size = 10)Pageable pageable,
@@ -186,16 +184,16 @@ public class AttendanceController {
 	@PostMapping("/form/attendacnes/edit")
 	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
 
-		List<IdForEdit> idList = idListForEdit.getIdList();
+		List<String> idList = idListForEdit.getIdList();
 		for (int i = idList.size() -1;i > -1; --i) {
-			if (idList.get(i).getId() == 0) {
+			if (idList.get(i).equals(null)) {
 				idList.remove(i);
 			}
 		}
-
+		//ここにstringからidへの変換を加える。
 		AttendancesDto attendancesDto = new AttendancesDto();
 		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
+			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(idList.get(i)), principal));
 		}
 
 		mv.addObject("mode", "update");
@@ -231,16 +229,18 @@ public class AttendanceController {
 
 	@PostMapping("/attendances/delete")
 	public ModelAndView deleteAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
-		List<IdForEdit> idList = idListForEdit.getIdList();
+		List<String> idList = idListForEdit.getIdList();
 		for (int i = idList.size() -1;i > -1; --i) {
-			if (idList.get(i).getId() == 0) {
+			if (idList.get(i).equals(null)) {
 				idList.remove(i);
 			}
 		}
 
+		//ここでStringからidへ変換　一連の流れをメソッドへ。
+
 		AttendancesDto attendancesDto = new AttendancesDto();
 		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesDto.addAttendance(secureAttendanceId(idList.get(i).getId(), principal));
+			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(idList.get(i)), principal));
 		}
 
 		attendanceService.goodbyeAttendances(attendancesDto.getAttendances());

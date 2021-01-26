@@ -4,30 +4,49 @@
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
 		<style type="text/css">
-		form, .text-center {
-		width:50%;
+		section.login {
 		margin-left:auto;
 		margin-right:auto;
+		text-align: center;
+		margin-top:40px;
+
 		}
-		.text-center {
-		top: 40%;
+		input.mr-3 {
+		width:130px
+		}
+		body{
+		background-image: url("../img/meeting.png");
+		}
+		div.image-source {
+		margin-left:1100px;
+		margin-top:325px;
+		font-size: 80%;
 		}
 		</style>
 	</head>
 	<body>
+		<section class="login">
+		<h2>ログイン画面</h2>
 		<form th:action="@{/login}" class="user" method="post">
-			<th>
-				<input type="text" name="username" placeholder="ユーザー名">
-			</th>
-			<br>
-			<th>
-				<input type="password" name="password" placeholder="パスワード">
-			</th>
-			<br>
-			<button class="btn">送信</button>
-			</form>
-			<div class="text-center">
-				<a th:href="@{/register}">新規登録</a>
-			</div>
+			<tr>
+				<td>
+					<input type="text" class="mr-3" name="username" placeholder="ユーザー名">
+				</td><br>
+				<td>
+					<input type="password" class="mr-3" name="password" placeholder="パスワード">
+				</td><br>
+				<td><button class="btn">送信</button></td><br>
+				<td><br>
+					<h7>登録がまだの方はこちら</h7><br>
+					<a th:href="@{/register}">新規登録</a>
+				</td>
+			</tr>
+		</form>
+		</section>
+		<div class="image-source">
+		画像出典元<br>
+			<a href="https://pixabay.com/ja/users/graphicmama-team-2641041/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1453895">GraphicMama-team</a><br>
+			<a href="https://pixabay.com/ja/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1453895">Pixabay</a>
+		</div>
 	</body>
 </html>

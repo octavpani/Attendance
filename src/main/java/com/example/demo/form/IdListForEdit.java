@@ -6,9 +6,9 @@ import java.util.List;
 import lombok.Data;
 @Data
 public class IdListForEdit {
-	 private List<IdForEdit> idList = new ArrayList<IdForEdit>();
+	 private List<String> idList = new ArrayList<String>();
 
-	 public void addId(IdForEdit idForEdit) {
+	 public void addId(String idForEdit) {
 	        this.idList.add(idForEdit);
 	    }
 

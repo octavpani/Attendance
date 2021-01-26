@@ -3,107 +3,92 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
-		<style type="text/css">
-		table {
-		border-collapse: collapse;
-		border-spacing: 0px;
-		}
-		table.bordered th, table.bordered td {
-		border: 1px solid-black;
-		}
-		th, td {
-		padding: 4px;
-		}
-		input.mr-4 {
-		width:30px;
-		}
-		input.mr-3 {
-		width:80px
-		}
-		body {
-		width:700px;
-		margin-right: auto;
-		margin-left : auto;
-		}
-		</style>
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<section>
-			<h2>検索条件</h2>
-			<form th:action="@{''}" method="get">
-			<table class="bordered">
-				<tr>
-					<th>名前</th>
-					<th>年</th>
-					<th>月</th>
-					<th>日付</th>
-				</tr>
-				<tr>
-					<td><input class="mr-3" type="text" name="username" th:value="${username}"/></td>
-					<td><input class="mr-3" type="number" name="year" th:value="${year}"/></td>
-					<td><input class="mr-4" type="number" name="month" th:value="${month}"/></td>
-					<td><input class="mr-4" type="number" name="day" th:value="${day}"/></td>
-				</tr>
-				<tr>
-					<td><input class="ope" type="submit" value="検索" /></td>
-				</tr>
-			</table>
-			</form>
-		</section>
-		<section>
-			<h2>勤務記録</h2>
-			<h4><a th:href="@{/attendance}"><button type="button">作成へ</button></a></h4>
-			<table class="bordered">
-				<thead>
-					<tr>
-						<th>id:</th>
-						<th>名前:</th>
-						<th>年</th>
-						<th>月</th>
-						<th>日</th>
-						<th>開始</th>
-						<th>終了</th>
-						<th>勤務時間</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="attendance:${attendanceList}">
-						<td th:text=${attendance.id}></td>
-						<td th:text=${attendance.username}></td>
-						<td th:text=${attendance.year}></td>
-						<td th:text=${attendance.month}></td>
-						<td th:text=${attendance.day}></td>
-						<td>
-							<span th:text=${attendance.staHour} />
-							:<span th:text=${attendance.staMin} />
-						</td>
-						<td>
-							<span th:text=${attendance.endHour} />
-							:<span th:text=${attendance.endMin} />
-						</td>
-						<td>
-							<span th:text=${attendance.workingHours()} />
-							:<span th:text=${attendance.workingMinutes()} />
-						</td>
-						<div th:if="${attendance.username == #authentication.principal.username}">
+		<section class="home-content">
+			<section>
+				<h2>検索条件</h2>
+					<form th:action="@{''}" method="get">
+						<table class="bordered">
+							<tr>
+								<th>名前</th>
+								<th>年</th>
+								<th>月</th>
+								<th>日付</th>
+							</tr>
+							<tr>
+								<td><input class="mr-3" type="text" name="username" th:value="${username}"/></td>
+								<td><input class="mr-3" type="number" name="year" th:value="${year}"/></td>
+								<td><input class="mr-4" type="number" name="month" th:value="${month}"/></td>
+								<td><input class="mr-4" type="number" name="day" th:value="${day}"/></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td><input class="ope" type="submit" value="検索" /></td>
+							</tr>
+						</table>
+					</form>
+			</section>
+			<section>
+				<h2>勤怠作成</h2>
+	 				<a th:href="@{/attendance}"><button class="ope" type="button">作成</button></a>
+	 				<a th:href="@{/form/pre/attendances}"><button class="ope" type="button">一括作成</button></a>
+	 		</section>
+			<section>
+				<h2>勤務記録</h2>
+				<table class="bordered">
+					<thead>
+						<tr class="row-4">
+							<th>id:</th>
+							<th>名前:</th>
+							<th>年</th>
+							<th>月</th>
+							<th>日</th>
+							<th>開始</th>
+							<th>終了</th>
+							<th>勤務時間</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="attendance:${attendanceList}">
+							<td th:text=${attendance.id}></td>
+							<td th:text=${attendance.username}></td>
+							<td th:text=${attendance.year}></td>
+							<td th:text=${attendance.month}></td>
+							<td th:text=${attendance.day}></td>
 							<td>
-								<a th:href="@{/attendance/{id}(id=${attendance.id})}">
-									<button type="button">編集
-								</a>
+								<span th:text=${attendance.staHour} />:
+								<span th:text=${attendance.staMin} />
 							</td>
-							<form th:action="@{/delete}" th:object="${attendance}" method="post">
-								<button type="submit">削除</button>
-								<input type="hidden" name="id" th:value="${attendance.id}" />
-							</form>
-						</div>
-					</tr>
-				</tbody>
-			</table>
-		</section>
-
-		<section th:object="${attendances}">
-			<h3>ページングリンク</h3>
+							<td>
+								<span th:text=${attendance.endHour} />:
+								<span th:text=${attendance.endMin} />
+							</td>
+							<td>
+								<span th:text=${attendance.workingHours()} />:
+								<span th:text=${attendance.workingMinutes()} />
+							</td>
+							<div th:if="${attendance.username == #authentication.principal.username}">
+								<td>
+									<a th:href="@{/attendance/{id}(id=${attendance.id})}">
+										<button type="button" value="編集">
+									</a>
+								</td>
+								<form th:action="@{/delete}" th:object="${attendance}" method="post">
+									<button type="submit" value="削除"></button>
+										<input type="hidden" name="id" th:value="${attendance.id}" />
+								</form>
+							</div>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+			<section th:object="${attendances}">
+				<h3>ページングリンク</h3>
 				<div class="pager">
 					<a th:href="@{${pathWithSort}(page=0)}">最初</a>
 					<th:block th:each="i : ${#numbers.sequence(0, attendances.totalPages - 1)}">
@@ -119,6 +104,7 @@
 					<li><a th:href="@{${pathWithPage}(sort='month,desc')}">月降順</a></li>
 					<li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li>
 				</ul>
+		</section>
 		</section>
 	</body>
 </html>

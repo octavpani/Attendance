@@ -3,14 +3,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
-		<style type="text/css">
-		p {
-		background-color:#FF6666;
-		}
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 		</style>
 	</head>
 	<body>
-		<div class="text-center">
+		<section class="home-content">
 			<h2>勤怠登録</h2>
 		</div>
 		<span>
@@ -27,6 +24,7 @@
 					</tr>
 				</thead>
 				<tbody>
+					<section class="submit">
 					<tr th:each="attendance, itemStat : *{attendances}">
 						<th>
 							<input type="hidden" th:field="*{attendances[__${itemStat.index}__].id}">
@@ -53,13 +51,14 @@
 							<input type="number" th:field="*{attendances[__${itemStat.index}__].endHour}"max=24 min=0 >:<input type="number" th:field="*{attendances[__${itemStat.index}__].endMin}"max=59 min=0 >
 						</th>
 					</tr>
+					</section>
 				</tbody>
 			</table>
 			<div th:if="${mode == null || mode == 'recreate'}">
-				<button class="btn btn-primary">登録</button>
+				<input type="submit" class="ope" value="登録"></button>
 			</div>
 			<div th:if="${mode == 'update'}">
-				<button class="btn btn-primary" th:formaction="@{/attendances/update}">更新</button>
+				<input type="submit" class="ope" value="更新" th:formaction="@{/attendances/update}"></button>
 			</div>
 			<div th:each="attendance, itemStat : *{attendances}">
 				<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].year')}">
@@ -88,7 +87,9 @@
 				<p th:text="${error_message}">
 			</div>
 			</form>
+
 		</span>
+		</section>
 	</body>
 </html>
 

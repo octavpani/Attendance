@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 	</head>
 	<body>
 		<form th:action="@{/form/attendances}"  method="get">
@@ -30,8 +31,10 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<button type="submit">送信</button>
+					<td></td>
+					<td></td>
+					<td class="pre">
+						<input type="submit" class="ope" value="送信">
 					</td>
 				</tr>
 			</table>

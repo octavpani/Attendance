@@ -3,55 +3,10 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
-		<style type="text/css">
-		table {
-		border-collapse: collapse;
-		border-spacing: 0px;
-		margin: 0 auto;
-		}
-		table.bordered th, table.bordered td {
-		border: 1px solid-black;
-		}
-		th, td {
-		padding: 4px;
-		}
-		input.mr-4 {
-		width:30px;
-		}
-		input.mr-3 {
-		width:80px
-		}
-		body {
-		padding:40px;
-		}
-		input.ope, button.ope{
-		text-decoration: none;
-		background-color: #336699;
-		color: #ffffff;
-		padding: 2px 8px;
-		border-radius: 3px;
-		}
-		tr.row-4 {
-		border-bottom: 2px solid tomato;
-		}
-		div.ope {
-		padding-bottom:20px;
-		}
-		div.home-content {
-		text-align: center;
-		}
-		ul {
-		display:flex;
-		align-items: center;
-		flex-direction:column;
-		}
-		li {
-		float:left;
-		}
-		</style>
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-	<div class="home-content">
+	<section class="home-content">
 	<h2>検索条件</h2>
 		<div>
 			<form th:action="@{''}" method="get">
@@ -123,7 +78,7 @@
 	 					</td>
 	 					<td th:if="${attendance.username == #authentication.principal.username}">
 	 						<span>
-	 							<input type="checkbox" th:id="|idList[${itemStat.index}].id|"  th:name="|idList[${itemStat.index}].id|" th:value="${attendance.id}">
+	 							<input type="checkbox" th:id="|idList[${itemStat.index}].id|" th:name="idList" th:value="${attendance.id}">
 	 						</span> <!--  th:name="|idList[${itemStat.index}].id|" -->
 	 					</td>
 	 	 			</tr>
@@ -156,6 +111,6 @@
 					<li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li>
 				</ul>
 		</section>
-		</div>
+		</section>
 	</body>
 </html>

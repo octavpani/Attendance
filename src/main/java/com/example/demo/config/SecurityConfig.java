@@ -27,18 +27,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/js/**", "/css/**", "/webjars/**");
+		//画像が表示されなかったので、追加。
+		web.ignoring().antMatchers("/js/**", "/css/**", "/webjars/**", "/img/**");
 	}
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/login", "/register", "/attendance", "/attendances/*", "/attendance/list/", "/delete/*", "/attendance/list*", "/export/*", "/form/*").permitAll()
+		.antMatchers("/login/**", "/register", "/attendance", "/attendances/*", "/attendance/list/", "/delete/*", "/attendance/list*", "/export/*", "/form/*").permitAll()
 		.antMatchers("/admin/**").hasRole(Role.ADMIN.name())
 		.anyRequest().authenticated()
 		.and()
-
-
-
 		.formLogin()
 		.loginPage("/login")
 		.defaultSuccessUrl("/")
