@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -183,14 +184,25 @@ public class AttendanceController {
 
 	@PostMapping("/form/attendacnes/edit")
 	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
+		//iteratorを試している。
+		List<String> idList = idListForEdit.getIdList();
+		Iterator<String> ite = idList.iterator();
+		while (ite.hasNext()) {
+			String item = ite.next();
+			if (item.equals(null)) {
+				idList.remove(item);
+			}
+		}
 
+		/*
 		List<String> idList = idListForEdit.getIdList();
 		for (int i = idList.size() -1;i > -1; --i) {
 			if (idList.get(i).equals(null)) {
 				idList.remove(i);
 			}
 		}
-		//ここにstringからidへの変換を加える。
+		*/
+
 		AttendancesDto attendancesDto = new AttendancesDto();
 		for(int i = 0;i < idList.size(); i++ ) {
 			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(idList.get(i)), principal));
@@ -230,13 +242,13 @@ public class AttendanceController {
 	@PostMapping("/attendances/delete")
 	public ModelAndView deleteAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
 		List<String> idList = idListForEdit.getIdList();
-		for (int i = idList.size() -1;i > -1; --i) {
-			if (idList.get(i).equals(null)) {
-				idList.remove(i);
+		Iterator<String> ite = idList.iterator();
+		while (ite.hasNext()) {
+			String item = ite.next();
+			if (item.equals(null)) {
+				idList.remove(item);
 			}
 		}
-
-		//ここでStringからidへ変換　一連の流れをメソッドへ。
 
 		AttendancesDto attendancesDto = new AttendancesDto();
 		for(int i = 0;i < idList.size(); i++ ) {
