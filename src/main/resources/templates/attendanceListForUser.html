@@ -65,16 +65,14 @@
 	 					<td th:text=${attendance.year}></td>
 	 					<td th:text=${attendance.month}></td>
 	 					<td th:text=${attendance.day}></td>
-	 					<td><span th:text=${attendance.staHour} />
-	 					:<span th:text=${attendance.staMin} />
+	 					<td>
+	 						<span th:text=${attendance.staHour} />:<span th:text=${attendance.staMin} />
 	 					</td>
 	 					<td>
-	 					<span th:text=${attendance.endHour} />
-	 					:<span th:text=${attendance.endMin} />
+	 						<span th:text=${attendance.endHour} />:<span th:text=${attendance.endMin} />
 	 					</td>
 	 					<td>
-	 					<span th:text=${attendance.workingHours()} />
-	 					:<span th:text=${attendance.workingMinutes()} />
+	 						<span th:text=${attendance.workingHours()} />:<span th:text=${attendance.workingMinutes()} />
 	 					</td>
 	 					<td th:if="${attendance.username == #authentication.principal.username}">
 	 						<span>
@@ -108,7 +106,8 @@
 				<ul class="sorter">
 					<li><a th:href="@{${pathWithPage}(sort=month)}">月昇順</a></li>
 					<li><a th:href="@{${pathWithPage}(sort='month,desc')}">月降順</a></li>
-					<li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li>
+					<li><a th:href="@{/error/on/purpose}">エラーボタン</a>
+					<!-- <li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li> -->
 				</ul>
 		</section>
 		</section>

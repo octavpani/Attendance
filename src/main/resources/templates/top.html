@@ -3,20 +3,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
-		<style>
-			table {
-			width:50%;
-			margin-left:auto;
-			margin-right:auto;
-			}
-			td{
-			text-align:center;
-			}
-		</style>
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 	</head>
-	<body>
-		<table border="1">
-			<tr>
+	<body class="top">
+		<table class="top">
+			<tr> <table border="1" width:50%;>
 				<th>ログインユーザー名</th>
 				<th>ユーザー権限</th>
 			</tr>
@@ -24,7 +15,7 @@
 				<th th:text="${username}"></th>
 				<th th:text="${role}"></th>
 			</tr>
-			<tr>
+			<tr class="top">
 				<td>
 					<a th:href="@{/attendance}">作成へ</a>
 					<a th:href="@{/form/pre/attendances}">一括作成へ</a>

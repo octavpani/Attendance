@@ -29,6 +29,14 @@ table {
 	td.pre {
 	text-align: right;
 	}
+	table.top {
+	border:"1";
+	width:50%;
+	margin-top: 50px;
+	}
+	tr.top {
+	text-align:center;
+	}
 	tr.row-4 {
 	border-bottom: 2px solid tomato;
 	}
@@ -49,4 +57,35 @@ table {
 	}
 	p {
 	background-color:#FF6666;
+	}
+	div.index {
+	padding:8px;
+	}
+	section.login {
+	margin-left:auto;
+	margin-right:auto;
+	text-align: center;
+	margin-top:40px;
+	}
+	section.greeting {
+	text-align: center;
+	}
+	div.image-source {
+		margin-left:1100px;
+		margin-top:200px;
+		font-size: 80%;
+		}
+	body.top {
+	background-image: url("../img/man.png");
+	background-size: 580px;
+	}
+	body.error {
+	background-image: url("../img/cat.png");
+	background-size: 850px;
+	background-repeat: no-repeat;
+	background-position: top 5px right 150px;
+	}
+	body.login {
+	background-image: url("../img/meeting.png");
+
 	}

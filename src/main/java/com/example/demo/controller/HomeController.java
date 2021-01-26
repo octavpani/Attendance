@@ -35,7 +35,7 @@ public class HomeController {
 	public String showList(Authentication loginUser, Model model) {
 		model.addAttribute("username", loginUser.getName());
 		model.addAttribute("role", loginUser.getAuthorities());
-		return "user";
+		return "top";
 	}
 
 	@GetMapping("/admin/list")
@@ -43,28 +43,6 @@ public class HomeController {
 		model.addAttribute("users", userRepository.findAll());
 		return "list";
 	}
-
-/*
-	@GetMapping("/register")
-	public String register(@ModelAttribute("user") SiteUser user) {
-		return "register";
-	}
-
-	@PostMapping("/register")
-	public String process(@Validated @ModelAttribute("user") SiteUser user, BindingResult result) {
-		if (result.hasErrors()) {
-			return "register";
-		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		if(user.getUsername().startsWith("Admin_")) {
-			user.setRole(Role.ADMIN.name());
-		} else {
-			user.setRole(Role.USER.name());
-		}
-		userRepository.save(user);
-		return "redirect:/login";
-	}
-	*/
 
 	@GetMapping("/register")
 	public String register(Model model)  {
@@ -102,9 +80,6 @@ public class HomeController {
 
 		return "redirect:/login";
 	}
-
-
-
 
 }
 

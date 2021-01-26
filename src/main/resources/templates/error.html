@@ -3,19 +3,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Error Page</title>
-		<style type="text/css">
-			h1,div {
-			text-align:center
-			}
-		</style>
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 	</head>
-	<body>
-	<div>
-		<h1>エラーです</h1>
-		<div th:text="${status} + ' ' + ${error}"></div>
-		<br>
+	<body class="error">
+		<section class="home-content">
+			<h1>エラーです</h1>
+			<div th:text="${status} + ' ' + ${error}"></div><br>
 			<a th:href="@{/}">ホームへ戻る</a>
-	</div>
-
+		</section>
 	</body>
 </html>

@@ -3,23 +3,23 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
-		<style>
-		p {
-		background-color:#FF6666;
-		}
-		</style>
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<td th:text="${name}"></td>さん　こんにちは<br>
+	<section class="greeting">
+		<div>こんにちは</div>
+		<span th:text="${name}"></span>さん
 		<div th:if="${mode == 'update'}">
-			投稿のIDは、<td th:text="${id}"></td>です<br>
+			<div>投稿のIDは、</div>
+			<span th:text="${id}"></span>です
 		</div>
-		<border="1"　width="50%" align="center">
+	</section>
+	<section class="home-content">
 			<form th:action="@{/attendance}" th:object="${attendance}" method="post">
 				<input type="hidden" th:field="*{id}">
-				<table align="center">
+				<table>
 					<tr>
-						<th>年</th>
+						<th>西暦</th>
 						<th>月</th>
 						<th>日</th>
 					</tr>
@@ -38,35 +38,28 @@
 					</tr>
 					<tr>
 						<th>
-							<input type="number" name="staHour" th:value="*{staHour}"max = 24 min = 0 >
-							:<input type="number" name="staMin" th:value="*{staMin}" max = 59 min = 0 >
+							<input type="number" name="staHour" th:value="*{staHour}"max = 24 min = 0 >:<input type="number" name="staMin" th:value="*{staMin}" max = 59 min = 0 >
 						</th><!-- ここに出金時間を入れます -->
 						<th>
-							<input type="number" name="endHour" th:value="*{endHour}"max = 24 min = 0 >
-							:<input type="number" name="endMin" th:value="*{endMin}" max = 59 min = 0 >
+							<input type="number" name="endHour" th:value="*{endHour}"max = 24 min = 0 >:<input type="number" name="endMin" th:value="*{endMin}" max = 59 min = 0 >
 						</th><!-- ここに退勤時間を入れます -->
 					</tr>
 				</table>
-				<div th:unless="${mode == 'update'}">
-					<button type="submit" th:formaction="@{/attendance}">登録</button>
+				<div class="index" th:unless="${mode == 'update'}">
+					<input type="submit" class="ope" value="登録" th:formaction="@{/attendance}">
 				</div>
-				<div th:if="${mode == 'update'}">
-					<button type="submit" th:formaction="@{/attendance/update}">更新
+				<div class="index" th:if="${mode == 'update'}">
+					<input type="submit" class="ope" value="登録" th:formaction="@{/attendance/update}">
+					<input type="submit" class="ope" value="削除" th:formaction="@{/delete}">
 					</button>
-					<button type="submit" th:formaction="@{/delete}">削除
-					</button>
-                                   <!--
-                                   <a th:href="@{/delete/{id}(id=${attendance.id})}">
-                                   <button type="button">削除</button>
-                                   </a>
-                                     -->
 				</div>
 				<div class="index">
 					<a th:href="@{/attendance/list}">
-						<button type="button">一覧</button>
+						<button type="button" class="ope">一覧へ</button>
 					</a>
 				</div>
 			</form>
+		</section>
 		</border>
 	</body>
 </html>
