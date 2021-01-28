@@ -1,90 +1,117 @@
 @charset "ISO-8859-1";
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0px;
 	margin: 0 auto;
-	}
-	table.bordered th, table.bordered td {
+}
+
+table.bordered th, table.bordered td {
 	border: 1px solid-black;
-	}
-	th, td {
+}
+
+th, td {
 	padding: 4px;
-	}
-	input.mr-4 {
-	width:30px;
-	}
-	input.mr-3 {
-	width:80px
-	}
-	body {
-	padding:40px;
-	}
-	input.ope, button.ope{
+}
+
+input.mr-4 {
+	width: 30px;
+}
+
+input.mr-3 {
+	width: 80px
+}
+input.mr-2 {
+	width: 120px
+}
+
+body {
+	padding: 40px;
+}
+
+input.ope, button.ope {
 	text-decoration: none;
 	background-color: #336699;
 	color: #ffffff;
 	padding: 2px 8px;
 	border-radius: 3px;
-	}
-	td.pre {
+}
+
+td.pre {
 	text-align: right;
-	}
-	table.top {
-	border:"1";
-	width:50%;
+}
+
+table.top {
+	border: "1";
+	width: 50%;
 	margin-top: 50px;
-	}
-	tr.top {
-	text-align:center;
-	}
-	tr.row-4 {
+}
+
+tr.top {
+	text-align: center;
+}
+
+tr.row-4 {
 	border-bottom: 2px solid tomato;
-	}
-	div.ope {
-	padding-bottom:20px;
-	}
-	section.home-content {
+}
+
+div.ope {
+	padding-bottom: 20px;
+}
+
+ul {
+	padding-inline-start: 0;
+}
+
+li {
+	list-style-type: none;
+}
+
+
+section.home-content {
 	text-align: center;
-	}
-	ul {
-	display: flex;
-	flex-direction: column;
-	text-align: left;
-	margin-left: 518px;
-	}
-	li {
-	float:left;
-	}
-	p {
-	background-color:#FF6666;
-	}
-	div.index {
-	padding:8px;
-	}
-	section.login {
-	margin-left:auto;
-	margin-right:auto;
+}
+
+p {
+	background-color: #FF6666;
+}
+
+div.index {
+	padding: 8px;
+}
+td.register {
 	text-align: center;
-	margin-top:40px;
-	}
-	section.greeting {
+}
+
+section.login {
+	margin-left: auto;
+	margin-right: auto;
 	text-align: center;
-	}
-	div.image-source {
-		margin-left:1100px;
-		margin-top:200px;
-		font-size: 80%;
-		}
-	body.top {
+	margin-top: 40px;
+}
+
+section.greeting {
+	text-align: center;
+}
+
+div.image-source {
+	margin-left: 1100px;
+	margin-top: 200px;
+	font-size: 80%;
+}
+
+body.top {
 	background-image: url("../img/man.png");
 	background-size: 580px;
-	}
-	body.error {
+}
+
+body.error {
 	background-image: url("../img/cat.png");
 	background-size: 850px;
 	background-repeat: no-repeat;
 	background-position: top 5px right 150px;
-	}
-	body.login {
+}
+
+body.login {
 	background-image: url("../img/meeting.png");
-	}
+}

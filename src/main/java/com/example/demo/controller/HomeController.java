@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.example.demo.form.UsersCreationDto;
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.SiteUserRepository;
 import com.example.demo.service.UserService;
@@ -45,6 +44,27 @@ public class HomeController {
 	}
 
 	@GetMapping("/register")
+	public String register(@ModelAttribute("user") SiteUser user) {
+		return "register1";
+	}
+
+	@PostMapping("/register")
+	public String process(@Validated @ModelAttribute("user") SiteUser user, BindingResult result) {
+		if (result.hasErrors()) {
+			return "register1";
+		}
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		if (user.getUsername().startsWith("Admin_")) {
+			user.setRole(Role.ADMIN.name());
+		} else {
+			user.setRole(Role.USER.name());
+		}
+		userRepository.save(user);
+
+		return "redirect:/login";
+	}
+	/* 一旦以下は保留。Adminでユーザーの一括登録をする際にコードを流用。　初期の登録は、とりあえず一人分だけ。
+	@GetMapping("/register")
 	public String register(Model model)  {
 		 UsersCreationDto usersform = new UsersCreationDto();
 		 for (int i = 0; i < 3; i++) {
@@ -66,7 +86,7 @@ public class HomeController {
 			model.addAttribute("error_message", "入力内容に誤りがあります。");
 		return "register";
 	}
-	*/
+
 		for (int i = 0; i < 3; i++) {
 			SiteUser user = usersCreationDto.getUsers().get(i);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -80,6 +100,7 @@ public class HomeController {
 
 		return "redirect:/login";
 	}
+*/
 
 }
 
