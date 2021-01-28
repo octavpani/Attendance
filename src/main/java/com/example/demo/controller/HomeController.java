@@ -60,7 +60,6 @@ public class HomeController {
 			user.setRole(Role.USER.name());
 		}
 		userRepository.save(user);
-
 		return "redirect:/login";
 	}
 	/* 一旦以下は保留。Adminでユーザーの一括登録をする際にコードを流用。　初期の登録は、とりあえず一人分だけ。

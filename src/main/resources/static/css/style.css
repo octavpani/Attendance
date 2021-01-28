@@ -1,5 +1,9 @@
 @charset "ISO-8859-1";
 
+body {
+	padding: 40px;
+}
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0px;
@@ -10,8 +14,18 @@ table.bordered th, table.bordered td {
 	border: 1px solid-black;
 }
 
+table.top {
+	border: "1";
+	width: 50%;
+	margin-top: 50px;
+}
+
 th, td {
 	padding: 4px;
+}
+
+section.home-content {
+	text-align: center;
 }
 
 input.mr-4 {
@@ -25,26 +39,12 @@ input.mr-2 {
 	width: 120px
 }
 
-body {
-	padding: 40px;
-}
-
 input.ope, button.ope {
 	text-decoration: none;
 	background-color: #336699;
 	color: #ffffff;
 	padding: 2px 8px;
 	border-radius: 3px;
-}
-
-td.pre {
-	text-align: right;
-}
-
-table.top {
-	border: "1";
-	width: 50%;
-	margin-top: 50px;
 }
 
 tr.top {
@@ -55,32 +55,25 @@ tr.row-4 {
 	border-bottom: 2px solid tomato;
 }
 
-div.ope {
-	padding-bottom: 20px;
+td.pre {
+	text-align: right;
+}
+
+td.register {
+	text-align: center;
 }
 
 ul {
 	padding-inline-start: 0;
+	text-align: left; margin-left: auto; margin-right: auto; width: 80px;
 }
 
 li {
-	list-style-type: none;
-}
-
-
-section.home-content {
-	text-align: center;
+	text-align: left;
 }
 
 p {
 	background-color: #FF6666;
-}
-
-div.index {
-	padding: 8px;
-}
-td.register {
-	text-align: center;
 }
 
 section.login {
@@ -94,10 +87,18 @@ section.greeting {
 	text-align: center;
 }
 
+div.ope {
+	padding-bottom: 20px;
+}
+
 div.image-source {
 	margin-left: 1100px;
 	margin-top: 200px;
 	font-size: 80%;
+}
+
+div.index {
+	padding: 8px;
 }
 
 body.top {

@@ -3,26 +3,10 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
-		<style type="text/css">
-		table {
-		border-collapse: collapse;
-		border-spacing: 0px;
-		}
-		table.bordered th, table.bordered td {
-		border: 1px solid-black;
-		}
-		th, td {
-		padding: 4px;
-		}
-		input.mr-4 {
-		width:60px;
-		}
-		input.mr-3 {
-		width:80px
-		}
-		</style>
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 	</head>
 	<body>
+		<section class="home-content">
 		<h2>検索条件</h2>
 			<section>
 				<form th:action="@{''}" method="get">
@@ -33,14 +17,14 @@
 						<th>名前</th>
 					</tr>
 					<tr>
-						<th><input class="mr-4" type="number" name="id" th:value="${id}"/></th>
+						<th><input class="mr-3" type="number" name="id" th:value="${id}"/></th>
 						<th><select class="mr-4" type="select" select name="role" th:value="${role}"/>
 							<option value="USER">USER</option>
 							<option value="ADMIN">ADMIN</option>
 							</select>
 						</th>
 						<th><input class="mr-3" type="text" name="username" th:value="${username}"/></th>
-						<th><input class="ope" type="submit" value="検索" /></th>
+						<tr><td class="search"colspan="3"><input class="ope" type="submit" value="検索" /></td></tr>
 					</tr>
 				</table>
 				</form>
@@ -81,6 +65,7 @@
 					<li><a th:href="@{${pathWithPage}(sort='id,desc')}">id降順</a></li>
 					<li><a th:href="@{${pathWithPage}(sort=username,sort='id,desc')}">名前昇順&amp;id降順</a></li>
 				</ul>
-			</section>
+		</section>
+		</section>
 	</body>
 </html>

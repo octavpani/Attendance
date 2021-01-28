@@ -63,8 +63,8 @@ public class AttendanceController {
 		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
 		int sumTime = 0;
-		for (int i = 0; i < attendanceList.size(); i++) {
-			sumTime = sumTime + attendanceList.get(i).workingHours() * PracticeCalcService.HOUR + attendanceList.get(i).workingMinutes();
+		for (Attendance attendance : attendanceList) {
+			sumTime = sumTime + attendance.workingHours() * PracticeCalcService.HOUR + attendance.workingMinutes();
 		}
 		int sumHours = sumTime / PracticeCalcService.HOUR;
 		int sumMinutes = sumTime % PracticeCalcService.HOUR;
@@ -120,7 +120,6 @@ public class AttendanceController {
 			mv.setViewName("attendanceForm");
 			return mv;
 		}
-
 		if (!PracticeCalcService.isValidWorkingRange(
 		      attendance.getStaHour(), attendance.getStaMin(),
 		      attendance.getEndHour(), attendance.getEndMin())) {
@@ -128,7 +127,6 @@ public class AttendanceController {
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
-
 	 	attendanceService.saveAttendance(attendance);
 	 	mv =  new ModelAndView("redirect:/attendance/list");
 	 		return mv;
@@ -149,7 +147,6 @@ public class AttendanceController {
 		for (int i = 0; i < number; i++ ) {
 			attendancesDto.addAttendance(new Attendance());
 		}
-
 		mv.setViewName("attendancesForm");
 		mv.addObject("year", year);
 		mv.addObject("month", month);
@@ -165,14 +162,12 @@ public class AttendanceController {
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-
 		if (!PracticeCalcService.isValidWorkingRange(attendancesDto.getAttendances())) {
 			mv.addObject("mode", "recreate");
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-
 		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
 			Attendance attendance = attendancesDto.getAttendances().get(i);
 			attendance.setUsername(principal.getName());
@@ -184,30 +179,11 @@ public class AttendanceController {
 
 	@PostMapping("/form/attendacnes/edit")
 	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
-		//iteratorを試している。
-		List<String> idList = idListForEdit.getIdList();
-		Iterator<String> ite = idList.iterator();
-		while (ite.hasNext()) {
-			String item = ite.next();
-			if (item.equals(null)) {
-				idList.remove(item);
-			}
-		}
-
-		/*
-		List<String> idList = idListForEdit.getIdList();
-		for (int i = idList.size() -1;i > -1; --i) {
-			if (idList.get(i).equals(null)) {
-				idList.remove(i);
-			}
-		}
-		*/
-
+		List<String> idList = removeVacantList(idListForEdit);
 		AttendancesDto attendancesDto = new AttendancesDto();
-		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(idList.get(i)), principal));
+		for(String id : idList) {
+			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(id), principal));
 		}
-
 		mv.addObject("mode", "update");
 		mv.addObject("attendancesDto", attendancesDto);
 		mv.setViewName("attendancesForm");
@@ -221,19 +197,17 @@ public class AttendanceController {
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-
 		if (!PracticeCalcService.isValidWorkingRange(attendancesDto.getAttendances())) {
 			mv.addObject("mode", "update");
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-
+		//入れ子なので、拡張を使わず。
 		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
 			Attendance attendance = attendancesDto.getAttendances().get(i);
 			attendance.setUsername(principal.getName());
 		}
-
 		attendanceService.saveAllAttendances(attendancesDto.getAttendances());
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
@@ -241,20 +215,11 @@ public class AttendanceController {
 
 	@PostMapping("/attendances/delete")
 	public ModelAndView deleteAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
-		List<String> idList = idListForEdit.getIdList();
-		Iterator<String> ite = idList.iterator();
-		while (ite.hasNext()) {
-			String item = ite.next();
-			if (item.equals(null)) {
-				idList.remove(item);
-			}
-		}
-
+		List<String> idList = removeVacantList(idListForEdit);
 		AttendancesDto attendancesDto = new AttendancesDto();
-		for(int i = 0;i < idList.size(); i++ ) {
-			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(idList.get(i)), principal));
+		for (String id : idList) {
+			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(id), principal));
 		}
-
 		attendanceService.goodbyeAttendances(attendancesDto.getAttendances());
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
@@ -269,7 +234,6 @@ public class AttendanceController {
 		return mv;
 		}
 
-
 	@PostMapping("/attendances")
 	public ModelAndView getAttendancesById(long id, Principal principal, ModelAndView mv) {
 		Attendance attendance = secureAttendanceId(id, principal);
@@ -281,30 +245,29 @@ public class AttendanceController {
 
 	@PostMapping("/attendance/update")
 	public ModelAndView updateAttendance(ModelAndView mv,@Validated @ModelAttribute Attendance attendance, BindingResult result, long id, Principal principal) {
-			 setLoginName(principal, attendance);
-			 if (result.hasErrors()) {
-				 setLoginName(principal, attendance);
-				 mv.addObject("mode", "update");
-			     mv.addObject("name", principal.getName());
-			     mv.setViewName("attendanceForm");
-				return mv;
+		setLoginName(principal, attendance);
+		if (result.hasErrors()) {
+
+			setLoginName(principal, attendance);
+			mv.addObject("mode", "update");
+			mv.addObject("name", principal.getName());
+			mv.setViewName("attendanceForm");
+			return mv;
 			}
+		if (!PracticeCalcService.isValidWorkingRange(
+			attendance.getStaHour(), attendance.getStaMin(),
+			attendance.getEndHour(), attendance.getEndMin())) {
 
-		     if (!PracticeCalcService.isValidWorkingRange(
-			      attendance.getStaHour(), attendance.getStaMin(),
-			      attendance.getEndHour(), attendance.getEndMin())) {
-		    	 //
-		    	 mv.addObject("error_message", "入力時刻のエラーです。");
-		    	 setLoginName(principal, attendance);
-		    	 mv.addObject("name", principal.getName());
-		    	 mv.addObject("mode", "update");
-		    	 mv.setViewName("attendance_form");
-		    	 return mv;
-		     }
-
-		     mv =  new ModelAndView("redirect:/attendance/list");
-		     attendanceService.saveAttendance(attendance);
-		     return mv;
+			mv.addObject("error_message", "入力時刻のエラーです。");
+			setLoginName(principal, attendance);
+			mv.addObject("name", principal.getName());
+			mv.addObject("mode", "update");
+			mv.setViewName("attendance_form");
+			return mv;
+			}
+		mv =  new ModelAndView("redirect:/attendance/list");
+		attendanceService.saveAttendance(attendance);
+		return mv;
 		}
 
 	@PostMapping("/delete")
@@ -345,12 +308,23 @@ public class AttendanceController {
 		if (!att.isPresent()) {
 			    throw new FileNotFoundException();
 		  }
-
 		if (!attendance.getUsername().equals(principal.getName())) {
 			throw new IllegalArgumentException();
 		}
-
 		return attendance;
+	}
+
+	public List<String> removeVacantList(IdListForEdit idListForEdit) {
+		List<String> idList = idListForEdit.getIdList();
+		Iterator<String> ite = idList.iterator();
+		while (ite.hasNext()) {
+			String item = ite.next();
+
+			if (item.equals(null)) {
+				idList.remove(item);
+			}
+		}
+		return idList;
 	}
 
 }

@@ -25,8 +25,8 @@
 							th:value="${day}" /></th>
 					</tr>
 					<tr>
-						<td class="search"colspan="3"><input class="ope" type="submit"
-							value="検索" /></td>
+						<td class="search" colspan="3"><input class="ope"
+							type="submit" value="検索" /></td>
 					</tr>
 				</table>
 			</form>
@@ -89,9 +89,9 @@
 							<div class="ope">
 								<span>
 									<button class="ope" type="submit">編集へ</button>
-								</span>
-								<span>
-									<button class="ope" type="submit" th:formaction="@{/attendances/delete}">削除へ</button>
+								</span> <span>
+									<button class="ope" type="submit"
+										th:formaction="@{/attendances/delete}">削除へ</button>
 								</span>
 							</div>
 						</form>
@@ -114,7 +114,7 @@
 				<ul class="sorter">
 					<li><a th:href="@{${pathWithPage}(sort=month)}">月昇順</a></li>
 					<li><a th:href="@{${pathWithPage}(sort='month,desc')}">月降順</a></li>
-					<li><a th:href="@{/error/on/purpose}">エラーボタン</a> <!-- <li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li> -->
+					<li><a th:href="@{/error/on/purpose}">エラー</a> <!-- <li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li> -->
 				</ul>
 			</section>
 		</section>

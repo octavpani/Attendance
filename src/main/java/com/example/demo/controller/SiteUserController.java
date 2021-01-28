@@ -26,7 +26,6 @@ public class SiteUserController {
 			@RequestParam(name = "username", required = false) String username,
 			@RequestParam(name = "role", required = false) String role)
 	{
-
 		Page<SiteUser> users = userService.getSiteuser(pageable, sq, id, username, role);
 
 		mv.addObject("SiteuserList", users.getContent());

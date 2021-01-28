@@ -41,8 +41,7 @@ public class PracticeCalcService {
 		}
 
 	static public boolean isValidWorkingRange(List<Attendance> attendances) {
-		for(int i = 0; i < attendances.size();  i++) {
-			Attendance attendance = attendances.get(i);
+		for(Attendance attendance : attendances) {
 			if (attendance.getStaHour() > attendance.getEndHour()) return false;
 			if (attendance.getStaHour() == attendance.getEndHour() && attendance.getStaMin() > attendance.getEndMin() ) return false;
 			if (attendance.getStaHour() < 5 || attendance.getStaHour() >= 23) return false;
@@ -63,15 +62,3 @@ public class PracticeCalcService {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
