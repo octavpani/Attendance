@@ -40,12 +40,26 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="siteuser:${SiteuserList}">
+					<form th:action="@{/admin/siteuser/edit}" th:object="${idList}" method="post">
+					<tr th:each="siteuser, itemStat : ${SiteuserList}">
 						<td th:text=${siteuser.id}></td>
 						<td th:text=${siteuser.role}></td>
 						<td th:text=${siteuser.username}></td>
-						<!-- ここに更新、削除 -->
+						<td>
+							<span>
+								<input type="checkbox" th:id="|idList[${itemStat.index}].id|" th:name="idList" th:value="${siteuser.id}">
+							</span>
+						</td>
 					</tr>
+					<div class="ope">
+						<span>
+							<button class="ope" type="submit">編集へ</button>
+						</span>
+						<span>
+							<button class="ope" type="submit" th:formaction="@{/admin/siteuser/delete}">削除へ</button>
+						</span>
+					</div>
+					</form>
 				</tbody>
 			</table>
 		<h3>ページングリンク</h3>

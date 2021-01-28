@@ -10,7 +10,7 @@ import com.example.demo.model.SiteUser;
 import lombok.Data;
 @Data
 
-public class UsersCreationDto {
+public class SiteUsersDto {
 	 @Valid
 	 private List<SiteUser> users = new ArrayList<SiteUser>();
 

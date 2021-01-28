@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<section class="home-content">
+		<h2>ユーザー編集</h2>
+		<h7>パスワードは、空欄で変更なしの予定</h7>
+		<span>
+			<form th:action="@{/admin/siteuser/update}"
+				th:object="${siteUsersDto}" method="post">
+				<table>
+					<thead>
+						<td th:each="user, itemStat : *{users}">
+							<div
+								th:if="${#fields.hasErrors('users[__${itemStat.index}__].username')}">
+								<p th:errors="*{users[__${itemStat.index}__].username}"
+									class="error-message"></p>
+							</div>
+						</td>
+						<tr>
+							<th></th>
+							<th>ユーザー名</th>
+							<th>パスワード</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="user, itemStat : *{users}">
+							<th>
+								<input type="hidden" th:field="*{users[__${itemStat.index}__].id}">
+							</th>
+							<td><input type="text"
+								th:field="*{users[__${itemStat.index}__].username}" /></td>
+							<td><input type="password" th:name="|users[${itemStat.index}].password|"
+								th:id="|users[${itemStat.index}].password|" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="submit" class="ope" value="送信">
+				</button>
+			</form>
+		</span>
+	</section>
+</body>
+</html>

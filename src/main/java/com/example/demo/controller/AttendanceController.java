@@ -181,7 +181,7 @@ public class AttendanceController {
 	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
 		List<String> idList = removeVacantList(idListForEdit);
 		AttendancesDto attendancesDto = new AttendancesDto();
-		for(String id : idList) {
+		for (String id : idList) {
 			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(id), principal));
 		}
 		mv.addObject("mode", "update");
@@ -304,10 +304,10 @@ public class AttendanceController {
 
 	public Attendance secureAttendanceId(long id, Principal principal) {
 		Optional<Attendance> att = attendanceService.findAttendanceById(id);
-		Attendance attendance = att.get();
 		if (!att.isPresent()) {
-			    throw new FileNotFoundException();
-		  }
+		    throw new FileNotFoundException();
+	  }
+		Attendance attendance = att.get();
 		if (!attendance.getUsername().equals(principal.getName())) {
 			throw new IllegalArgumentException();
 		}

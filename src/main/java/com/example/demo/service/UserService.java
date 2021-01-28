@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,7 @@ public class UserService {
 		for(int i = 0; i < users.size();  i++) {
 			SiteUser user = users.get(i);
 			if(20 <= user.getUsername().length() || user.getUsername().length() <= 2) return false;
-			if(255 <= user.getPassword().length() || user.getUsername().length() <= 4) return false;
+			if(255 <= user.getPassword().length() || user.getPassword().length() <= 4) return false;
 		}
 		return true;
 
@@ -42,6 +43,10 @@ public class UserService {
 
 	public void saveAll(List<SiteUser> users) {
 		siteUserRepository.saveAll(users);
+	}
+
+	public Optional<SiteUser> findSiteUserById(long id) {
+		return siteUserRepository.findById(id);
 	}
 
 }
