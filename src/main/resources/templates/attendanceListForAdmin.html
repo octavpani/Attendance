@@ -9,6 +9,10 @@
 	<section class="home-content">
 		<section>
 			<h2>検索条件</h2>
+			<!-- 移動予定。テンプレへ -->
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="ログアウト" />
+			</form>
 			<form th:action="@{''}" method="get">
 				<table class="bordered">
 					<tr>

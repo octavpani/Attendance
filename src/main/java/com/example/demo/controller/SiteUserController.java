@@ -25,7 +25,6 @@ import com.example.demo.form.SiteUserQuery;
 import com.example.demo.form.SiteUsersDto;
 import com.example.demo.model.SiteUser;
 import com.example.demo.service.UserService;
-import com.example.demo.util.Role;
 
 import lombok.AllArgsConstructor;
 
@@ -109,7 +108,8 @@ public class SiteUserController {
 		for (String id : idList) {
 			Optional<SiteUser> mayBeUser = userService.findSiteUserById(Long.parseLong(id));
 			SiteUser user = mayBeUser.get();
-			siteUsersDto.addSiteUser(user);
+			SiteUserForm userform = new SiteUserForm(user);
+			siteUsersDto.addSiteUser(userform);
 		}
 		mv.addObject("mode", "update");
 		mv.addObject("siteUsersDto", siteUsersDto);
@@ -129,16 +129,7 @@ public class SiteUserController {
 			mv.setViewName("siteUsersForm");
 			return mv;
 		}
-		for (int i = 0; i < siteUsersDto.getUsers().size(); i++) {
-			SiteUser user = siteUsersDto.getUsers().get(i);
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			if (user.getUsername().startsWith("Admin_")) {
-				user.setRole(Role.ADMIN.name());
-			} else {
-				user.setRole(Role.USER.name());
-			}
-		}
-		userService.saveAll(siteUsersDto.getUsers());
+		userService.saveSiteUsers(siteUsersDto);
 		mv = new ModelAndView("redirect:/admin/siteuser/list");
 		return mv;
 	}

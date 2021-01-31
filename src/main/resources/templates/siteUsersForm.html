@@ -11,7 +11,7 @@
 		<h7>パスワードは、空欄で変更なしの予定</h7>
 		<span>
 			<form th:action="@{/admin/siteuser/update}"
-				th:object="${siteUsersDto}" method="post">
+				th:object="${siteUsersDto}" method="post" enctype="multipart/form-data">
 				<table>
 					<thead>
 						<td th:each="user, itemStat : *{users}">
@@ -25,7 +25,8 @@
 							<th></th>
 							<th>ユーザー名</th>
 							<th>パスワード</th>
-
+							<th>アバター</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -37,11 +38,16 @@
 								th:field="*{users[__${itemStat.index}__].username}" /></td>
 							<td><input type="password" th:name="|users[${itemStat.index}].password|"
 								th:id="|users[${itemStat.index}].password|" /></td>
+							<td>
+								<input type="file" th:field="*{users[__${itemStat.index}__].avatar}" />
+							</td>
+							<td>
+								<img class="avatar" th:src="*{users[__${itemStat.index}__].avatarSrc} != '' ? *{users[__${itemStat.index}__].avatarSrc} : @{/img/default_avatar.jpg}" />
+							</td>
 						</tr>
 					</tbody>
 				</table>
 				<input type="submit" class="ope" value="送信">
-				</button>
 			</form>
 		</span>
 	</section>

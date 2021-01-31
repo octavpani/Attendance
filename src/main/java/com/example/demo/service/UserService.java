@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.form.SiteUserForm;
 import com.example.demo.form.SiteUserQuery;
+import com.example.demo.form.SiteUsersDto;
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.SiteUserRepository;
 import com.example.demo.util.Role;
@@ -35,9 +37,9 @@ public class UserService {
 		return siteUserRepository.findUser(anyId, sq.getId(), anyUsername, sq.getUsername(),  anyRole, sq.getRole(), pageable);
 	}
 
-	static public boolean isValidUsers(List<SiteUser> users) {
+	static public boolean isValidUsers(List<SiteUserForm> users) {
 		for(int i = 0; i < users.size();  i++) {
-			SiteUser user = users.get(i);
+			SiteUserForm user = users.get(i);
 			if(20 <= user.getUsername().length() || user.getUsername().length() <= 2) return false;
 			if(255 <= user.getPassword().length() || user.getPassword().length() <= 4) return false;
 		}
@@ -81,6 +83,27 @@ public class UserService {
 		userform.loadAvaterSrc().ifPresent(user::setAvatar);
 		//ifpresent関数
 		siteUserRepository.save(user);
+	}
+
+	public void saveSiteUsers(SiteUsersDto siteUsersDto) {
+		SiteUser user;
+		List<SiteUser> users = new ArrayList<SiteUser>();
+
+		for (SiteUserForm userform : siteUsersDto.getUsers()) {
+			user = findSiteUserById(userform.getId()).get();
+			user.setUsername(userform.getUsername());
+			if (!userform.getPassword().isEmpty()) {
+				user.setPassword(passwordEncoder.encode(userform.getPassword()));
+			}
+			if (userform.getUsername().startsWith("Admin_")) {
+				user.setRole(Role.ADMIN.name());
+			} else {
+				user.setRole(Role.USER.name());
+			}
+			userform.loadAvaterSrc().ifPresent(user::setAvatar);
+			users.add(user);
+		}
+		siteUserRepository.saveAll(users);
 	}
 }
 

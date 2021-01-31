@@ -5,16 +5,16 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.example.demo.model.SiteUser;
-
 import lombok.Data;
 @Data
 public class SiteUsersDto {
 	 @Valid
-	 private List<SiteUser> users = new ArrayList<SiteUser>();
+	 private List<SiteUserForm> users = new ArrayList<SiteUserForm>();
 
-	 public void addSiteUser(SiteUser user) {
-	        this.users.add(user);
+	 public void addSiteUser(SiteUserForm user) {
+		 this.users.add(user);
 	    }
+
+
 
 }

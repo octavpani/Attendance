@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.example.demo.util.Role;
 
@@ -33,18 +32,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/login/**", "/register", "/attendance", "/attendances/*", "/attendance/list/", "/delete/*", "/attendance/list*", "/export/*", "/form/*").permitAll()
-		.antMatchers("/admin/**").hasRole(Role.ADMIN.name())
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
-		.loginPage("/login")
-		.defaultSuccessUrl("/")
-		.and()
-		.logout()
-		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		.and()
-		.rememberMe();
+			.antMatchers("/login/**","/logout/**", "/register", "/attendance", "/attendances/*", "/attendance/list/", "/delete/*", "/attendance/list*", "/export/*", "/form/*").permitAll()
+			.antMatchers("/logout").authenticated()
+			.antMatchers("/admin/**").hasRole(Role.ADMIN.name())
+			.anyRequest().authenticated();
+		http.formLogin()
+			.loginPage("/login")
+			.usernameParameter("username")
+			.passwordParameter("password")
+			.defaultSuccessUrl("/");
+		http.logout()
+			.logoutUrl("/logout")
+			.logoutSuccessUrl("/?logout");
+		http.rememberMe()
+			.rememberMeParameter("rememberme");
 
 	}
 	@Override
