@@ -10,6 +10,10 @@ table {
 	margin: 0 auto;
 }
 
+.avatar {
+	max-width: 50px;
+}
+
 table.bordered th, table.bordered td {
 	border: 1px solid-black;
 }
@@ -22,6 +26,10 @@ table.top {
 
 th, td {
 	padding: 4px;
+}
+
+section.header {
+	text-align: center;
 }
 
 section.home-content {

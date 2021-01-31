@@ -5,17 +5,21 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.form.SiteUserForm;
 import com.example.demo.form.SiteUserQuery;
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.SiteUserRepository;
+import com.example.demo.util.Role;
 
 import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class UserService {
 	private final SiteUserRepository siteUserRepository;
+	private final BCryptPasswordEncoder passwordEncoder;
 
 	public Page<SiteUser> getSiteuser(Pageable pageable, SiteUserQuery sq,
 			Integer id, String username, String role) {
@@ -45,8 +49,39 @@ public class UserService {
 		siteUserRepository.saveAll(users);
 	}
 
+	public void save(SiteUser user) {
+		siteUserRepository.save(user);
+	}
+
 	public Optional<SiteUser> findSiteUserById(long id) {
 		return siteUserRepository.findById(id);
 	}
 
+	public void saveSiteUser(SiteUserForm userform) {
+		SiteUser user;
+		/*if (form.isNew()) {
+			user = new User();
+			user.setLoginId(form.getLoginId());
+		} else {*/
+			// 既存ユーザの編集時、パスワード欄が未入力なら、
+			// パスワードを変更したくない。
+			// また、ログインIDは編集不可とする。
+			// そのため、一旦、現在値をDBから読んでおく。
+		user = findSiteUserById(userform.getId()).get();
+		user.setId(userform.getId());
+		user.setUsername(userform.getUsername());
+		if (!userform.getPassword().isEmpty()) {
+			user.setPassword(passwordEncoder.encode(userform.getPassword()));
+		}
+		if (userform.getUsername().startsWith("Admin_")) {
+			user.setRole(Role.ADMIN.name());
+		} else {
+			user.setRole(Role.USER.name());
+		}
+		userform.loadAvaterSrc().ifPresent(user::setAvatar);
+		//ifpresent関数
+		siteUserRepository.save(user);
+	}
 }
+
+

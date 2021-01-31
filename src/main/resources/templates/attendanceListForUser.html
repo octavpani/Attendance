@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:th="http://www.thymeleaf.org"
+				xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{partial/layout}">
+	<head>
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
+	<section layout:fragment="contents">
 	<section class="home-content">
 		<section>
 			<h2>検索条件</h2>
@@ -117,6 +122,7 @@
 					<li><a th:href="@{/error/on/purpose}">エラー</a> <!-- <li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li> -->
 				</ul>
 			</section>
+		</section>
 		</section>
 </body>
 </html>

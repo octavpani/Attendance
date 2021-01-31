@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<section class="home-content">
+		<h2>ユーザー編集</h2>
+		<h7>パスワードは、空欄で変更なしの予定</h7>
+		<span>
+			<form th:action="@{/admin/siteuser/update/test}" th:object="${userform}" method="post" enctype="multipart/form-data">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>ユーザー名</th>
+							<th>パスワード</th>
+							<th>アバター</th>
+							<th></th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>
+								<input type="hidden" th:field="*{id}">
+							</th>
+							<td><input type="text" th:field="*{username}" th:value="${username}" /></td>
+							<td><input type="password" th:field="*{password}" /></td>
+							<td>
+								<input type="file" name="avatar" />
+							</td>
+							<td>
+								<img class="avatar" th:src="*{avatarSrc} != '' ? *{avatarSrc} : @{/img/default_avatar.jpg}" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="submit" class="ope" value="送信">
+			</form>
+		</span>
+	</section>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<section class="container">
+			<section class="header">
+				<div>	<!-- <div sec:authorize="isAuthenticated()"> -->
+					<!--  エラーが発生している箇所になります。-->
+					<img class="avatar" th:src="${#authentication.principal.avatar} != '' ? ${#authentication.principal.avatar} : @{/img/default_avatar.jpg}" />
+					<span th:text="${#authentication.principal.username}">user</span>
+					<!-- <form th:action="@{/logout}" method="post">
+						<input type="submit" value="Logout" />
+					</form> -->
+				</div>
+			</section>
+		<div layout:fragment="contents"></div>
+	</section>
+</body>
+</html>
