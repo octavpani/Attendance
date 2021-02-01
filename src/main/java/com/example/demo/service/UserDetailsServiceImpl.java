@@ -1,16 +1,11 @@
 package com.example.demo.service;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.CustomUserDetails;
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.SiteUserRepository;
 
@@ -28,9 +23,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if(user == null) {
 			throw new UsernameNotFoundException(username + "not found");
 		}
-		return createUserDetails(user);
+		return new CustomUserDetails(user);
 	}
-	public User createUserDetails(SiteUser user) {
+	/*public User createUserDetails(SiteUser user) {
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 		//SpringSecurityで、hasRoleすると、自動で"ROLE_"が付加される為必要な処理
 		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));

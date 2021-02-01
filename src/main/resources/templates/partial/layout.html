@@ -12,11 +12,11 @@
 			<section class="header">
 				<div>	<!-- <div sec:authorize="isAuthenticated()"> -->
 					<!--  エラーが発生している箇所になります。-->
-					<!--  <img class="avatar" th:src="${#authentication.principal.avatar} != '' ? ${#authentication.principal.avatar} : @{/img/default_avatar.jpg}" /> -->
+					<img class="avatar" th:src="${#authentication.principal.avatar} != '' ? ${#authentication.principal.avatar} : @{/img/default_avatar.jpg}" />
 					<span th:text="${#authentication.principal.username}">user</span>
-					<!-- <form th:action="@{/logout}" method="post">
+					 <form th:action="@{/logout}" method="post">
 						<input type="submit" value="Logout" />
-					</form> -->
+					</form>
 				</div>
 			</section>
 		<div layout:fragment="contents"></div>
