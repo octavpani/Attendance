@@ -1,43 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8">
-		<title>Insert title here</title>
-		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
-	</head>
-	<body>
-		<form th:action="@{/form/attendances}"  method="get">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{partial/layout}">
+<head>
+</head>
+<body>
+	<section layout:fragment="contents">
+		<form th:action="@{/form/attendances}" method="get">
 			<table>
 				<tr>
-					<th>
-						作成件数
-					</th>
-					<th>
-						西暦
-					</th>
-					<th>
-						月
-					</th>
+					<th>作成件数</th>
+					<th>西暦</th>
+					<th>月</th>
 				</tr>
 				<tr>
-					<td>
-						<input type="number" name="number" th:value="*{number}">
+					<td><input type="number" name="number" th:value="*{number}">
 					</td>
-					<td>
-						<input type="number" name="year" th:value="*{year}">
+					<td><input type="number" name="year" th:value="*{year}">
 					</td>
-					<td>
-						<input type="number" name="month" th:value="*{month}">
+					<td><input type="number" name="month" th:value="*{month}">
 					</td>
 				</tr>
 				<tr>
 					<td></td>
+					<td><input type="submit" class="ope" value="Submit"></td>
 					<td></td>
-					<td class="pre">
-						<input type="submit" class="ope" value="送信">
-					</td>
 				</tr>
 			</table>
 		</form>
-	</body>
+	</section>
+</body>
 </html>

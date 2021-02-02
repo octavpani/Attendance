@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{partial/layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<section class="home-content">
+	<section layout:fragment="contents">
 		<section>
 			<h2>検索条件</h2>
-			<!-- 移動予定。テンプレへ -->
-			<form th:action="@{/logout}" method="post">
-				<input type="submit" value="ログアウト" />
-			</form>
 			<form th:action="@{''}" method="get">
 				<table class="bordered">
 					<tr>

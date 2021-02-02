@@ -10,6 +10,26 @@ table {
 	margin: 0 auto;
 }
 
+.brand {
+	padding: 0 4px;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 2em;
+	font-weight: bold;
+}
+
+.user-info {
+	position: absolute;
+	right: 230px;
+	transform: translateY(-50%);
+}
+
+.user-info .avatar {
+	height: 32px;
+	vertical-align: middle;
+	border-radius: 50%;
+}
+
 .avatar {
 	max-width: 50px;
 }
@@ -32,8 +52,15 @@ section.header {
 	text-align: center;
 }
 
-section.home-content {
+section.container {
 	text-align: center;
+}
+
+.container {
+	margin: 0 auto;
+	max-width: 800px;
+	background-color: #f5f5f5;
+	padding: 8px 16px;
 }
 
 input.mr-4 {
@@ -63,9 +90,6 @@ tr.row-4 {
 	border-bottom: 2px solid tomato;
 }
 
-td.pre {
-	text-align: right;
-}
 
 td.register {
 	text-align: center;
@@ -82,6 +106,10 @@ li {
 
 p {
 	background-color: #FF6666;
+}
+
+section.home-content {
+	text-align: center;
 }
 
 section.login {

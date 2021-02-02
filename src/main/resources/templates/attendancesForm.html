@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8">
-		<title>Insert title here</title>
-		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
-		</style>
-	</head>
-	<body>
-		<section class="home-content">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{partial/layout}">
+<head>
+</head>
+<body>
+	<section layout:fragment="contents">
 			<h2>勤怠登録</h2>
 		</div>
 		<span>
@@ -55,7 +54,7 @@
 				</tbody>
 			</table>
 			<div th:if="${mode == null || mode == 'recreate'}">
-				<input type="submit" class="ope" value="登録"></button>
+				<input type="submit" class="ope" value="Submit"></button>
 			</div>
 			<div th:if="${mode == 'update'}">
 				<input type="submit" class="ope" value="更新" th:formaction="@{/attendances/update}"></button>
@@ -87,7 +86,6 @@
 				<p th:text="${error_message}">
 			</div>
 			</form>
-
 		</span>
 		</section>
 	</body>

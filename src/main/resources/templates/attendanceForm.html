@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8">
-		<title>Insert title here</title>
-		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
-	</head>
-	<body>
-	<section class="greeting">
-		<div>こんにちは</div>
-		<span th:text="${name}"></span>さん
-		<div th:if="${mode == 'update'}">
-			<div>投稿のIDは、</div>
-			<span th:text="${id}"></span>です
-		</div>
-	</section>
-	<section class="home-content">
-			<form th:action="@{/attendance}" th:object="${attendance}" method="post">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{partial/layout}">
+<head>
+</head>
+<body>
+	<section layout:fragment="contents">
+		<section class="greeting">
+			<div>こんにちは</div>
+			<span th:text="${name}"></span>さん
+			<div th:if="${mode == 'update'}">
+				<div>投稿のIDは、</div>
+				<span th:text="${id}"></span>です
+			</div>
+		</section>
+		<section class="home-content">
+			<form th:action="@{/attendance}" th:object="${attendance}"
+				method="post">
 				<input type="hidden" th:field="*{id}">
 				<table>
 					<tr>
@@ -24,9 +26,12 @@
 						<th>日</th>
 					</tr>
 					<tr>
-						<th><input type="number" name="year" th:value="*{year}" max = 2099 min = 2020></th>
-						<th><input type="number" name="month" th:value="*{month}" max = 12 min = 1></th>
-						<th><input type="number" name="day" th:value="*{day}" max = 31 min = 1></th>
+						<th><input type="number" name="year" th:value="*{year}"
+							max=2099 min=2020></th>
+						<th><input type="number" name="month" th:value="*{month}"
+							max=12 min=1></th>
+						<th><input type="number" name="day" th:value="*{day}" max=31
+							min=1></th>
 					</tr>
 					<div>
 						<p th:text="${error_message}"></p>
@@ -37,20 +42,24 @@
 						<th>勤務終了</th>
 					</tr>
 					<tr>
-						<th>
-							<input type="number" name="staHour" th:value="*{staHour}"max = 24 min = 0 >:<input type="number" name="staMin" th:value="*{staMin}" max = 59 min = 0 >
-						</th><!-- ここに出金時間を入れます -->
-						<th>
-							<input type="number" name="endHour" th:value="*{endHour}"max = 24 min = 0 >:<input type="number" name="endMin" th:value="*{endMin}" max = 59 min = 0 >
-						</th><!-- ここに退勤時間を入れます -->
+						<th><input type="number" name="staHour" th:value="*{staHour}"
+							max=24 min=0>:<input type="number" name="staMin"
+							th:value="*{staMin}" max=59 min=0></th>
+						<!-- ここに出金時間を入れます -->
+						<th><input type="number" name="endHour" th:value="*{endHour}"
+							max=24 min=0>:<input type="number" name="endMin"
+							th:value="*{endMin}" max=59 min=0></th>
+						<!-- ここに退勤時間を入れます -->
 					</tr>
 				</table>
 				<div class="index" th:unless="${mode == 'update'}">
-					<input type="submit" class="ope" value="登録" th:formaction="@{/attendance}">
+					<input type="submit" class="ope" value="Submit"
+						th:formaction="@{/attendance}">
 				</div>
 				<div class="index" th:if="${mode == 'update'}">
-					<input type="submit" class="ope" value="登録" th:formaction="@{/attendance/update}">
-					<input type="submit" class="ope" value="削除" th:formaction="@{/delete}">
+					<input type="submit" class="ope" value="Submit"
+						th:formaction="@{/attendance/update}"> <input
+						type="submit" class="ope" value="Delete" th:formaction="@{/delete}">
 					</button>
 				</div>
 				<div class="index">
@@ -61,5 +70,6 @@
 			</form>
 		</section>
 		</border>
-	</body>
+	</section>
+</body>
 </html>

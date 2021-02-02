@@ -10,12 +10,12 @@
 <body>
 	<section class="container">
 			<section class="header">
-				<div>	<!-- <div sec:authorize="isAuthenticated()"> -->
-					<!--  エラーが発生している箇所になります。-->
-					<img class="avatar" th:src="${#authentication.principal.avatar} != '' ? ${#authentication.principal.avatar} : @{/img/default_avatar.jpg}" />
+				<div><a class="brand" th:href="@{/}">勤怠管理アプリ</a></div>
+				<div class="user-info">	<!-- <div sec:authorize="isAuthenticated()"> -->
 					<span th:text="${#authentication.principal.username}">user</span>
-					 <form th:action="@{/logout}" method="post">
-						<input type="submit" value="Logout" />
+					<img class="avatar" th:src="${#authentication.principal.avatar} != '' ? ${#authentication.principal.avatar} : @{/img/default_avatar.jpg}" />
+					<form th:action="@{/logout}" method="post">
+						<input class="ope" type="submit" value="Logout" />
 					</form>
 				</div>
 			</section>
