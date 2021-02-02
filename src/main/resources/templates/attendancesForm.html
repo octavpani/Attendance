@@ -29,25 +29,25 @@
 							<input type="hidden" th:field="*{attendances[__${itemStat.index}__].id}">
 						</th>
 						<th th:if="${mode == null}">
-							<input type="number" th:value="${year}" th:id="|attendances[${itemStat.index}].year|" th:name="|attendances[${itemStat.index}].year|" max=2099 min=2020 >
+							<input class="mr-3" type="number" th:value="${year}" th:id="|attendances[${itemStat.index}].year|" th:name="|attendances[${itemStat.index}].year|" max=2099 min=2020 >
 						</th>
 						<th th:if="${mode == 'update' || mode == 'recreate'}">
-							<input type="number" th:field="*{attendances[__${itemStat.index}__].year}" max=2099 min=2020 >
+							<input class="mr-3"type="number" th:field="*{attendances[__${itemStat.index}__].year}" max=2099 min=2020 >
 						</th>
 						<th th:if="${mode == null}">
-							<input type="number" th:value="${month}" th:id="|attendances[${itemStat.index}].month|" th:name="|attendances[${itemStat.index}].month|" max=12 min=1 >
+							<input class="mr-4" type="number" th:value="${month}" th:id="|attendances[${itemStat.index}].month|" th:name="|attendances[${itemStat.index}].month|" max=12 min=1 >
 						</th>
 						<th th:if="${mode == 'update'|| mode == 'recreate'}">
-							<input type="number" th:field="*{attendances[__${itemStat.index}__].month}" max=12 min=1 >
+							<input class="mr-4" type="number" th:field="*{attendances[__${itemStat.index}__].month}" max=12 min=1 >
 						</th>
 						<th>
-							<input type="number" th:field="*{attendances[__${itemStat.index}__].day}"max=31 min=1 >
+							<input class="mr-4" type="number" th:field="*{attendances[__${itemStat.index}__].day}"max=31 min=1 >
 						</th>
 						<th><!-- ここに出金時間を入れます -->
-							<input type="number" th:field="*{attendances[__${itemStat.index}__].staHour}"max=24 min=0 >:<input type="number" th:field="*{attendances[__${itemStat.index}__].staMin}" max=59 min=0 >
+							<input class="mr-4" type="number" th:field="*{attendances[__${itemStat.index}__].staHour}"max=24 min=0 >:<input class="mr-4" type="number" th:field="*{attendances[__${itemStat.index}__].staMin}" max=59 min=0 >
 						</th>
 						<th><!-- ここに退勤時間を入れます -->
-							<input type="number" th:field="*{attendances[__${itemStat.index}__].endHour}"max=24 min=0 >:<input type="number" th:field="*{attendances[__${itemStat.index}__].endMin}"max=59 min=0 >
+							<input class="mr-4" type="number" th:field="*{attendances[__${itemStat.index}__].endHour}"max=24 min=0 >:<input class="mr-4" type="number" th:field="*{attendances[__${itemStat.index}__].endMin}"max=59 min=0 >
 						</th>
 					</tr>
 					</section>

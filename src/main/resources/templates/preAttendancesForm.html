@@ -15,11 +15,11 @@
 					<th>月</th>
 				</tr>
 				<tr>
-					<td><input type="number" name="number" th:value="*{number}">
+					<td><input class="mr-4" type="number" name="number" th:value="*{number}" min="1" max="30">
 					</td>
-					<td><input type="number" name="year" th:value="*{year}">
+					<td><input class="mr-3" type="number" name="year" th:value="*{year}" min="2020" max="2099">
 					</td>
-					<td><input type="number" name="month" th:value="*{month}">
+					<td><input class="mr-4" type="number" name="month" th:value="*{month}" min ="1" max="12">
 					</td>
 				</tr>
 				<tr>

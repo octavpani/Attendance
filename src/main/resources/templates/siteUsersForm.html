@@ -34,9 +34,9 @@
 							<th>
 								<input type="hidden" th:field="*{users[__${itemStat.index}__].id}">
 							</th>
-							<td><input type="text"
+							<td><input class="mr-3" type="text"
 								th:field="*{users[__${itemStat.index}__].username}" /></td>
-							<td><input type="password" th:name="|users[${itemStat.index}].password|"
+							<td><input class="mr-3" type="password" th:name="|users[${itemStat.index}].password|"
 								th:id="|users[${itemStat.index}].password|" /></td>
 							<td>
 								<input type="file" th:field="*{users[__${itemStat.index}__].avatar}" />
