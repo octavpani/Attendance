@@ -1,14 +1,20 @@
 package com.example.demo.service;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
+import com.example.demo.form.AttendancesDto;
+import com.example.demo.form.IdListForEdit;
 import com.example.demo.model.Attendance;
 import com.example.demo.repository.AttendanceRepository;
 
@@ -78,6 +84,59 @@ public class AttendanceService {
 		return attendanceRepository.findById(id);
 	}
 
+	public void saveAttendance(@ModelAttribute Attendance attendance, Principal principal) {
+		setLoginName(principal, attendance);
+		saveAttendance(attendance);
+	}
+	//不要なリストの要素を削除し、正常なものだけを戻します。
+	public AttendancesDto secureIdList(Principal principal, IdListForEdit idListForEdit) {
+		List<String> idList = removeVacantList(idListForEdit);
+		AttendancesDto attendancesDto = new AttendancesDto();
+		for (String id : idList) {
+			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(id), principal));
+		}
+		return attendancesDto;
+	}
+
+	//Dtoからフィールドであるusersを取り出します。その際に、usernameを差し込む
+		public List<Attendance> setUsernameOnDto(AttendancesDto attendancesDto, Principal principal) {
+			List<Attendance> attendances = new ArrayList<Attendance>();
+			for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
+				Attendance attendance = attendancesDto.getAttendances().get(i);
+				attendance.setUsername(principal.getName());
+				attendances.add(attendance);
+			}
+			return attendances;
+		}
+	//名前をattendanceに差し込みます
+	public void setLoginName(Principal principal, Attendance attendance) {
+		attendance.setUsername(principal.getName());
+	}
+	//コントローラ側で生成したidListの空欄部を削ります、
+	public List<String> removeVacantList(IdListForEdit idListForEdit) {
+		List<String> idList = idListForEdit.getIdList();
+		Iterator<String> ite = idList.iterator();
+		while (ite.hasNext()) {
+			String item = ite.next();
+
+			if (item.equals(null)) {
+				idList.remove(item);
+			}
+		}
+		return idList;
+	}
+	//idからattendanceを検索します。
+	public Attendance secureAttendanceId(long id, Principal principal) {
+		Optional<Attendance> att = findAttendanceById(id);
+		if (!att.isPresent()) {
+		    throw new FileNotFoundException();
+	  }
+		Attendance attendance = att.get();
+		if (!attendance.getUsername().equals(principal.getName())) {
+			throw new IllegalArgumentException();
+		}
+		return attendance;
+	}
 
 }
 

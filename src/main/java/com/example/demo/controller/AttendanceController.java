@@ -5,9 +5,7 @@ import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +26,6 @@ import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import com.example.demo.Utils;
-import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.form.AttendancesDto;
 import com.example.demo.form.IdListForEdit;
@@ -56,10 +53,8 @@ public class AttendanceController {
 		for (int i = 0; i < 10; i++) {
 			idListForEdit.addId(new String());
 		}
-
 		//初期のリスト表示
 		Page<Attendance> attendances = attendanceService.getYourAttendance(pageable, attendanceQuery, principal, year, month, day);
-
 		//勤務時間の計算
 		List<Attendance> attendanceList = attendanceService.getYourAllAttendance(principal);
 		int sumTime = 0;
@@ -115,7 +110,6 @@ public class AttendanceController {
 
 	@PostMapping("/attendance")
 	public ModelAndView createAttendance1(ModelAndView mv, @Validated @ModelAttribute Attendance attendance, Principal principal, BindingResult result) {
-		setLoginName(principal, attendance);
 		if (result.hasErrors()) {
 			mv.setViewName("attendanceForm");
 			return mv;
@@ -127,7 +121,7 @@ public class AttendanceController {
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			return mv;
 		}
-	 	attendanceService.saveAttendance(attendance);
+	 	attendanceService.saveAttendance(attendance, principal);
 	 	mv =  new ModelAndView("redirect:/attendance/list");
 	 		return mv;
 		}
@@ -142,7 +136,6 @@ public class AttendanceController {
 	public ModelAndView createAttendances(ModelAndView mv, @RequestParam(name="year", required = false)Integer year,
 			@RequestParam(name="month", required = false)Integer month,
 			@RequestParam(name="number", required = false)Integer number) {
-
 		AttendancesDto attendancesDto = new AttendancesDto();
 		for (int i = 0; i < number; i++ ) {
 			attendancesDto.addAttendance(new Attendance());
@@ -168,22 +161,15 @@ public class AttendanceController {
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
-			Attendance attendance = attendancesDto.getAttendances().get(i);
-			attendance.setUsername(principal.getName());
-		}
-		attendanceService.saveAllAttendances(attendancesDto.getAttendances());
+		List<Attendance> attendances = attendanceService.setUsernameOnDto(attendancesDto, principal);
+		attendanceService.saveAllAttendances(attendances);
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
 
 	@PostMapping("/form/attendacnes/edit")
 	public ModelAndView editAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
-		List<String> idList = removeVacantList(idListForEdit);
-		AttendancesDto attendancesDto = new AttendancesDto();
-		for (String id : idList) {
-			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(id), principal));
-		}
+		AttendancesDto attendancesDto = attendanceService.secureIdList(principal, idListForEdit);
 		mv.addObject("mode", "update");
 		mv.addObject("attendancesDto", attendancesDto);
 		mv.setViewName("attendancesForm");
@@ -203,23 +189,15 @@ public class AttendanceController {
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
-		//入れ子なので、拡張を使わず。
-		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
-			Attendance attendance = attendancesDto.getAttendances().get(i);
-			attendance.setUsername(principal.getName());
-		}
-		attendanceService.saveAllAttendances(attendancesDto.getAttendances());
+		List<Attendance> attendances = attendanceService.setUsernameOnDto(attendancesDto, principal);
+		attendanceService.saveAllAttendances(attendances);
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
 
 	@PostMapping("/attendances/delete")
 	public ModelAndView deleteAttendances(ModelAndView mv, Principal principal, IdListForEdit idListForEdit) {
-		List<String> idList = removeVacantList(idListForEdit);
-		AttendancesDto attendancesDto = new AttendancesDto();
-		for (String id : idList) {
-			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(id), principal));
-		}
+		AttendancesDto attendancesDto = attendanceService.secureIdList(principal, idListForEdit);
 		attendanceService.goodbyeAttendances(attendancesDto.getAttendances());
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
@@ -227,7 +205,7 @@ public class AttendanceController {
 
 	@GetMapping("/attendance/{id}")
 	public ModelAndView getAttendanceById(@PathVariable(name = "id")long id, Principal principal, ModelAndView mv) {
-		Attendance attendance = secureAttendanceId(id, principal);
+		Attendance attendance = attendanceService.secureAttendanceId(id, principal);
 		mv.setViewName("attendanceForm");
 		mv.addObject("attendance", attendance);
 		mv.addObject("mode", "update");
@@ -236,7 +214,7 @@ public class AttendanceController {
 
 	@PostMapping("/attendances")
 	public ModelAndView getAttendancesById(long id, Principal principal, ModelAndView mv) {
-		Attendance attendance = secureAttendanceId(id, principal);
+		Attendance attendance = attendanceService.secureAttendanceId(id, principal);
 		mv.setViewName("attendanceForm");
 		mv.addObject("attendance", attendance);
 		mv.addObject("mode", "update");
@@ -245,10 +223,8 @@ public class AttendanceController {
 
 	@PostMapping("/attendance/update")
 	public ModelAndView updateAttendance(ModelAndView mv,@Validated @ModelAttribute Attendance attendance, BindingResult result, long id, Principal principal) {
-		setLoginName(principal, attendance);
 		if (result.hasErrors()) {
-
-			setLoginName(principal, attendance);
+			attendanceService.setLoginName(principal, attendance);
 			mv.addObject("mode", "update");
 			mv.addObject("name", principal.getName());
 			mv.setViewName("attendanceForm");
@@ -257,74 +233,41 @@ public class AttendanceController {
 		if (!PracticeCalcService.isValidWorkingRange(
 			attendance.getStaHour(), attendance.getStaMin(),
 			attendance.getEndHour(), attendance.getEndMin())) {
-
 			mv.addObject("error_message", "入力時刻のエラーです。");
-			setLoginName(principal, attendance);
 			mv.addObject("name", principal.getName());
 			mv.addObject("mode", "update");
 			mv.setViewName("attendance_form");
 			return mv;
 			}
 		mv =  new ModelAndView("redirect:/attendance/list");
-		attendanceService.saveAttendance(attendance);
+		attendanceService.saveAttendance(attendance, principal);
 		return mv;
 		}
 
 	@PostMapping("/delete")
 	public ModelAndView deleteAttendance(ModelAndView mv,long id, Principal principal) {
-		Attendance attendance = secureAttendanceId(id, principal);
+		Attendance attendance = attendanceService.secureAttendanceId(id, principal);
 		attendanceService.goodbyeAttendance(attendance);
 		mv =  new ModelAndView("redirect:/attendance/list");
 		return mv;
 	}
 
 	@GetMapping("/export")
-    public void exportToCSV(HttpServletResponse response, Principal principal) throws IOException {
-        response.setContentType("text/csv");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String currentDateTime = dateFormatter.format(new Date());
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename= " + principal.getName() + currentDateTime + ".csv";
-        response.setHeader(headerKey, headerValue);
-
-        List<Attendance> attendances = attendanceService.getYourAllAttendance(principal);
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Attendance ID", "UserName", "Month", "Day", "staHour", "staMin", "endHour", "endMin"};
-        String[] nameMapping = {"id", "username", "month", "day", "staHour", "staMin", "endHour", "endMin"};
-        csvWriter.writeHeader(csvHeader);
-        for (Attendance attendance : attendances) {
-            csvWriter.write(attendance, nameMapping);
-        }
-        csvWriter.close();
-    }
-
-	private void setLoginName(Principal principal, Attendance attendance) {
-		attendance.setUsername(principal.getName());
-	}
-
-	public Attendance secureAttendanceId(long id, Principal principal) {
-		Optional<Attendance> att = attendanceService.findAttendanceById(id);
-		if (!att.isPresent()) {
-		    throw new FileNotFoundException();
-	  }
-		Attendance attendance = att.get();
-		if (!attendance.getUsername().equals(principal.getName())) {
-			throw new IllegalArgumentException();
-		}
-		return attendance;
-	}
-
-	public List<String> removeVacantList(IdListForEdit idListForEdit) {
-		List<String> idList = idListForEdit.getIdList();
-		Iterator<String> ite = idList.iterator();
-		while (ite.hasNext()) {
-			String item = ite.next();
-
-			if (item.equals(null)) {
-				idList.remove(item);
+	public void exportToCSV(HttpServletResponse response, Principal principal) throws IOException {
+		response.setContentType("text/csv");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename= " + principal.getName() + currentDateTime + ".csv";
+		response.setHeader(headerKey, headerValue);
+		List<Attendance> attendances = attendanceService.getYourAllAttendance(principal);
+		ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+		String[] csvHeader = {"Attendance ID", "UserName", "Month", "Day", "staHour", "staMin", "endHour", "endMin"};
+		String[] nameMapping = {"id", "username", "month", "day", "staHour", "staMin", "endHour", "endMin"};
+		csvWriter.writeHeader(csvHeader);
+		for (Attendance attendance : attendances) {
+			csvWriter.write(attendance, nameMapping);
 			}
+		csvWriter.close();
 		}
-		return idList;
 	}
-
-}
