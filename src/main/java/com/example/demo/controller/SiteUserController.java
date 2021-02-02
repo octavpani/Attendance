@@ -1,9 +1,5 @@
 package com.example.demo.controller;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -45,7 +41,6 @@ public class SiteUserController {
 		for (int i = 0; i < 10; i++) {
 			idListForSiteUser.addId(new String());
 		}
-
 		//初期リスト
 		Page<SiteUser> users = userService.getSiteuser(pageable, sq, id, username, role);
 
@@ -70,7 +65,7 @@ public class SiteUserController {
 		mv.setViewName("userForm");
 		return mv;
 	}
-	//テスト用
+	//テスト用　単体のユーザーを編集している。
 	@PostMapping("/admin/siteuser/update/test")
 	public ModelAndView updateSiteUser(ModelAndView mv, @ModelAttribute SiteUserForm userform) {
 		/* if (result.hasErrors()) {
@@ -96,21 +91,13 @@ public class SiteUserController {
 		}
 		userService.save(user); */
 		userService.saveSiteUser(userform);
-
 		mv = new ModelAndView("redirect:/admin/siteuser/list");
 		return mv;
 	}
 
 	@PostMapping("/admin/siteuser/edit")
 	public ModelAndView editSiteUsers(ModelAndView mv, IdListForSiteUser idListForSiteUser) {
-		List<String> idList = removeVacantList(idListForSiteUser);
-		SiteUsersDto siteUsersDto = new SiteUsersDto();
-		for (String id : idList) {
-			Optional<SiteUser> mayBeUser = userService.findSiteUserById(Long.parseLong(id));
-			SiteUser user = mayBeUser.get();
-			SiteUserForm userform = new SiteUserForm(user);
-			siteUsersDto.addSiteUser(userform);
-		}
+		SiteUsersDto siteUsersDto = userService.findUsers(idListForSiteUser);
 		mv.addObject("mode", "update");
 		mv.addObject("siteUsersDto", siteUsersDto);
 		mv.setViewName("siteUsersForm");
@@ -134,16 +121,6 @@ public class SiteUserController {
 		return mv;
 	}
 
-	public List<String> removeVacantList(IdListForSiteUser idListForSiteUser) {
-		List<String> idList = idListForSiteUser.getIdList();
-		Iterator<String> ite = idList.iterator();
-		while (ite.hasNext()) {
-			String item = ite.next();
-			if (item.equals(null)) {
-				idList.remove(item);
-			}
-		}
-		return idList;
-	}
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.form.IdListForSiteUser;
 import com.example.demo.form.SiteUserForm;
 import com.example.demo.form.SiteUserQuery;
 import com.example.demo.form.SiteUsersDto;
@@ -104,6 +106,30 @@ public class UserService {
 			users.add(user);
 		}
 		siteUserRepository.saveAll(users);
+	}
+	//コントローラ側で生成されたリストのうち、空の要素を削除する。
+	public List<String> removeVacantList(IdListForSiteUser idListForSiteUser) {
+		List<String> idList = idListForSiteUser.getIdList();
+		Iterator<String> ite = idList.iterator();
+		while (ite.hasNext()) {
+			String item = ite.next();
+			if (item.equals(null)) {
+				idList.remove(item);
+			}
+		}
+		return idList;
+	}
+	//idListから、ユーザーを見つける。avatarの関係上、フォームクラスに詰めなおしている。
+	public SiteUsersDto findUsers(IdListForSiteUser idListForSiteUser) {
+		List<String> idList = removeVacantList(idListForSiteUser);
+		SiteUsersDto siteUsersDto = new SiteUsersDto();
+		for (String id : idList) {
+			Optional<SiteUser> mayBeUser = findSiteUserById(Long.parseLong(id));
+			SiteUser user = mayBeUser.get();
+			SiteUserForm userform = new SiteUserForm(user);
+			siteUsersDto.addSiteUser(userform);
+		}
+		return siteUsersDto;
 	}
 }
 

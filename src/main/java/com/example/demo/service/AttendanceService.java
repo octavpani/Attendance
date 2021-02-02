@@ -54,7 +54,6 @@ public class AttendanceService {
 			month = anyMonth ? null : (aq.getMonth());
 			day = anyDay ? null : (aq.getDay());
 			username = anyName ? "" : ("%" + aq.getUsername() + "%");
-
 			return attendanceRepository.findAttendance(anyName, aq.getUsername(), anyYear, aq.getYear(),  anyMonth, aq.getMonth(), anyDay, aq.getDay(), pageable);
 		}
 
