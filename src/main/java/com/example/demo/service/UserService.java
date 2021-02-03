@@ -19,6 +19,7 @@ import com.example.demo.repository.SiteUserRepository;
 import com.example.demo.util.Role;
 
 import lombok.AllArgsConstructor;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -32,22 +33,24 @@ public class UserService {
 		boolean anyRole = sq.getRole() == null || sq.getRole().isEmpty();
 
 		id = anyId ? null : (sq.getId());
-		username = anyUsername ? "" : ("%" +sq.getUsername() + "%");
+		username = anyUsername ? "" : ("%" + sq.getUsername() + "%");
 		role = anyRole ? "" : ("%" + sq.getRole() + "%");
 
-
-		return siteUserRepository.findUser(anyId, sq.getId(), anyUsername, sq.getUsername(),  anyRole, sq.getRole(), pageable);
+		return siteUserRepository.findUser(anyId, sq.getId(), anyUsername, sq.getUsername(), anyRole, sq.getRole(),
+				pageable);
 	}
 
 	static public boolean isValidUsers(List<SiteUserForm> users) {
-		for(int i = 0; i < users.size();  i++) {
+		for (int i = 0; i < users.size(); i++) {
 			SiteUserForm user = users.get(i);
-			if(20 <= user.getUsername().length() || user.getUsername().length() <= 2) return false;
-			if(255 <= user.getPassword().length() || user.getPassword().length() <= 4) return false;
+			if (20 <= user.getUsername().length() || user.getUsername().length() <= 2)
+				return false;
+			if (255 <= user.getPassword().length() || user.getPassword().length() <= 4)
+				return false;
 		}
 		return true;
 
-		}
+	}
 
 	public void saveAll(List<SiteUser> users) {
 		siteUserRepository.saveAll(users);
@@ -67,10 +70,10 @@ public class UserService {
 			user = new User();
 			user.setLoginId(form.getLoginId());
 		} else {*/
-			// 既存ユーザの編集時、パスワード欄が未入力なら、
-			// パスワードを変更したくない。
-			// また、ログインIDは編集不可とする。
-			// そのため、一旦、現在値をDBから読んでおく。
+		// 既存ユーザの編集時、パスワード欄が未入力なら、
+		// パスワードを変更したくない。
+		// また、ログインIDは編集不可とする。
+		// そのため、一旦、現在値をDBから読んでおく。
 		user = findSiteUserById(userform.getId()).get();
 		user.setId(userform.getId());
 		user.setUsername(userform.getUsername());
@@ -88,11 +91,12 @@ public class UserService {
 	}
 
 	public void saveSiteUsers(SiteUsersDto siteUsersDto) {
-		SiteUser user;
 		List<SiteUser> users = new ArrayList<SiteUser>();
-
 		for (SiteUserForm userform : siteUsersDto.getUsers()) {
-			user = findSiteUserById(userform.getId()).get();
+			SiteUser user = new SiteUser();
+			if (siteUsersDto.getUsers().get(0).getId() != null) {
+				user = findSiteUserById(userform.getId()).get();
+			}
 			user.setUsername(userform.getUsername());
 			if (!userform.getPassword().isEmpty()) {
 				user.setPassword(passwordEncoder.encode(userform.getPassword()));
@@ -107,6 +111,12 @@ public class UserService {
 		}
 		siteUserRepository.saveAll(users);
 	}
+	//ユーザーの一括削除
+	public void goodByeUsers(IdListForSiteUser idListForSiteUser) {
+		List<SiteUser> users = findUsersForDelete(idListForSiteUser);
+		siteUserRepository.deleteAll(users);
+	}
+
 	//コントローラ側で生成されたリストのうち、空の要素を削除する。
 	public List<String> removeVacantList(IdListForSiteUser idListForSiteUser) {
 		List<String> idList = idListForSiteUser.getIdList();
@@ -119,6 +129,7 @@ public class UserService {
 		}
 		return idList;
 	}
+
 	//idListから、ユーザーを見つける。avatarの関係上、フォームクラスに詰めなおしている。
 	public SiteUsersDto findUsers(IdListForSiteUser idListForSiteUser) {
 		List<String> idList = removeVacantList(idListForSiteUser);
@@ -127,10 +138,23 @@ public class UserService {
 			Optional<SiteUser> mayBeUser = findSiteUserById(Long.parseLong(id));
 			SiteUser user = mayBeUser.get();
 			SiteUserForm userform = new SiteUserForm(user);
+			if (userform.getAvatarSrc() == null) {
+				userform.setAvatarSrc("");
+			}
 			siteUsersDto.addSiteUser(userform);
 		}
 		return siteUsersDto;
 	}
+	//idListからユーザーを見つける。戻り値は、siteuserのリスト
+	public List<SiteUser> findUsersForDelete(IdListForSiteUser idListForSiteUser) {
+		List<String> idList = removeVacantList(idListForSiteUser);
+		List<SiteUser> users = new ArrayList<SiteUser>();
+		for (String id : idList) {
+			Optional<SiteUser> mayBeUser = findSiteUserById(Long.parseLong(id));
+			SiteUser user = mayBeUser.get();
+			users.add(user);
+		}
+		return users;
+	}
+
 }
-
-

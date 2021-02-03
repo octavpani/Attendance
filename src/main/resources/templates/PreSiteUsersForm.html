@@ -7,25 +7,17 @@
 </head>
 <body>
 	<section layout:fragment="contents">
-		<form th:action="@{/form/attendances}" method="get">
+		<form th:action="@{/admin/siteuser/create}" method="get">
 			<table>
 				<tr>
 					<th>作成件数</th>
-					<th>西暦</th>
-					<th>月</th>
 				</tr>
 				<tr>
 					<td><input class="mr-4" type="number" name="number" th:value="*{number}" min="1" max="30" required>
 					</td>
-					<td><input class="mr-3" type="number" name="year" th:value="*{year}" min="2020" max="2099">
-					</td>
-					<td><input class="mr-4" type="number" name="month" th:value="*{month}" min ="1" max="12">
-					</td>
 				</tr>
 				<tr>
-					<td></td>
 					<td><input type="submit" class="ope" value="Submit"></td>
-					<td></td>
 				</tr>
 			</table>
 		</form>

@@ -14,13 +14,6 @@
 				th:object="${siteUsersDto}" method="post" enctype="multipart/form-data">
 				<table>
 					<thead>
-						<td th:each="user, itemStat : *{users}">
-							<div
-								th:if="${#fields.hasErrors('users[__${itemStat.index}__].username')}">
-								<p th:errors="*{users[__${itemStat.index}__].username}"
-									class="error-message"></p>
-							</div>
-						</td>
 						<tr>
 							<th></th>
 							<th>ユーザー名</th>
@@ -47,7 +40,20 @@
 						</tr>
 					</tbody>
 				</table>
-				<input type="submit" class="ope" value="Submit">
+				<div>
+					<input th:if="${mode == 'update'}" type="submit" class="ope" value="Submit">
+				</div>
+				<div>
+					<input th:if="${mode == null}" type="submit" th:formaction="@{/admin/siteuser/create}" class="ope" value="Create">
+				</div>
+				<div th:each="user, itemStat : *{users}">
+					<div th:if="${#fields.hasErrors('users[__${itemStat.index}__].username')}">
+						<p th:errors="*{users[__${itemStat.index}__].username}" class="error-message"></p>
+					</div>
+					<div th:if="${#fields.hasErrors('users[__${itemStat.index}__].password')}">
+						<p th:errors="*{users[__${itemStat.index}__].password}" class="error-message"></p>
+					</div>
+				</div>
 			</form>
 		</span>
 	</section>

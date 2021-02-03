@@ -57,7 +57,7 @@
 				<input type="submit" class="ope" value="Submit"></button>
 			</div>
 			<div th:if="${mode == 'update'}">
-				<input type="submit" class="ope" value="更新" th:formaction="@{/attendances/update}"></button>
+				<input type="submit" class="ope" value="update" th:formaction="@{/attendances/update}"></button>
 			</div>
 			<div th:each="attendance, itemStat : *{attendances}">
 				<div th:if="${#fields.hasErrors('attendances[__${itemStat.index}__].year')}">

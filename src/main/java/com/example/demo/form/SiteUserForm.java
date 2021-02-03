@@ -41,10 +41,11 @@ public class SiteUserForm {
 
 	public SiteUserForm() {
 		id = null;
+		username = null;
 		password = null;
 		role = null;
 		avatar = null;
-		avatarSrc = null;
+		avatarSrc = "";
 	}
 
 	public SiteUserForm(SiteUser user) {

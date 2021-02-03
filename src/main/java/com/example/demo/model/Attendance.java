@@ -49,22 +49,22 @@ public class Attendance {
 
 	@Min(value = 5, message = "開始時刻には、5以上23以下の数字を入力してください。")
 	@Max(value = 23, message = "開始時刻には、5以上23以下の数字を入力してください。")
-	@NotNull(message = "値を入力してください。")
+	@NotNull(message = "開始の時刻（Hour）を入力してください。")
 	@Column(name="sta_hour")
 	private Integer staHour;
 
 
-	@NotNull(message = "値を入力してください。")
+	@NotNull(message = "開始の時刻(Min)を入力してください。")
 	@Column(name="sta_min")
 	private Integer staMin;
 
 
-	@NotNull(message = "値を入力してください。")
+	@NotNull(message = "終了の時刻（Hour）を入力してください。")
 	@Column(name="end_hour")
 	private Integer endHour;
 
 
-	@NotNull(message = "値を入力してください。")
+	@NotNull(message = "終了の時刻（Min）を入力してください。")
 	@Column(name="end_min")
 	private Integer endMin;
 
