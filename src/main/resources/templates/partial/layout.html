@@ -14,7 +14,7 @@
 				<div class="user-info">	<!-- <div sec:authorize="isAuthenticated()"> -->
 					<span th:text="${#authentication.principal.username}">user</span>
 					<img class="avatar" th:src="${#authentication.principal.avatar} != '' ? ${#authentication.principal.avatar} : @{/img/default_avatar.jpg}" />
-					<form th:action="@{/logout}" method="post">
+					<form th:action="@{/logout}" method="post" />
 						<input class="ope" type="submit" value="Logout" />
 					</form>
 				</div>

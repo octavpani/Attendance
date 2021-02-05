@@ -32,8 +32,9 @@
 			</form>
 		</section>
 		<section>
-			<h2>勤怠出力</h2>
-			<form th:action="@{/export}" th:object="${csvForm}" method="post">
+
+			<form th:if="${'USER'.equals(#authentication.principal.role)}" th:action="@{/export}" th:object="${csvForm}" method="post">
+				<h2>勤怠出力</h2>
 				<table class="bordered">
 					<tr>
 						<th>西暦</th>
@@ -60,9 +61,9 @@
 					type="button">一括作成</button></a>
 		</section>
 		<section>
+			<div class="ope">
 			<h2>勤務記録</h2>
 			<h4>累計勤務時間</h4>
-			<div class="ope">
 				<span th:text=${sumHours}></span>: <span th:text=${sumMinutes}></span>
 			</div>
 			<section>
