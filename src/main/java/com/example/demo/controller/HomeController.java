@@ -24,7 +24,6 @@ public class HomeController {
 	private final UserService userService;
 	private final BCryptPasswordEncoder passwordEncoder;
 
-
 	@GetMapping("/login")
 	public String login() {
 		return "login";
@@ -37,21 +36,15 @@ public class HomeController {
 		return "top";
 	}
 
-	@GetMapping("/admin/list")
-	public String showAdminList(Model model) {
-		model.addAttribute("users", userRepository.findAll());
-		return "list";
-	}
-
 	@GetMapping("/register")
 	public String register(@ModelAttribute("user") SiteUser user) {
-		return "register1";
+		return "register";
 	}
 
 	@PostMapping("/register")
 	public String process(@Validated @ModelAttribute("user") SiteUser user, BindingResult result) {
 		if (result.hasErrors()) {
-			return "register1";
+			return "register";
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		if (user.getUsername().startsWith("Admin_")) {
@@ -62,44 +55,6 @@ public class HomeController {
 		userRepository.save(user);
 		return "redirect:/login";
 	}
-	/* 一旦以下は保留。Adminでユーザーの一括登録をする際にコードを流用。　初期の登録は、とりあえず一人分だけ。
-	@GetMapping("/register")
-	public String register(Model model)  {
-		 UsersCreationDto usersform = new UsersCreationDto();
-		 for (int i = 0; i < 3; i++) {
-			 usersform.addSiteUser(new SiteUser());
-		 }
-		 model.addAttribute("usersCreationDto", usersform);
-		 return "register";
-	}
-
-	@PostMapping("/register")
-	public String process(@Validated @ModelAttribute UsersCreationDto usersCreationDto, BindingResult result, Model model) {
-
-		if (result.hasErrors()) {
-			return "register";
-		}
-
-		/*if(!UserService.isValidUsers(usersCreationDto.getUsers())) {
-			//model.addAttribute("form", form);
-			model.addAttribute("error_message", "入力内容に誤りがあります。");
-		return "register";
-	}
-
-		for (int i = 0; i < 3; i++) {
-			SiteUser user = usersCreationDto.getUsers().get(i);
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			if(user.getUsername().startsWith("Admin_")) {
-				user.setRole(Role.ADMIN.name());
-			} else {
-				user.setRole(Role.USER.name());
-			}
-		}
-		userService.saveAll(usersCreationDto.getUsers());
-
-		return "redirect:/login";
-	}
-*/
 
 }
 

@@ -20,11 +20,11 @@
 					<tr>
 						<td><input class="mr-3" type="text" name="username"
 							th:value="${username}" /></td>
-						<td><input class="mr-3" type="number" name="year"
+						<td><input class="mr-3" type="number" name="year" min="2020" max="2099"
 							th:value="${year}" /></td>
-						<td><input class="mr-4" type="number" name="month"
+						<td><input class="mr-4" type="number" name="month" min="1" max="12"
 							th:value="${month}" /></td>
-						<td><input class="mr-4" type="number" name="day"
+						<td><input class="mr-4" type="number" name="day" min="1" max="31"
 							th:value="${day}" /></td>
 					</tr>
 					<tr>

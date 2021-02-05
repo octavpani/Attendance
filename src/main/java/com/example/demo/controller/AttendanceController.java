@@ -28,6 +28,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.example.demo.Utils;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.form.AttendancesDto;
+import com.example.demo.form.CsvForm;
 import com.example.demo.form.IdListForEdit;
 import com.example.demo.model.Attendance;
 import com.example.demo.service.AttendanceService;
@@ -42,7 +43,7 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 
 	@GetMapping("/attendance/list")
-	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery,
+	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery, CsvForm csvForm,
 			@PageableDefault(size = 10)Pageable pageable,
 			@RequestParam(name = "year", required = false) Integer year,
 			@RequestParam(name = "month", required = false) Integer month,
@@ -236,7 +237,7 @@ public class AttendanceController {
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			mv.addObject("name", principal.getName());
 			mv.addObject("mode", "update");
-			mv.setViewName("attendance_form");
+			mv.setViewName("attendanceform");
 			return mv;
 			}
 		mv =  new ModelAndView("redirect:/attendance/list");
@@ -252,15 +253,20 @@ public class AttendanceController {
 		return mv;
 	}
 
-	@GetMapping("/export")
-	public void exportToCSV(HttpServletResponse response, Principal principal) throws IOException {
+	@PostMapping("/export")
+	public ModelAndView exportToCSV(ModelAndView mv, HttpServletResponse response, Principal principal, CsvForm csvForm) throws IOException {
 		response.setContentType("text/csv");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		String currentDateTime = dateFormatter.format(new Date());
 		String headerKey = "Content-Disposition";
 		String headerValue = "attachment; filename= " + principal.getName() + currentDateTime + ".csv";
 		response.setHeader(headerKey, headerValue);
-		List<Attendance> attendances = attendanceService.getYourAllAttendance(principal);
+		//ここに年と月から検索を行う。
+		List<Attendance> attendances = attendanceService.getYourAttendance(principal, csvForm);
+		if (attendances.size() == 0) {
+			mv =  new ModelAndView("redirect:/attendance/list");
+			return mv;
+		}
 		ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 		String[] csvHeader = {"Attendance ID", "UserName", "Month", "Day", "staHour", "staMin", "endHour", "endMin"};
 		String[] nameMapping = {"id", "username", "month", "day", "staHour", "staMin", "endHour", "endMin"};
@@ -269,5 +275,7 @@ public class AttendanceController {
 			csvWriter.write(attendance, nameMapping);
 			}
 		csvWriter.close();
+		mv =  new ModelAndView("redirect:/attendance/list");
+		return mv;
 		}
-	}
+}

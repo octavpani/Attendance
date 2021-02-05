@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.form.AttendancesDto;
+import com.example.demo.form.CsvForm;
 import com.example.demo.form.IdListForEdit;
 import com.example.demo.model.Attendance;
 import com.example.demo.repository.AttendanceRepository;
@@ -40,8 +41,11 @@ public class AttendanceService {
 
 	 //勤怠時間
 	 public List<Attendance> getYourAllAttendance(Principal principal) {
-			return attendanceRepository.findByUsernameLike(principal.getName());
+		 return attendanceRepository.findByUsernameLike(principal.getName());
 		}
+	 public List<Attendance> getYourAttendance(Principal principal, CsvForm csvForm) {
+		 return attendanceRepository.findByUsernameLikeAndYearIsAndMonthIs(principal.getName(), csvForm.getYear(), csvForm.getMonth());
+	 }
 
 	//以下Adminの検索用
 	 public Page<Attendance> getAttendance(Pageable pageable, AttendanceQuery aq,

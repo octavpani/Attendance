@@ -95,43 +95,6 @@ public class SiteUserController {
 		return mv;
 	}
 
-	@PostMapping("/admin/siteuser/edit")
-	public ModelAndView editSiteUsers(ModelAndView mv, IdListForSiteUser idListForSiteUser) {
-		SiteUsersDto siteUsersDto = userService.findUsers(idListForSiteUser);
-		mv.addObject("mode", "update");
-		mv.addObject("siteUsersDto", siteUsersDto);
-		mv.setViewName("siteUsersForm");
-		return mv;
-	}
-
-	@PostMapping("/admin/siteuser/update")
-	public ModelAndView updateSiteUser(ModelAndView mv, @Validated @ModelAttribute SiteUsersDto siteUsersDto,
-			BindingResult result) {
-		if (result.hasErrors()) {
-			mv.addObject("mode", "update");
-			mv.setViewName("siteUsersForm");
-			return mv;
-		}
-		if (!UserService.isValidUsers(siteUsersDto.getUsers())) {
-			mv.addObject("error_message", "入力内容に誤りがあります。");
-			mv.addObject("mode", "update");
-			mv.setViewName("siteUsersForm");
-			return mv;
-		}
-		userService.saveSiteUsers(siteUsersDto);
-		mv = new ModelAndView("redirect:/admin/siteuser/list");
-
-		//makeSiteUser(mv, siteUsersDto, result);
-		return mv;
-	}
-
-	@PostMapping("/admin/siteuser/delete")
-		public ModelAndView deleteSiteUser(ModelAndView mv, IdListForSiteUser idListForSiteUser) {
-			userService.goodByeUsers(idListForSiteUser);
-			mv = new ModelAndView("redirect:/admin/siteuser/list");
-			return mv;
-		}
-
 	@PostMapping("/admin/pre/siteuser/create")
 	public ModelAndView prepareSiteUser(ModelAndView mv) {
 		mv.setViewName("preSiteUsersForm");
@@ -168,20 +131,41 @@ public class SiteUserController {
 		return mv;
 	}
 
-	/*public ModelAndView makeSiteUser(ModelAndView mv, @Validated @ModelAttribute SiteUsersDto siteUsersDto,
+	@PostMapping("/admin/siteuser/edit")
+	public ModelAndView editSiteUsers(ModelAndView mv, IdListForSiteUser idListForSiteUser) {
+		SiteUsersDto siteUsersDto = userService.findUsers(idListForSiteUser);
+		mv.addObject("mode", "update");
+		mv.addObject("siteUsersDto", siteUsersDto);
+		mv.setViewName("siteUsersForm");
+		return mv;
+	}
+
+	@PostMapping("/admin/siteuser/update")
+	public ModelAndView updateSiteUser(ModelAndView mv, @Validated @ModelAttribute SiteUsersDto siteUsersDto,
 			BindingResult result) {
 		if (result.hasErrors()) {
+			mv.addObject("mode", "update");
 			mv.setViewName("siteUsersForm");
 			return mv;
 		}
 		if (!UserService.isValidUsers(siteUsersDto.getUsers())) {
 			mv.addObject("error_message", "入力内容に誤りがあります。");
+			mv.addObject("mode", "update");
 			mv.setViewName("siteUsersForm");
 			return mv;
 		}
 		userService.saveSiteUsers(siteUsersDto);
 		mv = new ModelAndView("redirect:/admin/siteuser/list");
+
+		//makeSiteUser(mv, siteUsersDto, result);
 		return mv;
-		*/
+	}
+
+	@PostMapping("/admin/siteuser/delete")
+	public ModelAndView deleteSiteUser(ModelAndView mv, IdListForSiteUser idListForSiteUser) {
+		userService.goodByeUsers(idListForSiteUser);
+		mv = new ModelAndView("redirect:/admin/siteuser/list");
+		return mv;
+	}
 
 }

@@ -27,6 +27,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
 	//勤怠時間
 	List<Attendance> findByUsernameLike(String name);
+	List<Attendance> findByUsernameLikeAndYearIsAndMonthIs(String name, int year, int month);
 
 	//Admin用の検索
 	@Query(value = "SELECT * FROM attendance WHERE (:anyName OR username LIKE :username) AND (:anyYear OR year LIKE :year) AND (:anyMonth OR month LIKE :month) AND (:anyDay OR day LIKE :day)",

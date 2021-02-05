@@ -12,7 +12,7 @@
 			<form th:action="@{''}" method="get">
 				<table class="bordered">
 					<tr>
-						<th>年</th>
+						<th>西暦</th>
 						<th>月</th>
 						<th>日</th>
 					</tr>
@@ -33,7 +33,25 @@
 		</section>
 		<section>
 			<h2>勤怠出力</h2>
-			<a th:href="@{/export}"><button class="ope" type="button">出力</button></a>
+			<form th:action="@{/export}" th:object="${csvForm}" method="post">
+				<table class="bordered">
+					<tr>
+						<th>西暦</th>
+						<th>月</th>
+					</tr>
+					<tr>
+						<th><input class="mr-3" type="number" th:field="*{year}" min="2020" max="2099" required></th>
+						<th>
+					<input class="mr-4" type="number" th:field="*{month}" min="1" max="12" required>
+						</th>
+						</tr>
+					<tr>
+						<th colspan="3"><button class="ope" type="submit">出力</button>
+						</th>
+					</tr>
+				</table>
+			</form>
+			<!--  <a th:href="@{/export}"><button class="ope" type="button">出力</button></a> -->
 		</section>
 		<section>
 			<h2>勤怠作成</h2>
