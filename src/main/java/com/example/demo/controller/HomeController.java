@@ -52,7 +52,7 @@ public class HomeController {
 		} else {
 			user.setRole(Role.USER.name());
 		}
-		userRepository.save(user);
+		userService.save(user);
 		return "redirect:/login";
 	}
 

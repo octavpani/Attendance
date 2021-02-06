@@ -39,8 +39,7 @@ table.bordered th, table.bordered td {
 }
 
 table.top {
-	border: "1";
-	width: 50%;
+	width: 25%;
 	margin-top: 50px;
 }
 
@@ -85,6 +84,8 @@ input.ope, button.ope {
 tr.top {
 	text-align: center;
 }
+
+
 
 tr.row-4 {
 	border-bottom: 2px solid tomato;

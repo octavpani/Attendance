@@ -77,5 +77,9 @@ public class Attendance {
 		return PracticeCalcService.getMinutes(this);
 	}
 
+	public boolean isNew() {
+		return id == null;
+	}
+
 
 }
