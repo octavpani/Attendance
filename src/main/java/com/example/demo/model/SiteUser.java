@@ -39,4 +39,16 @@ public class SiteUser {
 	@Lob
 	@Column(name="avatar")
 	private String avatar;
+	//ここは微妙かも
+	public SiteUser() {
+
+	}
+
+	public SiteUser(String username, String password, String role, String avatar) {
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.avatar = avatar;
+	}
 }
+
