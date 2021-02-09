@@ -71,19 +71,17 @@ public class WebLayerTests {
 	@Test
 	public void indexofSiteUser() throws Exception {
 		CustomUserDetails ud = new CustomUserDetails(
-				new SiteUser("admin", "", "ADMIN", ""));
-
+				new SiteUser("satou5", "", "ADMIN", ""));
 		doAnswer(new Answer<Page<SiteUser>>() {
 			@Override
 			public Page<SiteUser> answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
-				return Page.empty((Pageable) args[1]);
+				return Page.empty((Pageable) args[0]);
 			}
 		}).when(userService).getSiteuser(any(), any(), any(), any(), any());
-		//↓この箇所がエラー箇所として指定されます。
 		mockMvc.perform(get("/admin/siteuser/list").with(user(ud)))
 				.andExpect(status().isOk());
-
 	}
+
 
 }

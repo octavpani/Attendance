@@ -32,6 +32,11 @@ public class Attendance {
 	@Column(name="username")
 	private String username;
 
+	@Min(2000)
+	@Max(2099)
+	@Column(name="year")
+	private Integer year;
+
 	@Min(1)
 	@Max(12)
 	@Column(name="month")
@@ -42,10 +47,7 @@ public class Attendance {
 	@Column(name="day")
 	private Integer day;
 
-	@Min(2000)
-	@Max(2099)
-	@Column(name="year")
-	private Integer year;
+
 
 	@Min(value = 5, message = "開始時刻には、5以上23以下の数字を入力してください。")
 	@Max(value = 23, message = "開始時刻には、5以上23以下の数字を入力してください。")
@@ -53,21 +55,32 @@ public class Attendance {
 	@Column(name="sta_hour")
 	private Integer staHour;
 
-
 	@NotNull(message = "開始の時刻(Min)を入力してください。")
 	@Column(name="sta_min")
 	private Integer staMin;
-
 
 	@NotNull(message = "終了の時刻（Hour）を入力してください。")
 	@Column(name="end_hour")
 	private Integer endHour;
 
-
 	@NotNull(message = "終了の時刻（Min）を入力してください。")
 	@Column(name="end_min")
 	private Integer endMin;
 
+	public Attendance(String username, Integer year, Integer month, Integer day, Integer staHour, Integer staMin, Integer endHour, Integer endMin) {
+		this.username = username;
+		this.year = year;
+		this.month = month;
+		this.day = day;
+		this.staHour = staHour;
+		this.staMin = staMin;
+		this.endHour = endHour;
+		this.endMin = endMin;
+	}
+
+	public Attendance() {
+
+	}
 
 
 	public int workingHours() {

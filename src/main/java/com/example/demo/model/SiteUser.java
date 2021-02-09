@@ -50,5 +50,9 @@ public class SiteUser {
 		this.role = role;
 		this.avatar = avatar;
 	}
+
+	public boolean isNew() {
+		return id == null;
+	}
 }
 
