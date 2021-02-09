@@ -27,40 +27,42 @@ public class AttendanceService {
 	private final AttendanceRepository attendanceRepository;
 
 	//以下userの検索用
-	 public Page<Attendance> getYourAttendance(Pageable pageable, AttendanceQuery aq, Principal principal,
-				Integer year, Integer month, Integer day) {
-			boolean anyYear = aq.getYear() == null;
-			boolean anyMonth = aq.getMonth() == null;
-			boolean anyDay = aq.getDay() == null;
-			year = anyYear ? null : (aq.getYear());
-			month = anyMonth ? null : (aq.getMonth());
-			day = anyDay ? null : (aq.getDay());
-
-			return attendanceRepository.findYourAttendance(principal.getName() , anyYear, aq.getYear(),  anyMonth, aq.getMonth(), anyDay, aq.getDay(), pageable);
-		}
-
-	 //勤怠時間
-	 public List<Attendance> getYourAllAttendance(Principal principal) {
-		 return attendanceRepository.findByUsernameLike(principal.getName());
-		}
-	 public List<Attendance> getYourAttendance(Principal principal, CsvForm csvForm) {
-		 return attendanceRepository.findByUsernameLikeAndYearIsAndMonthIs(principal.getName(), csvForm.getYear(), csvForm.getMonth());
-	 }
+	public Page<Attendance> getYourAttendance(Pageable pageable, AttendanceQuery aq, Principal principal,
+			Integer year, Integer month, Integer day) {
+		boolean anyYear = aq.getYear() == null;
+		boolean anyMonth = aq.getMonth() == null;
+		boolean anyDay = aq.getDay() == null;
+		year = anyYear ? null : (aq.getYear());
+		month = anyMonth ? null : (aq.getMonth());
+		day = anyDay ? null : (aq.getDay());
+		return attendanceRepository.findYourAttendance(principal.getName(), anyYear, aq.getYear(), anyMonth,
+				aq.getMonth(), anyDay, aq.getDay(), pageable);
+	}
 
 	//以下Adminの検索用
-	 public Page<Attendance> getAttendance(Pageable pageable, AttendanceQuery aq,
-				Integer year, Integer month, Integer day, String username) {
-			boolean anyYear = aq.getYear() == null;
-			boolean anyMonth = aq.getMonth() == null;
-			boolean anyDay = aq.getDay() == null;
-			boolean anyName = aq.getUsername() == null || aq.getUsername().isEmpty();
-			year = anyYear ? null : (aq.getYear());
-			month = anyMonth ? null : (aq.getMonth());
-			day = anyDay ? null : (aq.getDay());
-			username = anyName ? "" : ("%" + aq.getUsername() + "%");
-			return attendanceRepository.findAttendance(anyName, aq.getUsername(), anyYear, aq.getYear(),  anyMonth, aq.getMonth(), anyDay, aq.getDay(), pageable);
-		}
+	public Page<Attendance> getAttendance(Pageable pageable, AttendanceQuery aq,
+			Integer year, Integer month, Integer day, String username) {
+		boolean anyYear = aq.getYear() == null;
+		boolean anyMonth = aq.getMonth() == null;
+		boolean anyDay = aq.getDay() == null;
+		boolean anyName = aq.getUsername() == null || aq.getUsername().isEmpty();
+		year = anyYear ? null : (aq.getYear());
+		month = anyMonth ? null : (aq.getMonth());
+		day = anyDay ? null : (aq.getDay());
+		username = anyName ? "" : ("%" + aq.getUsername() + "%");
+		return attendanceRepository.findAttendance(anyName, aq.getUsername(), anyYear, aq.getYear(), anyMonth,
+				aq.getMonth(), anyDay, aq.getDay(), pageable);
+	}
 
+	//勤怠時間
+	public List<Attendance> getYourAllAttendance(Principal principal) {
+		return attendanceRepository.findByUsernameLike(principal.getName());
+	}
+
+	public List<Attendance> getYourAttendance(Principal principal, CsvForm csvForm) {
+		return attendanceRepository.findByUsernameLikeAndYearIsAndMonthIs(principal.getName(), csvForm.getYear(),
+				csvForm.getMonth());
+	}
 
 	//以下投稿編集用
 	public void saveAttendance(Attendance attendance) {
@@ -91,6 +93,7 @@ public class AttendanceService {
 		setLoginName(principal, attendance);
 		saveAttendance(attendance);
 	}
+
 	//不要なリストの要素を削除し、正常なものだけを戻します。
 	public AttendancesDto secureIdList(Principal principal, IdListForEdit idListForEdit) {
 		List<String> idList = removeVacantList(idListForEdit);
@@ -102,19 +105,21 @@ public class AttendanceService {
 	}
 
 	//Dtoからフィールドであるusersを取り出します。その際に、usernameを差し込む
-		public List<Attendance> setUsernameOnDto(AttendancesDto attendancesDto, Principal principal) {
-			List<Attendance> attendances = new ArrayList<Attendance>();
-			for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
-				Attendance attendance = attendancesDto.getAttendances().get(i);
-				attendance.setUsername(principal.getName());
-				attendances.add(attendance);
-			}
-			return attendances;
+	public List<Attendance> setUsernameOnDto(AttendancesDto attendancesDto, Principal principal) {
+		List<Attendance> attendances = new ArrayList<Attendance>();
+		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
+			Attendance attendance = attendancesDto.getAttendances().get(i);
+			attendance.setUsername(principal.getName());
+			attendances.add(attendance);
 		}
+		return attendances;
+	}
+
 	//名前をattendanceに差し込みます
 	public void setLoginName(Principal principal, Attendance attendance) {
 		attendance.setUsername(principal.getName());
 	}
+
 	//コントローラ側で生成したidListの空欄部を削ります、
 	public List<String> removeVacantList(IdListForEdit idListForEdit) {
 		List<String> idList = idListForEdit.getIdList();
@@ -128,12 +133,13 @@ public class AttendanceService {
 		}
 		return idList;
 	}
+
 	//idからattendanceを検索します。
 	public Attendance secureAttendanceId(long id, Principal principal) {
 		Optional<Attendance> att = findAttendanceById(id);
 		if (!att.isPresent()) {
-		    throw new FileNotFoundException();
-	  }
+			throw new FileNotFoundException();
+		}
 		Attendance attendance = att.get();
 		if (!attendance.getUsername().equals(principal.getName())) {
 			throw new IllegalArgumentException();
@@ -142,6 +148,3 @@ public class AttendanceService {
 	}
 
 }
-
-
-

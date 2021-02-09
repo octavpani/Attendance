@@ -1,16 +1,13 @@
 package com.example.demo;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 import com.example.demo.model.Attendance;
 import com.example.demo.model.SiteUser;
@@ -22,15 +19,16 @@ import com.example.demo.service.AttendanceService;
 class Attendancetest1ApplicationTests {
 
 	@Autowired
-	@InjectMocks
+	//@InjectMocks
 	AttendanceService as;
 
 	@Autowired
-	@Mock
+	//@Mock
 	private AttendanceRepository ar;
 
 	@Autowired
 	private SiteUserRepository sr;
+
 
 	/*@Mock
 	private Attendance attendance;*/
@@ -52,15 +50,44 @@ class Attendancetest1ApplicationTests {
 		List<Attendance> at = ar.findAll();
 		assertThat(at.get(0).isNew()).isFalse();
 	}
-
-
-	//AttendanceServiceの動作確認。repositoryの動作確認から。
-	/*
+	//User用の検索メソッドについてのメソッド呼び出し元のRepositoryからテストしている。
 	@Test
-	void TestOnGetYourAttendances() {
-		Page<SiteUser> su = sr.findUser(true, null, true, "", false, "USER", null);
-		assertThat(su.getSize()).isNotEqualTo(34);
-	}*/
+	void someAttendancePresentForUser() {
+		Page<Attendance> attendances = ar.findYourAttendance("Admin_satou", true, null, true, null, true, null, null);
+		assertThat(attendances.getContent().size()).isEqualTo(1);
+	}
+	@Test
+	void heIsNotWorkerForUser() {
+		Page<Attendance> attendances = ar.findYourAttendance("snoopy", true, null, true, null, true, null, null);
+		assertThat(attendances.getContent().size()).isEqualTo(0);
+	}
+	@Test
+	void NoNameSearchForUser() {
+		Page<Attendance> attendances = ar.findYourAttendance("", true, null, true, null, true, null, null);
+		assertThat(attendances.getContent().size()).isEqualTo(0);
+	}
+	//Admin用の検索メソッドのテスト。
+	@Test
+	void someAttendancePresentForAdmin() {
+		Page<Attendance> attendances = ar.findAttendance(false, "Admin_satou", true, null, true, null, true, null, null);
+		assertThat(attendances.getContent().size()).isEqualTo(1);
+	}
+	@Test
+	void heIsNotWorkerForAdmin() {
+		Page<Attendance> attendances = ar.findAttendance(false, "snoopy", true, null, true, null, true, null, null);
+		assertThat(attendances.getContent().size()).isEqualTo(0);
+	}
+	@Test
+	void NoNameSearchForAdmin() {
+		Page<Attendance> attendances = ar.findAttendance(true, "", true, null, true, null, true, null, null);
+		assertThat(attendances.getContent().size()).isEqualTo(0);
+	}
+	//サービス層のテスト principalが引数にあるので、mock化を考え中
+
+
+
+
+
 	@Test
 	void someUserPresent() {
 		List<SiteUser> su = sr.findAll();
@@ -72,6 +99,8 @@ class Attendancetest1ApplicationTests {
 		assertThat(su.get(0).isNew()).isFalse();
 	}
 
+
+	/* 現在考え中
 	@Test
 	void saveAttendance() {
 		Attendance attendance = new Attendance ("test", 2020, 1, 2, 7, 0, 12, 0);
@@ -79,6 +108,6 @@ class Attendancetest1ApplicationTests {
 		as.saveAttendance(attendance);
 		verify(ar, times(1)).save(any());
 
-	}
+	} */
 
 }

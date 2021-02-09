@@ -39,4 +39,5 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 			@Param("anyDay") boolean anyDay, @Param("day") Integer day,
 			Pageable pageable);
 
+
 }
