@@ -80,7 +80,7 @@ class Attendancetest1ApplicationTests {
 	@Test
 	void NoNameSearchForAdmin() {
 		Page<Attendance> attendances = ar.findAttendance(true, "", true, null, true, null, true, null, null);
-		assertThat(attendances.getContent().size()).isEqualTo(0);
+		assertThat(attendances.getContent().size()).isEqualTo((65));
 	}
 
 
