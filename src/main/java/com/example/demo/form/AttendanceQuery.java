@@ -14,7 +14,13 @@ public class AttendanceQuery {
 		year = null;
 		month = null;
 		day = null;
+	}
 
+	public AttendanceQuery(String username, Integer year, Integer month, Integer day) {
+		this.username = username;
+		this.year = year;
+		this.month = month;
+		this.day = day;
 	}
 
 }

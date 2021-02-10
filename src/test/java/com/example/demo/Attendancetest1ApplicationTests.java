@@ -82,10 +82,6 @@ class Attendancetest1ApplicationTests {
 		Page<Attendance> attendances = ar.findAttendance(true, "", true, null, true, null, true, null, null);
 		assertThat(attendances.getContent().size()).isEqualTo(0);
 	}
-	//サービス層のテスト principalが引数にあるので、mock化を考え中
-
-
-
 
 
 	@Test
@@ -99,15 +95,5 @@ class Attendancetest1ApplicationTests {
 		assertThat(su.get(0).isNew()).isFalse();
 	}
 
-
-	/* 現在考え中
-	@Test
-	void saveAttendance() {
-		Attendance attendance = new Attendance ("test", 2020, 1, 2, 7, 0, 12, 0);
-								//spy(new Attendance ("test", 2020, 1, 2, 7, 0, 12, 0));
-		as.saveAttendance(attendance);
-		verify(ar, times(1)).save(any());
-
-	} */
 
 }
