@@ -2,13 +2,18 @@ package com.example.demo;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
+import com.example.demo.form.AttendanceQuery;
 import com.example.demo.model.Attendance;
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.AttendanceRepository;
@@ -19,8 +24,11 @@ import com.example.demo.service.AttendanceService;
 class Attendancetest1ApplicationTests {
 
 	@Autowired
-	//@InjectMocks
+	@InjectMocks
 	AttendanceService as;
+
+	@Mock
+	private Principal principal;
 
 	@Autowired
 	//@Mock
@@ -28,11 +36,6 @@ class Attendancetest1ApplicationTests {
 
 	@Autowired
 	private SiteUserRepository sr;
-
-
-	/*@Mock
-	private Attendance attendance;*/
-
 
 	@Test
 	void contextLoads() {
@@ -93,6 +96,19 @@ class Attendancetest1ApplicationTests {
 		List<SiteUser> su = sr.findAll();
 		assertThat(su.get(0).isNew()).isFalse();
 	}
+
+	@Test
+	public void principalMock() {
+		Mockito.when(principal.getName()).thenReturn("snoopy");
+		/*Mockito.when(aq.getYear()).thenReturn(null);
+		Mockito.when(aq.getMonth()).thenReturn(null);
+		Mockito.when(aq.getDay()).thenReturn(null);*/
+		AttendanceQuery aq = new AttendanceQuery("", 2020, 1, 1);
+		Page<Attendance> attendances = as.getYourAttendance(null, aq, principal, null, null, null);
+		assertThat(attendances.getContent().size()).isEqualTo(0);
+	}
+
+
 
 
 }
