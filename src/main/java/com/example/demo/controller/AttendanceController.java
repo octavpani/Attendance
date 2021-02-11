@@ -17,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -124,22 +123,24 @@ public class AttendanceController {
 	@GetMapping("/attendance")
 	public ModelAndView createAttendance(ModelAndView mv, @ModelAttribute Attendance attendance, Principal principal) {
 		mv.setViewName("attendanceForm");
-		mv.addObject("name", principal.getName());
+		mv.addObject("principal", principal);
 		return mv;
 	}
 
 	@PostMapping("/attendance")
-	public ModelAndView createAttendance1(ModelAndView mv, @Validated @ModelAttribute Attendance attendance,
-			Principal principal, BindingResult result) {
+	public ModelAndView createAttendance(ModelAndView mv, Principal principal, @Validated @ModelAttribute Attendance attendance,
+			 BindingResult result) {
 		if (result.hasErrors()) {
+			mv.addObject("principal", principal);
 			mv.setViewName("attendanceForm");
 			return mv;
 		}
 		if (!PracticeCalcService.isValidWorkingRange(
 				attendance.getStaHour(), attendance.getStaMin(),
 				attendance.getEndHour(), attendance.getEndMin())) {
-			mv.setViewName("attendanceForm");
 			mv.addObject("error_message", "入力時刻のエラーです。");
+			mv.addObject("principal", principal);
+			mv.setViewName("attendanceForm");
 			return mv;
 		}
 		attendanceService.saveAttendance(attendance, principal);
@@ -206,11 +207,13 @@ public class AttendanceController {
 			@Validated @ModelAttribute AttendancesDto attendancesDto, BindingResult result) {
 		if (result.hasErrors()) {
 			mv.addObject("mode", "update");
+			mv.addObject("principal", principal);
 			mv.setViewName("attendancesForm");
 			return mv;
 		}
 		if (!PracticeCalcService.isValidWorkingRange(attendancesDto.getAttendances())) {
 			mv.addObject("mode", "update");
+			mv.addObject("principal", principal);
 			mv.addObject("error_message", "入力時刻のエラーです。");
 			mv.setViewName("attendancesForm");
 			return mv;
@@ -229,55 +232,6 @@ public class AttendanceController {
 		return mv;
 	}
 
-	@GetMapping("/attendance/{id}")
-	public ModelAndView getAttendanceById(@PathVariable(name = "id") long id, Principal principal, ModelAndView mv) {
-		Attendance attendance = attendanceService.secureAttendanceId(id, principal);
-		mv.addObject("attendance", attendance);
-		mv.addObject("mode", "update");
-		mv.setViewName("attendanceForm");
-		return mv;
-	}
-
-	@PostMapping("/attendances")
-	public ModelAndView getAttendancesById(long id, Principal principal, ModelAndView mv) {
-		Attendance attendance = attendanceService.secureAttendanceId(id, principal);
-		mv.setViewName("attendanceForm");
-		mv.addObject("attendance", attendance);
-		mv.addObject("mode", "update");
-		return mv;
-	}
-
-	@PostMapping("/attendance/update")
-	public ModelAndView updateAttendance(ModelAndView mv, @Validated @ModelAttribute Attendance attendance,
-			BindingResult result, long id, Principal principal) {
-		if (result.hasErrors()) {
-			attendanceService.setLoginName(principal, attendance);
-			mv.addObject("mode", "update");
-			mv.addObject("name", principal.getName());
-			mv.setViewName("attendanceForm");
-			return mv;
-		}
-		if (!PracticeCalcService.isValidWorkingRange(
-				attendance.getStaHour(), attendance.getStaMin(),
-				attendance.getEndHour(), attendance.getEndMin())) {
-			mv.addObject("error_message", "入力時刻のエラーです。");
-			mv.addObject("name", principal.getName());
-			mv.addObject("mode", "update");
-			mv.setViewName("attendanceform");
-			return mv;
-		}
-		mv = new ModelAndView("redirect:/attendance/list");
-		attendanceService.saveAttendance(attendance, principal);
-		return mv;
-	}
-
-	@PostMapping("/delete")
-	public ModelAndView deleteAttendance(ModelAndView mv, long id, Principal principal) {
-		Attendance attendance = attendanceService.secureAttendanceId(id, principal);
-		attendanceService.goodbyeAttendance(attendance);
-		mv = new ModelAndView("redirect:/attendance/list");
-		return mv;
-	}
 
 	@PostMapping("/export")
 	public ModelAndView exportToCSV(ModelAndView mv, HttpServletResponse response, Principal principal, CsvForm csvForm)

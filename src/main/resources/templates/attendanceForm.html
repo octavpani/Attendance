@@ -11,7 +11,7 @@
 		<section>
 			<section class="greeting">
 				<div>こんにちは</div>
-				<span th:text="${name}"></span>さん
+				<span th:text="${principal.name}"></span>さん
 				<div th:if="${mode == 'update'}">
 					<div>投稿のIDは、</div>
 					<span th:text="${id}"></span>です
@@ -35,10 +35,6 @@
 							<th><input type="number" name="day" th:value="*{day}" max=31
 								min=1></th>
 						</tr>
-						<div>
-							<p th:text="${error_message}"></p>
-							<p th:errors="*{staHour}" class="error-message"></p>
-						</div>
 						<tr>
 							<th>勤務開始</th>
 							<th>勤務終了</th>
@@ -69,6 +65,31 @@
 							<button type="button" class="ope">一覧へ</button>
 						</a>
 					</div>
+					<div>
+						<p th:errors="*{year}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{month}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{day}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{staHour}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{staMin}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{endHour}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{endMin}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:text="${error_message}">
+					</div>
+
 				</form>
 			</section>
 		</section>

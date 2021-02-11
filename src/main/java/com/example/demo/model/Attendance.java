@@ -32,16 +32,19 @@ public class Attendance {
 	@Column(name="username")
 	private String username;
 
+	@NotNull(message = "西暦を入力してください。")
 	@Min(2000)
 	@Max(2099)
 	@Column(name="year")
 	private Integer year;
 
+	@NotNull(message = "月を入力してください。")
 	@Min(1)
 	@Max(12)
 	@Column(name="month")
 	private Integer month;
 
+	@NotNull(message = "日付を入力してください。")
 	@Min(1)
 	@Max(31)
 	@Column(name="day")

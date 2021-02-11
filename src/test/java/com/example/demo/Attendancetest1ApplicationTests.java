@@ -83,7 +83,6 @@ class Attendancetest1ApplicationTests {
 		assertThat(attendances.getContent().size()).isEqualTo((65));
 	}
 
-
 	@Test
 	void someUserPresent() {
 		List<SiteUser> su = sr.findAll();
