@@ -99,6 +99,7 @@ public class AttendanceService {
 		}
 		return attendancesDto;
 	}
+	//次は、ここからテスト
 
 	//Dtoからフィールドであるusersを取り出します。その際に、usernameを差し込む
 	public List<Attendance> setUsernameOnDto(AttendancesDto attendancesDto, Principal principal) {
@@ -122,7 +123,6 @@ public class AttendanceService {
 		Iterator<String> ite = idList.iterator();
 		while (ite.hasNext()) {
 			String item = ite.next();
-
 			if (item.equals(null)) {
 				idList.remove(item);
 			}
