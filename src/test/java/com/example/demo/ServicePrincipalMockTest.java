@@ -1,10 +1,14 @@
 package com.example.demo;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
+import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.form.AttendancesDto;
 import com.example.demo.form.CsvForm;
@@ -94,5 +99,74 @@ public class ServicePrincipalMockTest {
 		assertThat(attendancesDto.getAttendances().size()).isEqualTo(1);
 	}
 
+	@Test
+	public void setUsernameOnDto() {
+		Mockito.when(principal.getName()).thenReturn("snoopy");
+		AttendancesDto attendancesDto = new AttendancesDto();
+		int number = 3;
+		for (int i = 0; i < number; i++) {
+			attendancesDto.addAttendance(new Attendance());
+		}
+		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
+			Attendance attendance = attendancesDto.getAttendances().get(i);
+			attendance.setUsername(principal.getName());
+			attendances.add(attendance);
+		}
+		assertThat(attendances.size()).isEqualTo(3);
+		assertThat(attendances.get(0).getUsername().equals("snoopy"));
+		assertThat(attendances.get(1).getUsername().equals("snoopy"));
+		assertThat(attendances.get(2).getUsername().equals("snoopy"));
+	}
 
+	@Test
+	public void setLoginName() {
+		Mockito.when(principal.getName()).thenReturn("snoopy");
+		Attendance attendance = new Attendance();
+		attendance.setUsername(principal.getName());
+		assertThat(attendance.getUsername().equals("snoopy"));
+	}
+
+	@Test
+	public void secureAttendanceById() {
+		Mockito.when(principal.getName()).thenReturn("Admin_satou");
+		Optional<Attendance> att = as.findAttendanceById((long) 428);
+		if (!att.isPresent()) {
+			throw new FileNotFoundException();
+		}
+		Attendance attendance = att.get();
+		if (!attendance.getUsername().equals(principal.getName())) {
+			throw new IllegalArgumentException();
+		}
+		assertThat(attendance.getUsername().equals("Admin_satou"));
+	}
+
+	@Test
+	public void expectingNoSuchElement() throws Exception {
+		Optional<Attendance> att = as.findAttendanceById((long) 0);
+		assertThrows(NoSuchElementException.class, () -> att.get());
+	}
+
+	@Test
+	public void expectingOptionalError() {
+		Optional<Attendance> att = as.findAttendanceById((long) 0);
+		if (!att.isPresent()) {
+			String ans = "hoge";
+			assertThat(ans.equals("hoge"));
+		} else {
+			fail();
+		}
+	}
+
+	@Test
+	public void expectingNameError() {
+		Optional<Attendance> att = as.findAttendanceById((long) 428);
+		Attendance attendance = att.get();
+		Mockito.when(principal.getName()).thenReturn("snoopy");
+		if (!attendance.getUsername().equals(principal.getName())) {
+			String ans = "hoge";
+			assertThat(ans.equals("hoge"));
+		} else {
+			fail();
+		}
+	}
 }

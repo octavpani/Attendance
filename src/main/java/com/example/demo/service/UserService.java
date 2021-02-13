@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,7 +116,7 @@ public class UserService {
 		siteUserRepository.deleteAll(users);
 	}
 
-	//コントローラ側で生成されたリストのうち、空の要素を削除する。
+	/*//コントローラ側で生成されたリストのうち、空の要素を削除する。
 	public List<String> removeVacantList(IdListForSiteUser idListForSiteUser) {
 		List<String> idList = idListForSiteUser.getIdList();
 		Iterator<String> ite = idList.iterator();
@@ -128,11 +127,11 @@ public class UserService {
 			}
 		}
 		return idList;
-	}
+	} */
 
 	//idListから、ユーザーを見つける。avatarの関係上、フォームクラスに詰めなおしている。
 	public SiteUsersDto findUsers(IdListForSiteUser idListForSiteUser) {
-		List<String> idList = removeVacantList(idListForSiteUser);
+		List<String> idList = idListForSiteUser.getIdList();
 		SiteUsersDto siteUsersDto = new SiteUsersDto();
 		for (String id : idList) {
 			Optional<SiteUser> mayBeUser = findSiteUserById(Long.parseLong(id));
@@ -147,7 +146,7 @@ public class UserService {
 	}
 	//idListからユーザーを見つける。戻り値は、siteuserのリスト
 	public List<SiteUser> findUsersForDelete(IdListForSiteUser idListForSiteUser) {
-		List<String> idList = removeVacantList(idListForSiteUser);
+		List<String> idList = idListForSiteUser.getIdList();
 		List<SiteUser> users = new ArrayList<SiteUser>();
 		for (String id : idList) {
 			Optional<SiteUser> mayBeUser = findSiteUserById(Long.parseLong(id));

@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,14 +91,13 @@ public class AttendanceService {
 
 	//不要なリストの要素を削除し、正常なものだけを戻します。
 	public AttendancesDto secureIdList(Principal principal, IdListForEdit idListForEdit) {
-		List<String> idList = removeVacantList(idListForEdit);
+		List<String> idList = idListForEdit.getIdList();
 		AttendancesDto attendancesDto = new AttendancesDto();
 		for (String id : idList) {
 			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(id), principal));
 		}
 		return attendancesDto;
 	}
-	//次は、ここからテスト
 
 	//Dtoからフィールドであるusersを取り出します。その際に、usernameを差し込む
 	public List<Attendance> setUsernameOnDto(AttendancesDto attendancesDto, Principal principal) {
@@ -115,19 +113,6 @@ public class AttendanceService {
 	//名前をattendanceに差し込みます
 	public void setLoginName(Principal principal, Attendance attendance) {
 		attendance.setUsername(principal.getName());
-	}
-
-	//コントローラ側で生成したidListの空欄部を削ります、
-	public List<String> removeVacantList(IdListForEdit idListForEdit) {
-		List<String> idList = idListForEdit.getIdList();
-		Iterator<String> ite = idList.iterator();
-		while (ite.hasNext()) {
-			String item = ite.next();
-			if (item.equals(null)) {
-				idList.remove(item);
-			}
-		}
-		return idList;
 	}
 
 	//idからattendanceを検索します。
