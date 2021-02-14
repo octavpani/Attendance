@@ -38,18 +38,14 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
 | POST | /attendances/delete | deleteAttendances() | /attendance/listへリダイレクト |
 | POST | /export | exportToCSV() | /attendance/listへリダイレクト |
 ## SiteUser
-| 内容セル | 内容セル | 内容セル | 内容セル |
+| HTTPメソッド | URL | Controllerメソッド | テンプレート |
 | ------------- | ------------- | ------------- | ------------- |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
-| 内容セル | 内容セル | 内容セル | 内容セル |
+| GET | /admin/siteuser/list | showAttendanceList() | siteuserList.html |
+| POST | /admin/pre/siteuser/create | prepareSiteUser() | preSiteUsersForm.html |
+| GET | /admin/siteuser/create | createSiteUser() | siteUsersForm.html |
+| POST | /admin/siteuser/create | createSiteUser() | 成功時、/siteuser/listへリダイレクト。失敗時は、siteUsersForm.html |
+| POST | /admin/siteuser/edit | editSiteUsers() | siteUsersForm.html |
+| POST | /admin/siteuser/update | updateSiteUser() | 成功時、/siteuser/listへリダイレクト。失敗時は、siteUsersForm.html|
+| POST | /admin/siteuser/delete | deleteSiteUser() | /admin/siteuser/listへリダイレクト |
 ## 認証
 ## テスト
