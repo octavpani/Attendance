@@ -8,7 +8,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,14 +18,14 @@ import com.example.demo.form.SiteUserForm;
 import com.example.demo.form.SiteUserQuery;
 import com.example.demo.form.SiteUsersDto;
 import com.example.demo.model.SiteUser;
-import com.example.demo.service.UserService;
+import com.example.demo.service.SiteUserService;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Controller
 public class SiteUserController {
-	private final UserService userService;
+	private final SiteUserService userService;
 
 	@GetMapping("/admin/siteuser/list")
 	public ModelAndView showAttendanceList(ModelAndView mv, SiteUserQuery sq,
@@ -51,45 +50,6 @@ public class SiteUserController {
 		mv.addObject("pathWithPage", Utils.pathWithPage("", pageable, "id", id, "username", username, "role", role));
 		mv.addObject("pathWithSort", Utils.pathWithSort("", pageable, "id", id, "username", username, "role", role));
 		mv.setViewName("siteuserList");
-		return mv;
-	}
-
-	//単体ユーザーの画像アップロード及び表示のテスト用
-	@GetMapping("/admin/siteuser/edit/{id}")
-	public ModelAndView editSiteUser(@PathVariable(name = "id") String id, ModelAndView mv) {
-		SiteUser user = userService.findSiteUserById(Long.parseLong(id)).get();
-		mv.addObject("mode", "update");
-		mv.addObject("userform", new SiteUserForm(user));
-		mv.setViewName("userForm");
-		return mv;
-	}
-	//テスト用　単体のユーザーを編集している。
-	@PostMapping("/admin/siteuser/update/test")
-	public ModelAndView updateSiteUser(ModelAndView mv, @ModelAttribute SiteUserForm userform) {
-		/* if (result.hasErrors()) {
-			mv.setViewName("userForm");
-			return mv;		@Validated BindingResult result
-		} */
-		/*
-		if(!UserService.isValidUsers(siteUsersDto.getUsers())) {
-			mv.addObject("error_message", "入力内容に誤りがあります。");
-			mv.setViewName("siteUsersForm");
-			return mv;
-		}
-		*/
-		/*
-		SiteUser user = new SiteUser();
-		user.setId(userform.getId());
-		user.setUsername(userform.getUsername());
-		user.setPassword(passwordEncoder.encode(userform.getPassword()));
-		if (userform.getUsername().startsWith("Admin_")) {
-			user.setRole(Role.ADMIN.name());
-		} else {
-			user.setRole(Role.USER.name());
-		}
-		userService.save(user); */
-		userService.saveSiteUser(userform);
-		mv = new ModelAndView("redirect:/admin/siteuser/list");
 		return mv;
 	}
 
@@ -118,7 +78,7 @@ public class SiteUserController {
 			mv.addObject("mode", null);
 			return mv;
 		}
-		if (!UserService.isValidUsers(siteUsersDto.getUsers())) {
+		if (!SiteUserService.isValidUsers(siteUsersDto.getUsers())) {
 			mv.addObject("error_message", "入力内容に誤りがあります。");
 			mv.setViewName("siteUsersForm");
 			mv.addObject("mode", null);
@@ -146,7 +106,7 @@ public class SiteUserController {
 			mv.setViewName("siteUsersForm");
 			return mv;
 		}
-		if (!UserService.isValidUsers(siteUsersDto.getUsers())) {
+		if (!SiteUserService.isValidUsers(siteUsersDto.getUsers())) {
 			mv.addObject("error_message", "入力内容に誤りがあります。");
 			mv.addObject("mode", "update");
 			mv.setViewName("siteUsersForm");

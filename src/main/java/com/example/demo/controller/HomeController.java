@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.model.SiteUser;
 import com.example.demo.repository.SiteUserRepository;
-import com.example.demo.service.UserService;
+import com.example.demo.service.SiteUserService;
 import com.example.demo.util.Role;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class HomeController {
 
 	private final SiteUserRepository userRepository;
-	private final UserService userService;
+	private final SiteUserService userService;
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	@GetMapping("/login")

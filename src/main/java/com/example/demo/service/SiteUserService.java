@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class SiteUserService {
 	private final SiteUserRepository siteUserRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 

@@ -26,7 +26,7 @@ import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.repository.SiteUserRepository;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.PracticeCalcService;
-import com.example.demo.service.UserService;
+import com.example.demo.service.SiteUserService;
 
 @WebMvcTest(controllers = SiteUserController.class)
 public class WebLayerTests {
@@ -51,7 +51,7 @@ public class WebLayerTests {
 	UserDetailsService userDetailsService;
 
 	@MockBean
-	UserService userService;
+	SiteUserService userService;
 
 	@Test
 	public void indexOfSiteUserListShouldBeRedirected() throws Exception {

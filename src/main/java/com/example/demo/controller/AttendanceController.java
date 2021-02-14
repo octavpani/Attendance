@@ -149,7 +149,7 @@ public class AttendanceController {
 	}
 
 	@GetMapping("/form/pre/attendances")
-	public ModelAndView setAttendancesForm(ModelAndView mv) {
+	public ModelAndView prepareAttendancesForm(ModelAndView mv) {
 		mv.setViewName("preAttendancesForm");
 		return mv;
 	}
