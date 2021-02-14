@@ -5,6 +5,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.GONE)
 public class FileNotFoundException
-extends RuntimeException {
+		extends RuntimeException {
 
 }

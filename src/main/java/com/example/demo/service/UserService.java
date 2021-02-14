@@ -65,14 +65,6 @@ public class UserService {
 
 	public void saveSiteUser(SiteUserForm userform) {
 		SiteUser user;
-		/*if (form.isNew()) {
-			user = new User();
-			user.setLoginId(form.getLoginId());
-		} else {*/
-		// 既存ユーザの編集時、パスワード欄が未入力なら、
-		// パスワードを変更したくない。
-		// また、ログインIDは編集不可とする。
-		// そのため、一旦、現在値をDBから読んでおく。
 		user = findSiteUserById(userform.getId()).get();
 		user.setId(userform.getId());
 		user.setUsername(userform.getUsername());
@@ -115,19 +107,6 @@ public class UserService {
 		List<SiteUser> users = findUsersForDelete(idListForSiteUser);
 		siteUserRepository.deleteAll(users);
 	}
-
-	/*//コントローラ側で生成されたリストのうち、空の要素を削除する。
-	public List<String> removeVacantList(IdListForSiteUser idListForSiteUser) {
-		List<String> idList = idListForSiteUser.getIdList();
-		Iterator<String> ite = idList.iterator();
-		while (ite.hasNext()) {
-			String item = ite.next();
-			if (item.equals(null)) {
-				idList.remove(item);
-			}
-		}
-		return idList;
-	} */
 
 	//idListから、ユーザーを見つける。avatarの関係上、フォームクラスに詰めなおしている。
 	public SiteUsersDto findUsers(IdListForSiteUser idListForSiteUser) {
