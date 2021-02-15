@@ -47,5 +47,12 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
 | POST | /admin/siteuser/edit | editSiteUsers() | siteUsersForm.html |
 | POST | /admin/siteuser/update | updateSiteUser() | 成功時、/siteuser/listへリダイレクト。失敗時は、siteUsersForm.html|
 | POST | /admin/siteuser/delete | deleteSiteUser() | /admin/siteuser/listへリダイレクト |
+## Home
+| HTTPメソッド | URL | Controllerメソッド | テンプレート |
+| ------------- | ------------- | ------------- | ------------- |
+| GET | /login | login() | login.html |
+| GET | / | showTop() | top.html |
+| GET | /register | register() | register.html |
+| POST | /register | process() | 成功時、/loginへリダイレクト。失敗時は、register.html |
 ## 認証
 ## テスト
