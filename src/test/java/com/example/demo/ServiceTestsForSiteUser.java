@@ -38,8 +38,8 @@ public class ServiceTestsForSiteUser {
 	void processOfSaveSiteUsers() {
 		//ダミーのファイルデータを生成
 		String textFile = "";
-        MultipartFile mockFile = new MockMultipartFile("file", textFile.getBytes());
-		for (int i = 0;i < 3; i++) {
+		MultipartFile mockFile = new MockMultipartFile("file", textFile.getBytes());
+		for (int i = 0; i < 3; i++) {
 			siteUsersDto.addSiteUser(new SiteUserForm());
 		}
 		siteUsersDto.getUsers().get(0).setUsername("test11");
@@ -69,10 +69,11 @@ public class ServiceTestsForSiteUser {
 		assertThat(users.get(1).getUsername()).isEqualTo("test12");
 		assertThat(users.get(2).getUsername()).isEqualTo("test13");
 	}
+
 	@Test
 	//後日、分岐の検証
 	void findUsers() {
-		for (int i = 0;i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 			idListForSiteUser.addId(new String());
 		}
 		idListForSiteUser.setId(0, "8");
@@ -95,6 +96,24 @@ public class ServiceTestsForSiteUser {
 
 	}
 
-	//残りは、デリート関連のテスト 呼び出しだけして、verify()が妥当かも。
-
+	@Test
+	void findUsersForDelete() {
+		for (int i = 0; i < 3; i++) {
+			idListForSiteUser.addId(new String());
+		}
+		idListForSiteUser.setId(0, "8");
+		idListForSiteUser.setId(1, "52");
+		idListForSiteUser.setId(2, "79");
+		users = new ArrayList<SiteUser>();
+		List<String> idList = idListForSiteUser.getIdList();
+		for (String id : idList) {
+			Optional<SiteUser> mayBeUser = sus.findSiteUserById(Long.parseLong(id));
+			SiteUser user = mayBeUser.get();
+			users.add(user);
+		}
+		assertThat(users.size()).isEqualTo(3);
+		assertThat(users.get(0).getUsername()).isEqualTo("かっこう");
+		assertThat(users.get(1).getUsername()).isEqualTo("Admin_satou");
+		assertThat(users.get(2).getUsername()).isEqualTo("snoopy");
+	}
 }

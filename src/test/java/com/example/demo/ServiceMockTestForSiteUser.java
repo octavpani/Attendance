@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.demo.form.IdListForSiteUser;
 import com.example.demo.form.SiteUserForm;
 import com.example.demo.form.SiteUserQuery;
 import com.example.demo.model.SiteUser;
@@ -37,8 +38,10 @@ public class ServiceMockTestForSiteUser {
 	@Mock
 	SiteUserForm userform;
 
-	private List<SiteUser> users = new ArrayList<>();
+	@Mock
+	IdListForSiteUser list;
 
+	private List<SiteUser> users = new ArrayList<>();
 
 	@Test
 	void saveSiteUser() {
@@ -58,6 +61,14 @@ public class ServiceMockTestForSiteUser {
 		sus.findSiteUserById(user.getId());
 		verify(sur, times(1)).findById(any());
 	}
+
+	@Test
+	void deleteSiteUsers() {
+		sus.goodByeUsers(list);
+		verify(sur, times(1)).deleteAll(any());
+	}
+
+
 
 
 

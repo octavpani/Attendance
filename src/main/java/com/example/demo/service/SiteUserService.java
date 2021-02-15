@@ -38,7 +38,7 @@ public class SiteUserService {
 		return siteUserRepository.findUser(anyId, sq.getId(), anyUsername, sq.getUsername(), anyRole, sq.getRole(),
 				pageable);
 	}
-
+	//未テスト。
 	static public boolean isValidUsers(List<SiteUserForm> users) {
 		for (int i = 0; i < users.size(); i++) {
 			SiteUserForm user = users.get(i);
@@ -48,7 +48,6 @@ public class SiteUserService {
 				return false;
 		}
 		return true;
-
 	}
 
 	public void save(SiteUser user) {
