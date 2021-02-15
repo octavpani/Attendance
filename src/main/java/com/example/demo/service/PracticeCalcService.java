@@ -11,7 +11,6 @@ import lombok.Setter;
 @Service
 @Getter
 @Setter
-
 public class PracticeCalcService {
 	public static final int HOUR  = 60;
 

@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 public class SiteUserService {
 	private final SiteUserRepository siteUserRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
-
+	//一覧表示の為の検索メソッド
 	public Page<SiteUser> getSiteuser(Pageable pageable, SiteUserQuery sq,
 			Integer id, String username, String role) {
 		boolean anyId = sq.getId() == null;
@@ -51,44 +51,22 @@ public class SiteUserService {
 
 	}
 
-	public void saveAll(List<SiteUser> users) {
-		siteUserRepository.saveAll(users);
-	}
-
 	public void save(SiteUser user) {
 		siteUserRepository.save(user);
 	}
-
-	public Optional<SiteUser> findSiteUserById(long id) {
-		return siteUserRepository.findById(id);
-	}
-
-	public void saveSiteUser(SiteUserForm userform) {
-		SiteUser user;
-		user = findSiteUserById(userform.getId()).get();
-		user.setId(userform.getId());
-		user.setUsername(userform.getUsername());
-		if (!userform.getPassword().isEmpty()) {
-			user.setPassword(passwordEncoder.encode(userform.getPassword()));
-		}
-		if (userform.getUsername().startsWith("Admin_")) {
-			user.setRole(Role.ADMIN.name());
-		} else {
-			user.setRole(Role.USER.name());
-		}
-		userform.loadAvaterSrc().ifPresent(user::setAvatar);
-		//ifpresent関数
-		siteUserRepository.save(user);
-	}
+	//SiteUsersDto = userformのリストを保持。
+	//SiteUserForm = 入力フォーム。画像の変換の為に利用
 
 	public void saveSiteUsers(SiteUsersDto siteUsersDto) {
 		List<SiteUser> users = new ArrayList<SiteUser>();
 		for (SiteUserForm userform : siteUsersDto.getUsers()) {
 			SiteUser user = new SiteUser();
+			//既存のidの場合は、idをセット。新規の場合は、idは、null
 			if (siteUsersDto.getUsers().get(0).getId() != null) {
 				user = findSiteUserById(userform.getId()).get();
 			}
 			user.setUsername(userform.getUsername());
+			//パスワードが入力されていたら、パスワードをハッシュ化
 			if (!userform.getPassword().isEmpty()) {
 				user.setPassword(passwordEncoder.encode(userform.getPassword()));
 			}
@@ -102,10 +80,9 @@ public class SiteUserService {
 		}
 		siteUserRepository.saveAll(users);
 	}
-	//ユーザーの一括削除
-	public void goodByeUsers(IdListForSiteUser idListForSiteUser) {
-		List<SiteUser> users = findUsersForDelete(idListForSiteUser);
-		siteUserRepository.deleteAll(users);
+
+	public Optional<SiteUser> findSiteUserById(long id) {
+		return siteUserRepository.findById(id);
 	}
 
 	//idListから、ユーザーを見つける。avatarの関係上、フォームクラスに詰めなおしている。
@@ -123,6 +100,7 @@ public class SiteUserService {
 		}
 		return siteUsersDto;
 	}
+
 	//idListからユーザーを見つける。戻り値は、siteuserのリスト
 	public List<SiteUser> findUsersForDelete(IdListForSiteUser idListForSiteUser) {
 		List<String> idList = idListForSiteUser.getIdList();
@@ -133,6 +111,12 @@ public class SiteUserService {
 			users.add(user);
 		}
 		return users;
+	}
+
+	//ユーザーの一括削除
+	public void goodByeUsers(IdListForSiteUser idListForSiteUser) {
+		List<SiteUser> users = findUsersForDelete(idListForSiteUser);
+		siteUserRepository.deleteAll(users);
 	}
 
 }

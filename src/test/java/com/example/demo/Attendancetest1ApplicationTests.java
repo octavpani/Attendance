@@ -59,7 +59,7 @@ class Attendancetest1ApplicationTests {
 	}
 
 	@Test
-	void NoNameSearchForUser() {
+	void noNameSearchForUser() {
 		Page<Attendance> attendances = ar.findYourAttendance("", true, null, true, null, true, null, null);
 		assertThat(attendances.getContent().size()).isEqualTo(0);
 	}

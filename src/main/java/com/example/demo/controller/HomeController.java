@@ -11,16 +11,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.model.SiteUser;
-import com.example.demo.repository.SiteUserRepository;
 import com.example.demo.service.SiteUserService;
 import com.example.demo.util.Role;
 
 import lombok.RequiredArgsConstructor;
+
 @RequiredArgsConstructor
 @Controller
 public class HomeController {
 
-	private final SiteUserRepository userRepository;
 	private final SiteUserService userService;
 	private final BCryptPasswordEncoder passwordEncoder;
 
@@ -30,7 +29,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/")
-	public String showList(Authentication loginUser, Model model) {
+	public String showTop(Authentication loginUser, Model model) {
 		model.addAttribute("username", loginUser.getName());
 		model.addAttribute("role", loginUser.getAuthorities());
 		return "top";
@@ -57,4 +56,3 @@ public class HomeController {
 	}
 
 }
-

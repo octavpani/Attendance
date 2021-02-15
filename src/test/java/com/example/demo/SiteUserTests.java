@@ -41,9 +41,33 @@ public class SiteUserTests {
 	}
 
 	@Test
-	void someUserPresent() {
+	void someSiteUserPresent() {
 		Page<SiteUser> users = sr.findUser(true, null, false, "Admin_satou", true, null, null);
 		assertThat(users.getContent().size()).isEqualTo(1);
+	}
+
+	@Test
+	void someAdminPresent() {
+		Page<SiteUser> users = sr.findUser(true, null, true, "", false, "ADMIN", null);
+		assertThat(users.getContent().size()).isEqualTo(3);
+	}
+
+	@Test
+	void heIsNotAdmin() {
+		Page<SiteUser> users = sr.findUser(true, null, false, "snoopy", false, "ADMIN", null);
+		assertThat(users.getContent().size()).isEqualTo(0);
+	}
+
+	@Test
+	void heIsUser() {
+		Page<SiteUser> users = sr.findUser(true, null, false, "snoopy", false, "USER", null);
+		assertThat(users.getContent().size()).isEqualTo(1);
+	}
+
+	@Test
+	void noNameSearch() {
+		Page<SiteUser> users = sr.findUser(true, null, true, "", true, null, null);
+		assertThat(users.getContent().size()).isEqualTo(36);
 	}
 
 

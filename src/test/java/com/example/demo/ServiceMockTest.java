@@ -67,7 +67,7 @@ public class ServiceMockTest {
 
 	@Test
 	public void findAttendanceById() {
-		attendance.setId((long)(1));
+		Mockito.when(attendance.getId()).thenReturn((long)1);
 		as.findAttendanceById(attendance.getId());
 		verify(ar, times(1)).findById(any());
 	}
@@ -76,7 +76,6 @@ public class ServiceMockTest {
 	public void getYourAttendance() {
 		Mockito.when(principal.getName()).thenReturn("snoopy");
 		Mockito.when(ar.findYourAttendance("snoopy", true, null, true, null, true, null, null)).thenReturn(null);
-		//AttendanceQuery aq = new AttendanceQuery("", 2020, 1, 1);
 		Mockito.when(aq.getYear()).thenReturn(2020);
 		Mockito.when(aq.getMonth()).thenReturn(1);
 		Mockito.when(aq.getDay()).thenReturn(1);
