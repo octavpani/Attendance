@@ -13,4 +13,8 @@ public class IdListForSiteUser {
 		this.idList.add(idForSiteUser);
 	}
 
+	public void setId(int num, String id) {
+		 idList.set(num, id);
+	 }
+
 }

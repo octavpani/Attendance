@@ -21,7 +21,7 @@ import com.example.demo.service.AttendanceService;
 
 @SpringBootTest
 public class ServiceMockTest {
-	//このテストの目的は、サービス層以外をモック化したテストを行う事。
+	//Repositoryをモック化してテストを行う。
 
 	@InjectMocks
 	private AttendanceService as;

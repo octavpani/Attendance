@@ -28,8 +28,9 @@ import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.service.AttendanceService;
 
 @SpringBootTest
-public class ServicePrincipalMockTest {
-	//このテストの目的は、Principalのみモック化して、サービス層をテストする事。
+public class ServiceTestsForAttendance {
+	//このテストの目的は、Repositoryをモック化せずにテストを行う事。
+	//主にモックは、Principalに利用している。
 	@InjectMocks
 	@Autowired
 	private AttendanceService as;
