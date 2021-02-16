@@ -53,11 +53,11 @@ public class AttendanceService {
 				aq.getMonth(), anyDay, aq.getDay(), pageable);
 	}
 
-	//勤怠時間
+	//勤怠時間の計算に利用するリスト
 	public List<Attendance> getYourAllAttendance(Principal principal) {
 		return attendanceRepository.findByUsernameLike(principal.getName());
 	}
-
+	//CSVでの出力する際に利用するリスト
 	public List<Attendance> getYourAttendance(Principal principal, CsvForm csvForm) {
 		return attendanceRepository.findByUsernameLikeAndYearIsAndMonthIs(principal.getName(), csvForm.getYear(),
 				csvForm.getMonth());

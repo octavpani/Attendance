@@ -68,9 +68,4 @@ public class ServiceMockTestForSiteUser {
 		verify(sur, times(1)).deleteAll(any());
 	}
 
-
-
-
-
-
 }

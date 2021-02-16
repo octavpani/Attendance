@@ -18,13 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
-import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.form.AttendanceQuery;
 import com.example.demo.form.AttendancesDto;
 import com.example.demo.form.CsvForm;
 import com.example.demo.form.IdListForEdit;
 import com.example.demo.model.Attendance;
-import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.service.AttendanceService;
 
 @SpringBootTest
@@ -34,9 +32,6 @@ public class ServiceTestsForAttendance {
 	@InjectMocks
 	@Autowired
 	private AttendanceService as;
-
-	@Autowired
-	private AttendanceRepository ar;
 
 	@Mock
 	private Principal principal;
@@ -108,11 +103,7 @@ public class ServiceTestsForAttendance {
 		for (int i = 0; i < number; i++) {
 			attendancesDto.addAttendance(new Attendance());
 		}
-		for (int i = 0; i < attendancesDto.getAttendances().size(); i++) {
-			Attendance attendance = attendancesDto.getAttendances().get(i);
-			attendance.setUsername(principal.getName());
-			attendances.add(attendance);
-		}
+		attendances = as.setUsernameOnDto(attendancesDto, principal);
 		assertThat(attendances.size()).isEqualTo(3);
 		assertThat(attendances.get(0).getUsername().equals("snoopy"));
 		assertThat(attendances.get(1).getUsername().equals("snoopy"));
@@ -123,21 +114,14 @@ public class ServiceTestsForAttendance {
 	public void setLoginName() {
 		Mockito.when(principal.getName()).thenReturn("snoopy");
 		Attendance attendance = new Attendance();
-		attendance.setUsername(principal.getName());
+		as.setLoginName(principal, attendance);
 		assertThat(attendance.getUsername().equals("snoopy"));
 	}
 
 	@Test
 	public void secureAttendanceById() {
 		Mockito.when(principal.getName()).thenReturn("Admin_satou");
-		Optional<Attendance> att = as.findAttendanceById((long) 428);
-		if (!att.isPresent()) {
-			throw new FileNotFoundException();
-		}
-		Attendance attendance = att.get();
-		if (!attendance.getUsername().equals(principal.getName())) {
-			throw new IllegalArgumentException();
-		}
+		Attendance attendance = as.secureAttendanceId((long) 428, principal);
 		assertThat(attendance.getUsername().equals("Admin_satou"));
 	}
 

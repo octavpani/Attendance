@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,21 +78,12 @@ public class ServiceTestsForSiteUser {
 		idListForSiteUser.setId(0, "8");
 		idListForSiteUser.setId(1, "52");
 		idListForSiteUser.setId(2, "79");
-		List<String> idList = idListForSiteUser.getIdList();
-		for (String id : idList) {
-			Optional<SiteUser> mayBeUser = sus.findSiteUserById(Long.parseLong(id));
-			SiteUser user = mayBeUser.get();
-			SiteUserForm userform = new SiteUserForm(user);
-			if (userform.getAvatarSrc() == null) {
-				userform.setAvatarSrc("");
-			}
-			siteUsersDto.addSiteUser(userform);
-		}
+		siteUsersDto = sus.findUsers(idListForSiteUser);
+
 		assertThat(siteUsersDto.getUsers().size()).isEqualTo(3);
 		assertThat(siteUsersDto.getUsers().get(0).getUsername()).isEqualTo("かっこう");
 		assertThat(siteUsersDto.getUsers().get(1).getUsername()).isEqualTo("Admin_satou");
 		assertThat(siteUsersDto.getUsers().get(2).getUsername()).isEqualTo("snoopy");
-
 	}
 
 	@Test
@@ -104,13 +94,8 @@ public class ServiceTestsForSiteUser {
 		idListForSiteUser.setId(0, "8");
 		idListForSiteUser.setId(1, "52");
 		idListForSiteUser.setId(2, "79");
-		users = new ArrayList<SiteUser>();
-		List<String> idList = idListForSiteUser.getIdList();
-		for (String id : idList) {
-			Optional<SiteUser> mayBeUser = sus.findSiteUserById(Long.parseLong(id));
-			SiteUser user = mayBeUser.get();
-			users.add(user);
-		}
+		users = sus.findUsersForDelete(idListForSiteUser);
+
 		assertThat(users.size()).isEqualTo(3);
 		assertThat(users.get(0).getUsername()).isEqualTo("かっこう");
 		assertThat(users.get(1).getUsername()).isEqualTo("Admin_satou");

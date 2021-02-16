@@ -24,7 +24,7 @@ public class PracticeCalcService {
 		int[] data = calcWorkingTime(attendance);
 		return data[1];
 	}
-
+	//上記のメソッドで利用
 	static public int[] calcWorkingTime(Attendance attendance) {
 	    int sta = sumTimeFromTime(attendance.getStaHour(), attendance.getStaMin());
 		int end = sumTimeFromTime(attendance.getEndHour(), attendance.getEndMin());
