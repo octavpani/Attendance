@@ -30,11 +30,11 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
 | GET | /admin/attendance/list | showAttendanceListForAdmin() | attendanceList.html |
 | GET | /attendance | createAttendance() | attendanceForm.html |
 | POST | /attendance | createAttendance() | 成功時は /attendance/listへリダイレクト。失敗時は、attendanceForm.html|
-| GET | /form/pre/attendances | setAttendancesForm() | preAttendancesForm.html |
+| GET | /form/pre/attendances | prepareAttendancesForm() | preAttendancesForm.html |
 | GET | /form/attendances | createAttendances() | attendancesForm.html |
 | POST | /form/attendances | createAttendances() | 成功時は/attendance/listへリダイレクト。失敗時は、attendancesForm.html |
 | POST | /form/attendacnes/edit | editAttendances() | attendancesForm.html |
-| POST | /attendances/update | updateattendances() | 成功時は、/attendance/listへリダイレクト。失敗時は、attendancesForm.html
+| POST | /attendances/update | updateAttendances() | 成功時は、/attendance/listへリダイレクト。失敗時は、attendancesForm.html
 | POST | /attendances/delete | deleteAttendances() | /attendance/listへリダイレクト |
 | POST | /export | exportToCSV() | /attendance/listへリダイレクト |
 ## SiteUser
