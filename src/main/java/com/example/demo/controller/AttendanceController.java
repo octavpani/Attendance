@@ -40,6 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class AttendanceController {
 
 	private final AttendanceService attendanceService;
+	private final PracticeCalcService calcService;
 
 	@GetMapping("/attendance/list")
 	public ModelAndView showAttendanceList(ModelAndView mv, Principal principal, AttendanceQuery attendanceQuery,
@@ -62,8 +63,10 @@ public class AttendanceController {
 		for (Attendance attendance : attendanceList) {
 			sumTime = sumTime + attendance.workingHours() * PracticeCalcService.HOUR + attendance.workingMinutes();
 		}
-		int sumHours = sumTime / PracticeCalcService.HOUR;
-		int sumMinutes = sumTime % PracticeCalcService.HOUR;
+		int sumHours = calcService.hourFromSumTime(sumTime);
+		int sumMinutes = calcService.minFromSumTime(sumTime);
+		//int sumHours = sumTime / PracticeCalcService.HOUR;
+		//int sumMinutes = sumTime % PracticeCalcService.HOUR;
 
 		mv.addObject("attendanceList", attendances.getContent());
 		mv.addObject("idListForEdit", idListForEdit);

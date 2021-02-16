@@ -13,12 +13,13 @@ import lombok.Setter;
 @Setter
 public class PracticeCalcService {
 	public static final int HOUR  = 60;
-
+	//Attendanceのメソッド。勤務時間（Hour）を計算する。
 	static public int getHours(Attendance attendance) {
 		int[] data = calcWorkingTime(attendance);
 		return data[0];
 	}
 
+	//Attendanceのメソッド。勤務時間（Min）を計算する。
 	static public int getMinutes(Attendance attendance) {
 		int[] data = calcWorkingTime(attendance);
 		return data[1];
