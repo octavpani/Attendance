@@ -7,6 +7,7 @@ import java.util.Base64;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.imgscalr.Scalr;
@@ -27,12 +28,13 @@ public class SiteUserForm {
 
 	private Long id;
 
-	@Size(min = 2, max = 20)
+	@Size(min = 2, max = 20, message="名前は、3文字から、20文字の間で入力してください。")
 	private String username;
 
-	@Size(min = 4, max = 255)
+	@Size(min = 4, max = 255, message="パスワードは、5文字から255文字の間で入力してください。")
 	private String password;
 
+	@NotBlank(message = "ロールを選択してください。")
 	private String role;
 
 	private MultipartFile avatar;
@@ -41,9 +43,9 @@ public class SiteUserForm {
 
 	public SiteUserForm() {
 		id = null;
-		username = null;
+		username = "";
 		password = null;
-		role = null;
+		role = "";
 		avatar = null;
 		avatarSrc = "";
 	}

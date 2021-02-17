@@ -39,7 +39,6 @@ public class SiteUser {
 	@Lob
 	@Column(name="avatar")
 	private String avatar;
-	//ここは微妙かも
 	public SiteUser() {
 
 	}

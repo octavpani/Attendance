@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.example.demo.model.SiteUser;
+import com.example.demo.form.SiteUserForm;
 import com.example.demo.service.SiteUserService;
-import com.example.demo.util.Role;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,22 +35,22 @@ public class HomeController {
 	}
 
 	@GetMapping("/register")
-	public String register(@ModelAttribute("user") SiteUser user) {
+	public String register(Model model) {
+		model.addAttribute("userform", new SiteUserForm());
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String process(@Validated @ModelAttribute("user") SiteUser user, BindingResult result) {
+	public String process(Model model, @Validated @ModelAttribute("userform") SiteUserForm userform, BindingResult result) {
 		if (result.hasErrors()) {
 			return "register";
 		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		if (user.getUsername().startsWith("Admin_")) {
-			user.setRole(Role.ADMIN.name());
-		} else {
-			user.setRole(Role.USER.name());
+		if (!SiteUserService.isValidUser(userform)) {
+			model.addAttribute("error_message", "入力内容に誤りがあります。");
+			model.addAttribute("mode", null);
+			return "register";
 		}
-		userService.save(user);
+		userService.saveSiteUser(userform);
 		return "redirect:/login";
 	}
 

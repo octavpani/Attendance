@@ -5,34 +5,54 @@
 <title>Insert title here</title>
 <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 </head>
-<body>
-	<section class="home-content">
-		<h2>ユーザー登録</h2>
-		<table>
-			<form th:action="@{/register}" th:object="${user}" method="post">
-				<tr>
-					<td>
-						<label for="username">名前</label>
-					</td>
-					<td>
-						<label for="password">パスワード</label>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="text" class="mr-3" th:field="*{username}">
-					</td>
-					<td>
-						<input type="password" class="mr-3" th:field="*{password}">
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" class="register">
-						<input type="submit" class="ope" value="登録">
-					</td>
-				</tr>
+<body class="register">
+	<section class="container">
+		<h2>ユーザー作成</h2>
+		<span>
+			<form th:action="@{/register}" th:object="${userform}" method="post" enctype="multipart/form-data">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>ユーザー名</th>
+							<th>パスワード</th>
+							<th>アバター</th>
+							<th></th>
+							<th>ロール</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>
+								<input type="hidden" th:field="*{id}">
+							</th>
+							<td><input class="mr-2" type="text" th:field="*{username}" /></td>
+							<td><input class="mr-2" type="password" th:field="*{password}" /></td>
+							<td>
+								<input type="file" th:field="*{avatar}" />
+							</td>
+							<td colspan="2">
+								<input type="radio" th:field="*{role}" id="ADMIN" value="ADMIN"><label for="ADMIN">ADMIN</label>
+								<input type="radio" th:field="*{role}" id="USER" value="USER"><label for="ADMIN">USER</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="submit" class="ope" value="送信">
+				<div>
+					<div>
+						<p th:errors="*{username}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{password}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{role}" class="error-message"></p>
+					</div>
+				</div>
 			</form>
-		</table>
+		</span>
 	</section>
 </body>
 </html>

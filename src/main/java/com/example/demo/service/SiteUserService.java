@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 public class SiteUserService {
 	private final SiteUserRepository siteUserRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
+
 	//一覧表示の為の検索メソッド
 	public Page<SiteUser> getSiteuser(Pageable pageable, SiteUserQuery sq,
 			Integer id, String username, String role) {
@@ -38,7 +39,20 @@ public class SiteUserService {
 		return siteUserRepository.findUser(anyId, sq.getId(), anyUsername, sq.getUsername(), anyRole, sq.getRole(),
 				pageable);
 	}
+
 	//未テスト。
+	static public boolean isValidUser(SiteUserForm user) {
+		if (20 <= user.getUsername().length() || user.getUsername().length() <= 2) {
+			return false;
+		}
+
+		if (255 <= user.getPassword().length() || user.getPassword().length() <= 4) {
+			return false;
+		}
+
+		return true;
+	}
+
 	static public boolean isValidUsers(List<SiteUserForm> users) {
 		for (int i = 0; i < users.size(); i++) {
 			SiteUserForm user = users.get(i);
@@ -55,6 +69,19 @@ public class SiteUserService {
 	}
 	//SiteUsersDto = userformのリストを保持。
 	//SiteUserForm = 入力フォーム。画像の変換の為に利用
+	public void saveSiteUser(SiteUserForm userform) {
+		SiteUser user = new SiteUser();
+		user.setUsername(userform.getUsername());
+		user.setPassword(passwordEncoder.encode(userform.getPassword()));
+		if (userform.getRole().equals("ADMIN")) {
+			user.setRole(Role.ADMIN.name());
+		} else {
+			user.setRole(Role.USER.name());
+		}
+		userform.loadAvaterSrc().ifPresent(user::setAvatar);
+		if (user.getAvatar() == null) { user.setAvatar(""); }
+		siteUserRepository.save(user);
+	}
 
 	public void saveSiteUsers(SiteUsersDto siteUsersDto) {
 		List<SiteUser> users = new ArrayList<SiteUser>();
@@ -75,6 +102,7 @@ public class SiteUserService {
 				user.setRole(Role.USER.name());
 			}
 			userform.loadAvaterSrc().ifPresent(user::setAvatar);
+			if (user.getAvatar() == null) { user.setAvatar(""); }
 			users.add(user);
 		}
 		siteUserRepository.saveAll(users);

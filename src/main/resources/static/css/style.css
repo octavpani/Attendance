@@ -143,6 +143,10 @@ body.top {
 	background-size: 580px;
 }
 
+body.register {
+	background-size: 580px;
+}
+
 body.error {
 	background-image: url("../img/cat.png");
 	background-size: 850px;

@@ -114,8 +114,6 @@ public class SiteUserController {
 		}
 		userService.saveSiteUsers(siteUsersDto);
 		mv = new ModelAndView("redirect:/admin/siteuser/list");
-
-		//makeSiteUser(mv, siteUsersDto, result);
 		return mv;
 	}
 
