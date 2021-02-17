@@ -20,7 +20,7 @@ import com.example.demo.repository.AttendanceRepository;
 import com.example.demo.service.AttendanceService;
 
 @SpringBootTest
-public class ServiceMockTestForAdmin {
+public class ServiceMockTestForAttendance {
 	//Repositoryをモック化してテストを行う。
 
 	@InjectMocks

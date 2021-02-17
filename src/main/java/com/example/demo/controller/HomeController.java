@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class HomeController {
 
 	private final SiteUserService userService;
-	private final BCryptPasswordEncoder passwordEncoder;
 
 	@GetMapping("/login")
 	public String login() {
@@ -41,7 +39,7 @@ public class HomeController {
 	}
 
 	@PostMapping("/register")
-	public String process(Model model, @Validated @ModelAttribute("userform") SiteUserForm userform, BindingResult result) {
+	public String register(Model model, @Validated @ModelAttribute("userform") SiteUserForm userform, BindingResult result) {
 		if (result.hasErrors()) {
 			return "register";
 		}

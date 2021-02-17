@@ -70,7 +70,6 @@ public class ServiceTestsForSiteUser {
 	}
 
 	@Test
-	//後日、分岐の検証
 	void findUsers() {
 		for (int i = 0; i < 3; i++) {
 			idListForSiteUser.addId(new String());
