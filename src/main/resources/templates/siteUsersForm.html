@@ -37,6 +37,10 @@
 							<td>
 								<img class="avatar" th:src="*{users[__${itemStat.index}__].avatarSrc} != '' ? *{users[__${itemStat.index}__].avatarSrc} : @{/img/default_avatar.jpg}" />
 							</td>
+							<td colspan="2">
+								<input type="radio" th:field="*{users[__${itemStat.index}__].role}" th:value="ADMIN"><label for="ADMIN">ADMIN</label>
+								<input type="radio" th:field="*{users[__${itemStat.index}__].role}" th:value="USER"><label for="USER">USER</label>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -52,6 +56,9 @@
 					</div>
 					<div th:if="${#fields.hasErrors('users[__${itemStat.index}__].password')}">
 						<p th:errors="*{users[__${itemStat.index}__].password}" class="error-message"></p>
+					</div>
+					<div th:if="${#fields.hasErrors('users[__${itemStat.index}__].role')}">
+						<p th:errors="*{users[__${itemStat.index}__].role}" class="error-message"></p>
 					</div>
 				</div>
 			</form>

@@ -96,7 +96,7 @@ public class SiteUserService {
 			if (!userform.getPassword().isEmpty()) {
 				user.setPassword(passwordEncoder.encode(userform.getPassword()));
 			}
-			if (userform.getUsername().startsWith("Admin_")) {
+			if (userform.getRole().equals("ADMIN")) {
 				user.setRole(Role.ADMIN.name());
 			} else {
 				user.setRole(Role.USER.name());
