@@ -53,6 +53,22 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
 | GET | /login | login() | login.html |
 | GET | / | showTop() | top.html |
 | GET | /register | register() | register.html |
-| POST | /register | process() | 成功時、/loginへリダイレクト。失敗時は、register.html |
-## 認証
+| POST | /register | register() | 成功時、/loginへリダイレクト。失敗時は、register.html 
+## 認可
+ - User  Top → AttendanceList → 自分の勤怠の作成、変更、削除。
+ - Admin Top → SiteUserList（全ユーザーの一覧） or AttendanceList（全てのユーザーの勤怠） → ユーザーの情報の作成、変更、削除。もしくは、自分自身の勤怠の作成。
+ - SpringSecurityの設定により、ユーザーが他の人の勤怠を見たり、登録情報を見る事はできない。Adminも、他の人の勤怠の修正ができない。
 ## テスト
+ - Junit5でテストを行った。基本的には、サービス層のテストがメイン。サービス層は、Admin, SiteUser, PracticeCalcがある。それぞれ、勤怠、ユーザー情報、勤怠時間の計算を担当している。
+ サービス層については、各メソッドについて、最低でも一個のテストを作成している。
+ - Attendancetest1ApplicationTests... 全レイヤを結合を結合したもの。基本のテスト。AttendanceRepositoryの動作を確認。モックは利用していない。
+ - HttpRequestsTests... httpリクエスト•レスポンスについてのテスト
+ - HttpRequestEmulatedTest... httpサーバーなし。エミュレートされたリクエストでテスト
+ - WebLayerTests... WebLayerについてのテスト
+ - ここからサービス層のテスト
+ - SiteUserTests... 全レイヤーを結合したもの。Attendancetest1ApplicationTestsでのテスト内容を、SiteUserで行ったもの。
+ - ServiceTestsForAttendance... AttendanceServiceについて、AttendanceRepositoryをモック化せずにテストを行ったもの。
+ - ServiceTestsForSiteUser... SiteUserServiceについて、SiteUserRepositoryをモック化せずにテストを行ったもの。
+ - ServiceMockTestForAttendance... AttendanceRepositoryをモック化してテストを行ったもの。
+ - ServiceMockTestForSiteUser... SiteUserRepositoryをモック化してテストを行ったもの。
+ - CalcurationTestForAttendance... PracticeCalcServiceについてのテスト。
