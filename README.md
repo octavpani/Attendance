@@ -22,7 +22,7 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
  - EclipseのメニューからFile→Import→Existing Maven Projects
  - EclipseのPackage Explorerでプロジェクトを右クリックしてMaven→Update project
  - EclipseのPackage Explorerでプロジェクトを右クリックしてRun As(またはDebug As)→Spring Boot App
- - ブラウザでhttp://localhost:8080/
+ - ブラウザでhttp://localhost:80/
 ## Attendance
 | HTTPメソッド | URL | Controllerメソッド | テンプレート |
 | ------------- | ------------- | ------------- | ------------- |
@@ -66,7 +66,7 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
  - HttpRequestEmulatedTest... httpサーバーなし。エミュレートされたリクエストでテスト
  - WebLayerTests... WebLayerについてのテスト
  - ここからサービス層のテスト
- - SiteUserTests... 全レイヤーを結合したもの。Attendancetest1ApplicationTestsでのテスト内容を、SiteUserで行ったもの。
+ - SiteUserTests... 全レイヤーを結合したもの。AttendanceApplicationTestsでのテスト内容を、SiteUserで行ったもの。
  - ServiceTestsForAttendance... AttendanceServiceについて、AttendanceRepositoryをモック化せずにテストを行ったもの。
  - ServiceTestsForSiteUser... SiteUserServiceについて、SiteUserRepositoryをモック化せずにテストを行ったもの。
  - ServiceMockTestForAttendance... AttendanceRepositoryをモック化してテストを行ったもの。
