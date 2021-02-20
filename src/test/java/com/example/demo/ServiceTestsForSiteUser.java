@@ -74,15 +74,15 @@ public class ServiceTestsForSiteUser {
 		for (int i = 0; i < 3; i++) {
 			idListForSiteUser.addId(new String());
 		}
-		idListForSiteUser.setId(0, "8");
-		idListForSiteUser.setId(1, "52");
-		idListForSiteUser.setId(2, "79");
+		idListForSiteUser.setId(0, "2");
+		idListForSiteUser.setId(1, "4");
+		idListForSiteUser.setId(2, "8");
 		siteUsersDto = sus.findUsers(idListForSiteUser);
 
 		assertThat(siteUsersDto.getUsers().size()).isEqualTo(3);
-		assertThat(siteUsersDto.getUsers().get(0).getUsername()).isEqualTo("かっこう");
-		assertThat(siteUsersDto.getUsers().get(1).getUsername()).isEqualTo("Admin_satou");
-		assertThat(siteUsersDto.getUsers().get(2).getUsername()).isEqualTo("snoopy");
+		assertThat(siteUsersDto.getUsers().get(0).getUsername()).isEqualTo("satou");
+		assertThat(siteUsersDto.getUsers().get(1).getUsername()).isEqualTo("鈴木太郎");
+		assertThat(siteUsersDto.getUsers().get(2).getUsername()).isEqualTo("小山田");
 	}
 
 	@Test
@@ -90,14 +90,14 @@ public class ServiceTestsForSiteUser {
 		for (int i = 0; i < 3; i++) {
 			idListForSiteUser.addId(new String());
 		}
-		idListForSiteUser.setId(0, "8");
-		idListForSiteUser.setId(1, "52");
-		idListForSiteUser.setId(2, "79");
+		idListForSiteUser.setId(0, "2");
+		idListForSiteUser.setId(1, "4");
+		idListForSiteUser.setId(2, "8");
 		users = sus.findUsersForDelete(idListForSiteUser);
 
 		assertThat(users.size()).isEqualTo(3);
-		assertThat(users.get(0).getUsername()).isEqualTo("かっこう");
-		assertThat(users.get(1).getUsername()).isEqualTo("Admin_satou");
-		assertThat(users.get(2).getUsername()).isEqualTo("snoopy");
+		assertThat(users.get(0).getUsername()).isEqualTo("satou");
+		assertThat(users.get(1).getUsername()).isEqualTo("鈴木太郎");
+		assertThat(users.get(2).getUsername()).isEqualTo("小山田");
 	}
 }

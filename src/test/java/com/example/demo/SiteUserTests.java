@@ -42,14 +42,14 @@ public class SiteUserTests {
 
 	@Test
 	void someSiteUserPresent() {
-		Page<SiteUser> users = sr.findUser(true, null, false, "Admin_satou", true, null, null);
+		Page<SiteUser> users = sr.findUser(true, null, false, "admin", true, null, null);
 		assertThat(users.getContent().size()).isEqualTo(1);
 	}
 
 	@Test
 	void someAdminPresent() {
 		Page<SiteUser> users = sr.findUser(true, null, true, "", false, "ADMIN", null);
-		assertThat(users.getContent().size()).isEqualTo(3);
+		assertThat(users.getContent().size()).isEqualTo(6);
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class SiteUserTests {
 	@Test
 	void noNameSearch() {
 		Page<SiteUser> users = sr.findUser(true, null, true, "", true, null, null);
-		assertThat(users.getContent().size()).isEqualTo(36);
+		assertThat(users.getContent().size()).isEqualTo(18);
 	}
 
 

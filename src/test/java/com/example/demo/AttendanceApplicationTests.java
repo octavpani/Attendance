@@ -16,7 +16,7 @@ import com.example.demo.repository.SiteUserRepository;
 import com.example.demo.service.AttendanceService;
 
 @SpringBootTest
-class Attendancetest1ApplicationTests {
+class AttendanceApplicationTests {
 	//このテストでは、モックを利用せず、サービスクラスをテストします。
 
 	@Autowired
@@ -48,7 +48,7 @@ class Attendancetest1ApplicationTests {
 	//User用の検索メソッドについてのメソッド呼び出し元のRepositoryからテストしている。
 	@Test
 	void someAttendancePresentForUser() {
-		Page<Attendance> attendances = ar.findYourAttendance("Admin_satou", true, null, true, null, true, null, null);
+		Page<Attendance> attendances = ar.findYourAttendance("admin", true, null, true, null, true, null, null);
 		assertThat(attendances.getContent().size()).isEqualTo(1);
 	}
 
@@ -67,7 +67,7 @@ class Attendancetest1ApplicationTests {
 	//Admin用の検索メソッドのテスト。
 	@Test
 	void someAttendancePresentForAdmin() {
-		Page<Attendance> attendances = ar.findAttendance(false, "Admin_satou", true, null, true, null, true, null,
+		Page<Attendance> attendances = ar.findAttendance(false, "admin", true, null, true, null, true, null,
 				null);
 		assertThat(attendances.getContent().size()).isEqualTo(1);
 	}
@@ -81,7 +81,7 @@ class Attendancetest1ApplicationTests {
 	@Test
 	void NoNameSearchForAdmin() {
 		Page<Attendance> attendances = ar.findAttendance(true, "", true, null, true, null, true, null, null);
-		assertThat(attendances.getContent().size()).isEqualTo((65));
+		assertThat(attendances.getContent().size()).isEqualTo((57));
 	}
 
 	@Test

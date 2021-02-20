@@ -35,8 +35,8 @@ public class HttpRequestEmulatedTest {
 	@Test
 	public void login() throws Exception {
 		mockMvc.perform(post("/login", new Object[0])
-				.param("username", "satou5")
-				.param("password", "satou5")
+				.param("username", "admin")
+				.param("password", "admin")
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl("/"));
