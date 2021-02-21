@@ -53,8 +53,8 @@ public class HttpRequestsTests {
 		//assertThat(doc.select("table.top tr").size()).as("メニューアイテム数").isEqualTo(3);
 		//assertThat(doc.select("h2").text()).as("ログイン画面").isEqualTo("ログイン画面");
 		assertThat(doc.select("a").text()).as("メニュー")
-				.contains("作成へ")
-				.contains("一括作成へ");
+				.contains("作成")
+				.contains("一括作成");
 	}
 
 }
