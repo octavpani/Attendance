@@ -17,12 +17,20 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
  - WEBアプリの基本として、CRUDの実装
  - Thymeleafを利用した、Entityの一括の登録(Attendance及びSiteUser)
  - Spring Boot特有の支援を利用した機能の実装(勤怠情報のCSV形式での出力、SpringSecurityを利用した認証等)
+## 環境
+ - 言語 java openjdk version 15.0.1
+ - フレームワーク Spring Boot 2.4.0
+ - データーベース 開発 H2 本番 MySQL 8.0.23
+## テーブルの作成と初期データの作成
+ - 本番環境が、MySQLの為、ローカルでプロジェクトを起動する為に準備が必要になります。
+ - application.propaties にデータベース及びテーブル、初期データ作成のコードを置きました。
 ## 使い方
  - Eclispeのワークスペースフォルダの下でgit clone
  - EclipseのメニューからFile→Import→Existing Maven Projects
  - EclipseのPackage Explorerでプロジェクトを右クリックしてMaven→Update project
  - EclipseのPackage Explorerでプロジェクトを右クリックしてRun As(またはDebug As)→Spring Boot App
  - ブラウザでhttp://localhost:80/
+
 ## Attendance
 | HTTPメソッド | URL | Controllerメソッド | テンプレート |
 | ------------- | ------------- | ------------- | ------------- |
@@ -56,12 +64,12 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
 | POST | /register | register() | 成功時、/loginへリダイレクト。失敗時は、register.html 
 ## 認可
  - User  Top → AttendanceList → 自分の勤怠の作成、変更、削除。
- - Admin Top → SiteUserList（全ユーザーの一覧） or AttendanceList（全てのユーザーの勤怠） → ユーザーの情報の作成、変更、削除。もしくは、自分自身の勤怠の作成。
+ - Admin Top → SiteUserList（全ユーザーの一覧） or AttendanceList（全てのユーザーの勤怠） → ユーザーに関するCRUDもしくは、自分自身の勤怠に関するCRUD
  - SpringSecurityの設定により、ユーザーが他の人の勤怠を見たり、登録情報を見る事はできない。Adminも、他の人の勤怠の修正ができない。
 ## テスト
  - Junit5でテストを行った。基本的には、サービス層のテストがメイン。サービス層は、Admin, SiteUser, PracticeCalcがある。それぞれ、勤怠、ユーザー情報、勤怠時間の計算を担当している。
  サービス層については、各メソッドについて、最低でも一個のテストを作成している。
- - Attendancetest1ApplicationTests... 全レイヤを結合を結合したもの。基本のテスト。AttendanceRepositoryの動作を確認。モックは利用していない。
+ - AttendanceApplicationTests... 全レイヤを結合を結合したもの。基本のテスト。AttendanceRepositoryの動作を確認。モックは利用していない。
  - HttpRequestsTests... httpリクエスト•レスポンスについてのテスト
  - HttpRequestEmulatedTest... httpサーバーなし。エミュレートされたリクエストでテスト
  - WebLayerTests... WebLayerについてのテスト
