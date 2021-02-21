@@ -80,3 +80,6 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
  - ServiceMockTestForAttendance... AttendanceRepositoryをモック化してテストを行ったもの。
  - ServiceMockTestForSiteUser... SiteUserRepositoryをモック化してテストを行ったもの。
  - CalcurationTestForAttendance... PracticeCalcServiceについてのテスト。
+## パッケージング
+ - ビルド $ mvnw package Attendance:repackage
+ - 起動 $ java -jar Attendance-0.0.1-SNAPSHOT.jar
