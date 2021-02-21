@@ -49,7 +49,7 @@ public class SiteUserTests {
 	@Test
 	void someAdminPresent() {
 		Page<SiteUser> users = sr.findUser(true, null, true, "", false, "ADMIN", null);
-		assertThat(users.getContent().size()).isEqualTo(6);
+		assertThat(users.getContent().size()).isEqualTo(1);
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class SiteUserTests {
 	@Test
 	void noNameSearch() {
 		Page<SiteUser> users = sr.findUser(true, null, true, "", true, null, null);
-		assertThat(users.getContent().size()).isEqualTo(18);
+		assertThat(users.getContent().size()).isEqualTo(3);
 	}
 
 

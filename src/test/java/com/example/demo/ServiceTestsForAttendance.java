@@ -38,8 +38,8 @@ public class ServiceTestsForAttendance {
 
 	//空のListの生成
 	private List<Attendance> attendances = new ArrayList<Attendance>();
-	private AttendanceQuery aq = new AttendanceQuery("", 2021, 4, 1);
-	private CsvForm csv = new CsvForm(2021, 4);
+	private AttendanceQuery aq = new AttendanceQuery("", 2021, 7, 21);
+	private CsvForm csv = new CsvForm(2021, 7);
 	private Page<Attendance> pages;
 	private IdListForEdit idListForEdit = new IdListForEdit();
 	private AttendancesDto attendancesDto;
@@ -69,7 +69,7 @@ public class ServiceTestsForAttendance {
 	public void getYourAllAttendance1() {
 		Mockito.when(principal.getName()).thenReturn("admin");
 		attendances = as.getYourAllAttendance(principal);
-		assertThat(attendances.size()).isEqualTo(1);
+		assertThat(attendances.size()).isEqualTo(10);
 	}
 
 	@Test
@@ -90,7 +90,7 @@ public class ServiceTestsForAttendance {
 	public void secureIdList() {
 		Mockito.when(principal.getName()).thenReturn("admin");
 		idListForEdit.addId(new String());
-		idListForEdit.setId(0, "57");
+		idListForEdit.setId(0, "11");
 		attendancesDto = as.secureIdList(principal, idListForEdit);
 		assertThat(attendancesDto.getAttendances().size()).isEqualTo(1);
 	}
@@ -121,7 +121,7 @@ public class ServiceTestsForAttendance {
 	@Test
 	public void secureAttendanceById() {
 		Mockito.when(principal.getName()).thenReturn("admin");
-		Attendance attendance = as.secureAttendanceId((long) 57, principal);
+		Attendance attendance = as.secureAttendanceId((long) 12, principal);
 		assertThat(attendance.getUsername().equals("admin"));
 	}
 
@@ -144,7 +144,7 @@ public class ServiceTestsForAttendance {
 
 	@Test
 	public void expectingNameError() {
-		Optional<Attendance> att = as.findAttendanceById((long) 31);
+		Optional<Attendance> att = as.findAttendanceById((long) 1);
 		Attendance attendance = att.get();
 		Mockito.when(principal.getName()).thenReturn("snoopy");
 		if (!attendance.getUsername().equals(principal.getName())) {

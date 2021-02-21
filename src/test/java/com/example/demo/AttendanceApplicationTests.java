@@ -49,7 +49,7 @@ class AttendanceApplicationTests {
 	@Test
 	void someAttendancePresentForUser() {
 		Page<Attendance> attendances = ar.findYourAttendance("admin", true, null, true, null, true, null, null);
-		assertThat(attendances.getContent().size()).isEqualTo(1);
+		assertThat(attendances.getContent().size()).isEqualTo(10);
 	}
 
 	@Test
@@ -69,7 +69,7 @@ class AttendanceApplicationTests {
 	void someAttendancePresentForAdmin() {
 		Page<Attendance> attendances = ar.findAttendance(false, "admin", true, null, true, null, true, null,
 				null);
-		assertThat(attendances.getContent().size()).isEqualTo(1);
+		assertThat(attendances.getContent().size()).isEqualTo(10);
 	}
 
 	@Test
@@ -81,13 +81,13 @@ class AttendanceApplicationTests {
 	@Test
 	void NoNameSearchForAdmin() {
 		Page<Attendance> attendances = ar.findAttendance(true, "", true, null, true, null, true, null, null);
-		assertThat(attendances.getContent().size()).isEqualTo((57));
+		assertThat(attendances.getContent().size()).isEqualTo((20));
 	}
 
 	@Test
 	void someUserPresent() {
 		List<SiteUser> su = sr.findAll();
-		assertThat(su.size()).isNotEqualTo(3);
+		assertThat(su.size()).isNotEqualTo(100);
 	}
 
 	@Test
