@@ -23,7 +23,8 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
  - データーベース 開発 H2 本番 MySQL 8.0.23
 ## テーブルの作成と初期データの作成
  - 本番環境が、MySQLの為、ローカルでプロジェクトを起動する為に準備が必要になります。
- - application.propaties にデータベース及びテーブル、初期データ作成のコードを置きました。
+ - データベースの作成 : MySQLを起動→CREATE DATABASE attendance_db CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+ - テーブルの作成及び初期データの差し込み : パスに、Resourceを指定して、source attendance_setup.sql を実行。
 ## 使い方
  - Eclispeのワークスペースフォルダの下でgit clone
  - EclipseのメニューからFile→Import→Existing Maven Projects
