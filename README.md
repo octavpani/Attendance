@@ -1,23 +1,33 @@
 # 勤怠管理アプリ
 
 ## 概要
-Spring Boot及びjavaの基本的な使い方について学習しました。
+Spring Boot及びjavaの基本的な使い方について学習しました。  
 そのアウトプットとして、勤怠管理のアプリを作成しました。  
 Wikiに主要な画面の変遷をスクショで取っております。
 ## 基本的な内容
  - Attendance(勤怠のデータ)
 SiteUserが登録する事により、一覧表示をする事できます。  
- Adminロールの場合は、すべてのAttendanceを見る事ができますが、修正、削除ができません。  
- Userロールでログインした場合、一覧表示されてみる事ができるのは、自分の勤怠のみです。  
+Adminロールの場合は、すべてのAttendanceを見る事ができますが、修正、削除ができません。  
+Userロールでログインした場合、一覧表示されてみる事ができるのは、自分の勤怠のみです。  
  - SiteUser
 Roleで、AdminとUserに分かれています。Roleによって、表示内容が異なります。  
- Adminロールは、すべてのSiteUserを一覧表示できます。Attendanceと同様のCRUDをSiteUserに対して行えるイメージです。  
- Userロールは、新規登録画面を利用して、自分のデータを登録する事ができます。
+Adminロールは、すべてのSiteUserを一覧表示できます。Attendanceと同様のCRUDをSiteUserに対して行えるイメージです。  
+Userロールは、新規登録画面を利用して、自分のデータを登録する事ができます。
 ## ポイント
  - WEBアプリの基本として、CRUDの実装
  - Thymeleafを利用した、Entityの一括の登録(Attendance及びSiteUser)
  - Spring Boot特有の支援を利用した機能の実装(勤怠情報のCSV形式での出力、SpringSecurityを利用した認証等)
+## 機能一覧
+ - ユーザー登録 • ログイン機能(Spring Security)
+ - 投稿機能
+   - 勤怠の投稿、ユーザーの作成
+   - 勤怠のCSV出力（Super CSV）
+   - 画像（アバター）の登録
+ - 検索（Springの支援メソッド及びSQLの手書き）
+ - 一覧表示 • ソート
+ - ページネーション（SpringのPageable利用）
 ## 環境
+ - 開発環境 IDE(Eclipse)
  - 言語 java openjdk version 15.0.1
  - フレームワーク Spring Boot 2.4.0
  - データーベース 開発 H2 本番 MySQL 8.0.23
@@ -68,14 +78,18 @@ Roleで、AdminとUserに分かれています。Roleによって、表示内容
  - Admin Top → SiteUserList（全ユーザーの一覧） or AttendanceList（全てのユーザーの勤怠） → ユーザーに関するCRUDもしくは、自分自身の勤怠に関するCRUD
  - SpringSecurityの設定により、ユーザーが他の人の勤怠を見たり、登録情報を見る事はできない。Adminも、他の人の勤怠の修正ができない。
 ## テスト
- - Junit5でテストを行った。基本的には、サービス層のテストがメイン。サービス層は、Admin, SiteUser, PracticeCalcがある。それぞれ、勤怠、ユーザー情報、勤怠時間の計算を担当している。
- サービス層については、各メソッドについて、最低でも一個のテストを作成している。
- - AttendanceApplicationTests... 全レイヤを結合を結合したもの。基本のテスト。AttendanceRepositoryの動作を確認。モックは利用していない。
- - HttpRequestsTests... httpリクエスト•レスポンスについてのテスト
+ - Junit5を利用。  
+   基本的には、サービス層のテストがメイン。  
+   サービス層は、Admin, SiteUser, PracticeCalcがある。それぞれ、勤怠、ユーザー情報、勤怠時間の計算を担当している。  
+   サービス層については、各メソッドについて、最低でも一個のテストを作成している。
+ - AttendanceApplicationTests... 全レイヤを結合を結合したもの。基本のテスト。  
+   AttendanceRepositoryの動作を確認。モックは利用していない。
+ - HttpRequestsTests... httpリクエスト • レスポンスについてのテスト
  - HttpRequestEmulatedTest... httpサーバーなし。エミュレートされたリクエストでテスト
  - WebLayerTests... WebLayerについてのテスト
  - ここからサービス層のテスト
- - SiteUserTests... 全レイヤーを結合したもの。AttendanceApplicationTestsでのテスト内容を、SiteUserで行ったもの。
+ - SiteUserTests... 全レイヤーを結合したもの。  
+   AttendanceApplicationTestsでのテスト内容を、SiteUserで行ったもの。
  - ServiceTestsForAttendance... AttendanceServiceについて、AttendanceRepositoryをモック化せずにテストを行ったもの。
  - ServiceTestsForSiteUser... SiteUserServiceについて、SiteUserRepositoryをモック化せずにテストを行ったもの。
  - ServiceMockTestForAttendance... AttendanceRepositoryをモック化してテストを行ったもの。
