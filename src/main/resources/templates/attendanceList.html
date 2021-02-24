@@ -34,7 +34,7 @@
 		</section>
 		<section>
 
-			<form th:if="${'USER'.equals(#authentication.principal.role)}" th:action="@{/export}" th:object="${csvForm}" method="post">
+			<form th:action="@{/export}" th:object="${csvForm}" method="post">
 				<h2>勤怠出力</h2>
 				<table class="bordered">
 					<tr>

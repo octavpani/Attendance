@@ -16,7 +16,7 @@ CREATE TABLE siteuser (
   username varchar(255) NOT NULL,
   password varchar(255) NOT NULL,
   role varchar(20) NOT NULL,
-  avatar blob NOT NULL,
+  avatar text NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
