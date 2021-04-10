@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>LoginPage</title>
+		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+	</head>
+	<body class="login">
+		<section class="login">
+			<h2>ログイン画面</h2>
+				<form th:action="@{/login}" class="user" method="post">
+					<section>
+						<span>
+							<input type="text" class="mr-3" name="username" placeholder="ユーザー名">
+						</span>
+						<span>
+							<input type="password" class="mr-3" name="password" placeholder="パスワード">
+						</span>
+					</section>
+					<div class="index">
+						<input type="submit" class="ope" value="Login">
+					</div>
+					<h7>登録がまだの方はこちら</h7><br>
+					<a th:href="@{/register}">新規登録</a>
+				</form>
+		</section>
+		<div class="image-source">
+		画像出典元<br>
+			<a href="https://pixabay.com/ja/users/graphicmama-team-2641041/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1453895">GraphicMama-team</a><br>
+			<a href="https://pixabay.com/ja/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1453895">Pixabay</a>
+		</div>
+	</body>
+</html>

@@ -80,7 +80,7 @@ public class AttendanceService {
 		attendanceRepository.deleteAll(attendances);
 	}
 
-	public Optional<Attendance> findAttendanceById(long id) {
+	public Optional<Attendance> findAttendanceById(Integer id) {
 		return attendanceRepository.findById(id);
 	}
 
@@ -94,7 +94,7 @@ public class AttendanceService {
 		List<String> idList = idListForEdit.getIdList();
 		AttendancesDto attendancesDto = new AttendancesDto();
 		for (String id : idList) {
-			attendancesDto.addAttendance(secureAttendanceId(Long.parseLong(id), principal));
+			attendancesDto.addAttendance(secureAttendanceId(Integer.valueOf(id), principal));
 		}
 		return attendancesDto;
 	}
@@ -116,7 +116,7 @@ public class AttendanceService {
 	}
 
 	//idからattendanceを検索します。
-	public Attendance secureAttendanceId(long id, Principal principal) {
+	public Attendance secureAttendanceId(Integer id, Principal principal) {
 		Optional<Attendance> att = findAttendanceById(id);
 		if (!att.isPresent()) {
 			throw new FileNotFoundException();

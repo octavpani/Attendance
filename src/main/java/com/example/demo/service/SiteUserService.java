@@ -108,7 +108,7 @@ public class SiteUserService {
 		siteUserRepository.saveAll(users);
 	}
 
-	public Optional<SiteUser> findSiteUserById(long id) {
+	public Optional<SiteUser> findSiteUserById(Integer id) {
 		return siteUserRepository.findById(id);
 	}
 
@@ -117,7 +117,7 @@ public class SiteUserService {
 		List<String> idList = idListForSiteUser.getIdList();
 		SiteUsersDto siteUsersDto = new SiteUsersDto();
 		for (String id : idList) {
-			Optional<SiteUser> mayBeUser = findSiteUserById(Long.parseLong(id));
+			Optional<SiteUser> mayBeUser = findSiteUserById(Integer.valueOf(id));
 			SiteUser user = mayBeUser.get();
 			SiteUserForm userform = new SiteUserForm(user);
 			if (userform.getAvatarSrc() == null) {
@@ -133,7 +133,7 @@ public class SiteUserService {
 		List<String> idList = idListForSiteUser.getIdList();
 		List<SiteUser> users = new ArrayList<SiteUser>();
 		for (String id : idList) {
-			Optional<SiteUser> mayBeUser = findSiteUserById(Long.parseLong(id));
+			Optional<SiteUser> mayBeUser = findSiteUserById(Integer.valueOf(id));
 			SiteUser user = mayBeUser.get();
 			users.add(user);
 		}

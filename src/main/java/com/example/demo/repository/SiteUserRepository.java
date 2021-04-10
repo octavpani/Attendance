@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.demo.model.SiteUser;
 
-public interface SiteUserRepository extends JpaRepository<SiteUser, Long> {
+public interface SiteUserRepository extends JpaRepository<SiteUser, Integer> {
 	//securityで使用
 	SiteUser findByUsername(String username);
 	boolean existsByUsername(String username);

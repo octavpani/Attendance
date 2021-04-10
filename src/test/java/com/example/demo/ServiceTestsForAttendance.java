@@ -121,19 +121,19 @@ public class ServiceTestsForAttendance {
 	@Test
 	public void secureAttendanceById() {
 		Mockito.when(principal.getName()).thenReturn("admin");
-		Attendance attendance = as.secureAttendanceId((long) 12, principal);
+		Attendance attendance = as.secureAttendanceId((Integer) 12, principal);
 		assertThat(attendance.getUsername().equals("admin"));
 	}
 
 	@Test
 	public void expectingNoSuchElement() throws Exception {
-		Optional<Attendance> att = as.findAttendanceById((long) 0);
+		Optional<Attendance> att = as.findAttendanceById((Integer) 0);
 		assertThrows(NoSuchElementException.class, () -> att.get());
 	}
 
 	@Test
 	public void expectingOptionalError() {
-		Optional<Attendance> att = as.findAttendanceById((long) 0);
+		Optional<Attendance> att = as.findAttendanceById((Integer) 0);
 		if (!att.isPresent()) {
 			String ans = "hoge";
 			assertThat(ans.equals("hoge"));
@@ -144,7 +144,7 @@ public class ServiceTestsForAttendance {
 
 	@Test
 	public void expectingNameError() {
-		Optional<Attendance> att = as.findAttendanceById((long) 1);
+		Optional<Attendance> att = as.findAttendanceById((Integer) 1);
 		Attendance attendance = att.get();
 		Mockito.when(principal.getName()).thenReturn("snoopy");
 		if (!attendance.getUsername().equals(principal.getName())) {

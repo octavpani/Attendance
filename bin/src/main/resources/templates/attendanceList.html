@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{partial/layout}">
+<head>
+<title>AttendanceList</title>
+</head>
+<body>
+	<section layout:fragment="contents">
+		<section>
+			<h2>検索条件</h2>
+			<form th:action="@{''}" method="get">
+				<table class="bordered">
+					<tr>
+						<th>西暦</th>
+						<th>月</th>
+						<th>日</th>
+					</tr>
+					<tr>
+						<th><input class="mr-3" type="number" name="year"
+							th:value="${year}" max="2099" min="2020" /></th>
+						<th><input class="mr-4" type="number" name="month"
+							th:value="${month}" max="12" min="1" /></th>
+						<th><input class="mr-4" type="number" name="day"
+							th:value="${day}" max="31" min="1" /></th>
+					</tr>
+					<tr>
+						<td class="search" colspan="3"><input class="ope"
+							type="submit" value="検索" /></td>
+					</tr>
+				</table>
+			</form>
+		</section>
+		<section>
+
+			<form th:action="@{/export}" th:object="${csvForm}" method="post">
+				<h2>勤怠出力</h2>
+				<table class="bordered">
+					<tr>
+						<th>西暦</th>
+						<th>月</th>
+					</tr>
+					<tr>
+						<th><input class="mr-3" type="number" th:field="*{year}" min="2020" max="2099" required></th>
+						<th>
+					<input class="mr-4" type="number" th:field="*{month}" min="1" max="12" required>
+						</th>
+						</tr>
+					<tr>
+						<th colspan="3"><button class="ope" type="submit">出力</button>
+						</th>
+					</tr>
+				</table>
+			</form>
+			<!--  <a th:href="@{/export}"><button class="ope" type="button">出力</button></a> -->
+		</section>
+		<section>
+			<h2>勤怠作成</h2>
+			<a th:href="@{/attendance}"><button class="ope" type="button">作成</button></a>
+			<a th:href="@{/form/pre/attendances}"><button class="ope"
+					type="button">一括作成</button></a>
+		</section>
+		<section>
+			<div class="ope">
+			<h2>勤務記録</h2>
+			<h4>累計勤務時間</h4>
+				<span th:text=${sumHours}></span>: <span th:text=${sumMinutes}></span>
+			</div>
+			<section>
+				<table class="bordered">
+					<thead>
+						<tr class="row-4">
+							<th>id:</th>
+							<th>名前:</th>
+							<th>年</th>
+							<th>月</th>
+							<th>日</th>
+							<th>開始</th>
+							<th>終了</th>
+							<th>勤務時間</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!--  attendanceList→attendancesより取得-->
+						<form th:action="@{/form/attendacnes/edit}" th:object="${idList}"
+							method="post">
+							<tr th:each="attendance, itemStat : ${attendanceList}">
+								<td th:text=${attendance.id}></td>
+								<td th:text=${attendance.username}></td>
+								<td th:text=${attendance.year}></td>
+								<td th:text=${attendance.month}></td>
+								<td th:text=${attendance.day}></td>
+								<td><span th:text=${attendance.staHour} />:<span
+									th:text=${attendance.staMin} /></td>
+								<td><span th:text=${attendance.endHour} />:<span
+									th:text=${attendance.endMin} /></td>
+								<td><span th:text=${attendance.workingHours()} />:<span
+									th:text=${attendance.workingMinutes()} /></td>
+								<td
+									th:if="${attendance.username == #authentication.principal.username}">
+									<span> <input type="checkbox"
+										th:id="|idList[${itemStat.index}].id|" th:name="idList"
+										th:value="${attendance.id}">
+								</span>
+								</td>
+							</tr>
+							<div class="ope">
+								<span>
+									<button class="ope" type="submit">編集へ</button>
+								</span> <span>
+									<button class="ope" type="submit"
+										th:formaction="@{/attendances/delete}">削除へ</button>
+								</span>
+							</div>
+						</form>
+					</tbody>
+				</table>
+			</section>
+			<section th:object="${attendances}">
+				<h3>ページングリンク</h3>
+				<div class="pager">
+					<a th:href="@{${pathWithSort}(page=0)}">最初</a>
+					<th:block
+						th:each="i : ${#numbers.sequence(0, attendances.totalPages - 1)}">
+						<a th:href="@{${pathWithSort}(page=${i})}" th:text="${i+1}">0</a>
+					</th:block>
+					<a th:href="@{${pathWithSort}(page=*{totalPages-1})}">最後</a>
+				</div>
+			</section>
+			<section class="sort" th:object="${attendances}">
+				<h3>ソートリンク</h3>
+				<ul class="sorter">
+					<li><a th:href="@{${pathWithPage}(sort=month)}">月昇順</a></li>
+					<li><a th:href="@{${pathWithPage}(sort='month,desc')}">月降順</a></li>
+					<li><a th:href="@{/error/on/purpose}">エラー</a> <!-- <li><a th:href="@{${pathWithPage}(sort=name,sort='month,desc')}">名前昇順&amp;月降順</a></li> -->
+				</ul>
+			</section>
+		</section>
+</body>
+</html>

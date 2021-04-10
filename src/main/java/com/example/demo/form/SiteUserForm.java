@@ -26,7 +26,7 @@ public class SiteUserForm {
 
 	private static final int AVATAR_MAX_WIDTH = 200;
 
-	private Long id;
+	private Integer id;
 
 	@Size(min = 2, max = 20, message="名前は、3文字から、20文字の間で入力してください。")
 	private String username;

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+</head>
+<body class="register">
+	<section class="container">
+		<h2>ユーザー作成</h2>
+		<span>
+			<form th:action="@{/register}" th:object="${userform}" method="post" enctype="multipart/form-data">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>ユーザー名</th>
+							<th>パスワード</th>
+							<th>アバター</th>
+							<th></th>
+							<th>ロール</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>
+								<input type="hidden" th:field="*{id}">
+							</th>
+							<td><input class="mr-2" type="text" th:field="*{username}" /></td>
+							<td><input class="mr-2" type="password" th:field="*{password}" /></td>
+							<td>
+								<input type="file" th:field="*{avatar}" />
+							</td>
+							<td colspan="2">
+								<input type="radio" th:field="*{role}" value="ADMIN"><label for="ADMIN">ADMIN</label>
+								<input type="radio" th:field="*{role}" value="USER"><label for="USER">USER</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="submit" class="ope" value="送信">
+				<div>
+					<div>
+						<p th:errors="*{username}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{password}" class="error-message"></p>
+					</div>
+					<div>
+						<p th:errors="*{role}" class="error-message"></p>
+					</div>
+				</div>
+			</form>
+		</span>
+	</section>
+</body>
+</html>

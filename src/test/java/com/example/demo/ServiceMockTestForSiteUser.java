@@ -57,7 +57,7 @@ public class ServiceMockTestForSiteUser {
 
 	@Test
 	void findSiteUserByid() {
-		Mockito.when(user.getId()).thenReturn((long)1);
+		Mockito.when(user.getId()).thenReturn((Integer)1);
 		sus.findSiteUserById(user.getId());
 		verify(sur, times(1)).findById(any());
 	}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{partial/layout}">
+<head>
+<title>SiteUsersForm</title>
+</head>
+<body>
+	<section layout:fragment="contents">
+		<h2>ユーザー編集</h2>
+		<h7>パスワードは、空欄で変更なしの予定</h7>
+		<span>
+			<form th:action="@{/admin/siteuser/update}"
+				th:object="${siteUsersDto}" method="post" enctype="multipart/form-data">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>ユーザー名</th>
+							<th>パスワード</th>
+							<th>アバター</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="user, itemStat : *{users}">
+							<th>
+								<input type="hidden" th:field="*{users[__${itemStat.index}__].id}">
+							</th>
+							<td><input class="mr-3" type="text"
+								th:field="*{users[__${itemStat.index}__].username}" /></td>
+							<td><input class="mr-3" type="password" th:name="|users[${itemStat.index}].password|"
+								th:id="|users[${itemStat.index}].password|" /></td>
+							<td>
+								<input type="file" th:field="*{users[__${itemStat.index}__].avatar}" />
+							</td>
+							<td>
+								<img class="avatar" th:src="*{users[__${itemStat.index}__].avatarSrc} != '' ? *{users[__${itemStat.index}__].avatarSrc} : @{/img/default_avatar.jpg}" />
+							</td>
+							<td colspan="2">
+								<input type="radio" th:field="*{users[__${itemStat.index}__].role}" th:value="ADMIN"><label for="ADMIN">ADMIN</label>
+								<input type="radio" th:field="*{users[__${itemStat.index}__].role}" th:value="USER"><label for="USER">USER</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<input th:if="${mode == 'update'}" type="submit" class="ope" value="Submit">
+				</div>
+				<div>
+					<input th:if="${mode == null}" type="submit" th:formaction="@{/admin/siteuser/create}" class="ope" value="Create">
+				</div>
+				<div th:each="user, itemStat : *{users}">
+					<div th:if="${#fields.hasErrors('users[__${itemStat.index}__].username')}">
+						<p th:errors="*{users[__${itemStat.index}__].username}" class="error-message"></p>
+					</div>
+					<div th:if="${#fields.hasErrors('users[__${itemStat.index}__].password')}">
+						<p th:errors="*{users[__${itemStat.index}__].password}" class="error-message"></p>
+					</div>
+					<div th:if="${#fields.hasErrors('users[__${itemStat.index}__].role')}">
+						<p th:errors="*{users[__${itemStat.index}__].role}" class="error-message"></p>
+					</div>
+				</div>
+			</form>
+		</span>
+	</section>
+</body>
+</html>

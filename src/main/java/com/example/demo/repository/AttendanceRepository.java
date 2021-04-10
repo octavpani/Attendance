@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.Attendance;
 @Repository
-public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
+public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
 	Page<Attendance> findByUsernameLikeAndMonthIs(String username, Integer month, Pageable pageable);
 
 

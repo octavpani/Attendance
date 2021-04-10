@@ -67,7 +67,7 @@ public class ServiceMockTestForAttendance {
 
 	@Test
 	public void findAttendanceById() {
-		Mockito.when(attendance.getId()).thenReturn((long)1);
+		Mockito.when(attendance.getId()).thenReturn((Integer)1);
 		as.findAttendanceById(attendance.getId());
 		verify(ar, times(1)).findById(any());
 	}
