@@ -14,6 +14,7 @@ public interface SiteUserRepository extends JpaRepository<SiteUser, Integer> {
 	boolean existsByUsername(String username);
 
 	//user検索用メソッド
+	//WHERE (:anyId OR id LIKE :id)  SQLにも問題がありそう。調査中
 	@Query(value = "SELECT * FROM siteuser WHERE (:anyId OR id LIKE :id) AND (:anyUsername OR username LIKE :username) AND (:anyRole OR role LIKE :role)",
 			countQuery = "SELECT COUNT(*) FROM siteuser WHERE (:anyId OR id LIKE :id) AND (:anyUsername OR username LIKE :username) AND (:anyRole OR role LIKE :role)",
 			nativeQuery = true)
