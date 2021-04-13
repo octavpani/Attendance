@@ -16,8 +16,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 
 
 	//user用の検索
-	@Query(value = "SELECT * FROM attendance WHERE (username LIKE :username) AND (:anyYear OR year LIKE :year) AND (:anyMonth OR month LIKE :month) AND (:anyDay OR day LIKE :day)",
-			countQuery = "SELECT COUNT(*) FROM attendance WHERE (username LIKE :username) AND (:anyYear OR year LIKE :year) AND (:anyMonth OR month LIKE :month) AND (:anyDay OR day LIKE :day)",
+	@Query(value = "SELECT * FROM attendance WHERE (username LIKE :username) AND (:anyYear OR year = :year) AND (:anyMonth OR month = :month) AND (:anyDay OR day = :day)",
+			countQuery = "SELECT COUNT(*) FROM attendance WHERE (username LIKE :username) AND (:anyYear OR year = :year) AND (:anyMonth OR month = :month) AND (:anyDay OR day = :day)",
 			nativeQuery = true)
 	Page<Attendance> findYourAttendance(@Param("username") String username,
 			@Param("anyYear") boolean anyYear, @Param("year") Integer year,
@@ -30,9 +30,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 	List<Attendance> findByUsernameLikeAndYearIsAndMonthIs(String name, int year, int month);
 
 	//Admin用の検索
-	@Query(value = "SELECT * FROM attendance WHERE (:anyName OR username LIKE :username) AND (:anyYear OR year LIKE :year) AND (:anyMonth OR month LIKE :month) AND (:anyDay OR day LIKE :day)",
-			countQuery = "SELECT COUNT(*) FROM attendance WHERE (:anyName OR username LIKE :username) AND (:anyYear OR year LIKE :year) AND (:anyMonth OR month LIKE :month) AND (:anyDay OR day LIKE :day)",
-			nativeQuery = true)
+	@Query(value = "SELECT * FROM attendance WHERE (:anyName OR username LIKE :username) AND (:anyYear OR year = :year) AND (:anyMonth OR month = :month) AND (:anyDay OR day = :day)",
+	countQuery = "SELECT COUNT(*) FROM attendance WHERE (:anyName OR username LIKE :username) AND (:anyYear OR year = :year) AND (:anyMonth OR month = :month) AND (:anyDay OR day = :day)",
+	nativeQuery = true)
 	Page<Attendance> findAttendance(@Param("anyName") boolean anyName, @Param("username") String username,
 			@Param("anyYear") boolean anyYear, @Param("year") Integer year,
 			@Param("anyMonth") boolean anyMonth, @Param("month") Integer month,
