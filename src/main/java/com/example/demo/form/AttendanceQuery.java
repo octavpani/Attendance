@@ -11,9 +11,9 @@ public class AttendanceQuery {
 
 	public AttendanceQuery() {
 		username = "";
-		year = null;
-		month = null;
-		day = null;
+		year = 0;
+		month = 0;
+		day = 0;
 	}
 
 	public AttendanceQuery(String username, Integer year, Integer month, Integer day) {
